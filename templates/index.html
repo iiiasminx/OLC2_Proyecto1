@@ -8,63 +8,21 @@
   <title>[OLC]Proyecto1</title>
 
   <link rel="stylesheet" href="https://bootswatch.com/4/darkly/bootstrap.min.css">
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+  <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
 
-    /* Create two equal columns that floats next to each other */
-    .column {
-      float: left;
-      width: 46%;
-      padding: 10px;
-      height: 300px;
-      /* Should be removed. Only for demonstration */
-    }
+  <!--JQUERY-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{{url_for('static', filename='jquery-3.6.0.min.js')}}"></script>
 
-    .column2 {
-      float: left;
-      width: 2%;
-      padding: 10px;
-      height: 300px;
-      /* Should be removed. Only for demonstration */
-    }
-
-    /* Clear floats after the columns */
-    .row:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-    .container {
-      height: 80px;
-      position: relative;
-      ;
-    }
-
-    .vertical-center {
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-    }
-  </style>
-
+  <script src="{{url_for('static', filename='index.js')}}"></script>
 
   <!--CODEMIRROR-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/meta.min.js"></script>
-  <link rel="stylesheet" href="https://codemirror.net/theme/yonce.css" />
-  <link rel="stylesheet" href="https://codemirror.net/theme/darcula.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/clike/clike.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/python/python.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.js" integrity="sha512-hGVnilhYD74EGnPbzyvje74/Urjrg5LSNGx0ARG1Ucqyiaz+lFvtsXk/1jCwT9/giXP0qoXSlVDjxNxjLvmqAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/mode/julia/julia.min.js" integrity="sha512-X4Vk2O2mdGy5yigDfJ6ZQWDApCtWXMvR5VT1eyzivvURPquYWFqSBXmmQCbhbfpFtrSgcSBkN0CS5MeH4qfSbg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.css" integrity="sha512-6sALqOPMrNSc+1p5xOhPwGIzs6kIlST+9oGWlI4Wwcbj1saaX9J3uzO3Vub016dmHV7hM+bMi/rfXLiF5DNIZg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/theme/darcula.min.css" integrity="sha512-kqCOYFDdyQF4JM8RddA6rMBi9oaLdR0aEACdB95Xl1EgaBhaXMIe8T4uxmPitfq4qRmHqo+nBU2d1l+M4zUx1g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
 
 </head>
 
@@ -98,32 +56,29 @@
 
   <p></p>
   <p></p>
-  <h2>Intérprete</h2>
-
-  <br><br><br>
+  <br>
+  <h2>&emsp;Intérprete
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+  <button type="button" class="btn btn-primary">Analizar</button>
+  </h2>
+  
+  <br>
   <!--textarea class="form-control" id="Java1" rows="18"></textarea-->
   <div class="row">
     <div class="column2">
     </div>
     <div class="column" style="background-color:#aaa;">
       <h2>Entrada</h2>
-      <p>Some text..</p>
+      <textarea  class="form-control" id="entrada"></textarea>
     </div>
     <div class="column2">
     </div>
     <div class="column" style="background-color:#bbb;">
       <h2>Salida</h2>
-      <p>Some text..</p>
+      <textarea  class="form-control" disabled id="salida"></textarea>
     </div>
   </div>
-
-  <br>
-  <div class="container">
-    <div class="vertical-center">
-      <button type="button" class="btn btn-primary">Analizar</button>
-    </div>
-  </div>
-
 
 
 </body>
