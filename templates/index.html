@@ -17,12 +17,18 @@
   <script src="{{url_for('static', filename='index.js')}}"></script>
 
   <!--CODEMIRROR-->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.js" integrity="sha512-hGVnilhYD74EGnPbzyvje74/Urjrg5LSNGx0ARG1Ucqyiaz+lFvtsXk/1jCwT9/giXP0qoXSlVDjxNxjLvmqAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/mode/julia/julia.min.js" integrity="sha512-X4Vk2O2mdGy5yigDfJ6ZQWDApCtWXMvR5VT1eyzivvURPquYWFqSBXmmQCbhbfpFtrSgcSBkN0CS5MeH4qfSbg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.css" integrity="sha512-6sALqOPMrNSc+1p5xOhPwGIzs6kIlST+9oGWlI4Wwcbj1saaX9J3uzO3Vub016dmHV7hM+bMi/rfXLiF5DNIZg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/theme/darcula.min.css" integrity="sha512-kqCOYFDdyQF4JM8RddA6rMBi9oaLdR0aEACdB95Xl1EgaBhaXMIe8T4uxmPitfq4qRmHqo+nBU2d1l+M4zUx1g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.js"
+    integrity="sha512-hGVnilhYD74EGnPbzyvje74/Urjrg5LSNGx0ARG1Ucqyiaz+lFvtsXk/1jCwT9/giXP0qoXSlVDjxNxjLvmqAw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/mode/julia/julia.min.js"
+    integrity="sha512-X4Vk2O2mdGy5yigDfJ6ZQWDApCtWXMvR5VT1eyzivvURPquYWFqSBXmmQCbhbfpFtrSgcSBkN0CS5MeH4qfSbg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.css"
+    integrity="sha512-6sALqOPMrNSc+1p5xOhPwGIzs6kIlST+9oGWlI4Wwcbj1saaX9J3uzO3Vub016dmHV7hM+bMi/rfXLiF5DNIZg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/theme/darcula.min.css"
+    integrity="sha512-kqCOYFDdyQF4JM8RddA6rMBi9oaLdR0aEACdB95Xl1EgaBhaXMIe8T4uxmPitfq4qRmHqo+nBU2d1l+M4zUx1g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -57,28 +63,30 @@
   <p></p>
   <p></p>
   <br>
-  <h2>&emsp;Intérprete
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-  <button type="button" class="btn btn-primary">Analizar</button>
-  </h2>
-  
-  <br>
-  <!--textarea class="form-control" id="Java1" rows="18"></textarea-->
-  <div class="row">
-    <div class="column2">
+  <form action="/submit" method="POST"> 
+    <h2>&emsp;Intérprete
+    <input id="done" type="submit" value="Analizar" class="btn btn-primary" />
+    </h2>
+    <br>
+    <div class="row form-group">
+      <div class="column2">
+      </div>
+      <div class="column" style="background-color:#aaa;">
+        <h2>Entrada</h2>
+        <input type="text" class="form-control" id="entrada" name="entrada"></input>
+      </div>
+      <div class="column2">
+      </div>
+      <div class="column" style="background-color:#bbb;">
+        <h2>Salida</h2>
+        <input type="text" class="form-control" disabled id="salida"></input>
+      </div>
     </div>
-    <div class="column" style="background-color:#aaa;">
-      <h2>Entrada</h2>
-      <textarea  class="form-control" id="entrada"></textarea>
-    </div>
-    <div class="column2">
-    </div>
-    <div class="column" style="background-color:#bbb;">
-      <h2>Salida</h2>
-      <textarea  class="form-control" disabled id="salida"></textarea>
-    </div>
-  </div>
+
+  </form>
+
+  <p id="txtsalida">{{ mesg }}</p>
+  <p id="txtentrada" >{{ entrada }}</p>
 
 
 </body>
