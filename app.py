@@ -23,7 +23,7 @@ def submit():
     if request.method == 'POST':
         entrada = request.form['entrada']
         print(entrada)
-        mesg = 'wangxian'
+        mesg = 'este es mi codigo traducido y toda la onda'
         return render_template('index.html', mesg=mesg, entrada=entrada)
 
 @app.route('/submit', methods=['GET'])
