@@ -9,7 +9,7 @@ $(document).ready(function () {
     mode: "julia",
     theme: "darcula",
     lineNumbers: true,
-    lineWrapping: false,
+    lineWrapping: true,
     readOnly: false
   });
   editorEntrada.setSize(null, 300);
@@ -19,7 +19,7 @@ $(document).ready(function () {
     mode: "julia",
     theme: "darcula",
     lineNumbers: true,
-    lineWrapping: false,
+    lineWrapping: true,
     readOnly: true
   });
   editorSalida.setSize(null, 300);

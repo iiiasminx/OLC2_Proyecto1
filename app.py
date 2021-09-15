@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from gramatica import fighting
+from sintactico import fighting2
 
 app = Flask(__name__, static_url_path='')
 
@@ -23,8 +24,9 @@ def reportes():
 def submit():
     if request.method == 'POST':
         entrada = request.form['entrada']
-        #print(entrada)
-        mesg = fighting(entrada)
+        print('Este es ->' + entrada)
+        mesg = fighting(entrada) #lexico
+        fighting2(entrada)
         #mesg = 'este es mi codigo traducido y toda la onda' + entrada
         return render_template('index.html', mesg=mesg, entrada=entrada)
 

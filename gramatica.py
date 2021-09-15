@@ -1,6 +1,6 @@
-# -------------------------------------
-#       GRAMÁTICA - FIGHTING!
-# --------------------------------------
+# ----------------------------------------------------------------------------------------------------- 
+#-------------------------------------------- INICIO LÉXICO -------------------------------------------
+# -----------------------------------------------------------------------------------------------------
 
 import ply.lex as lex
 import re
@@ -10,62 +10,63 @@ import sys
 
 reservadas = {
     # reservadas
-    'nothing': 'NOTHING',
-    'true': 'TRUE',
-    'false': 'FALSE',
+    'nothing',
+    'true',
+    'false',
 
-    'struct': 'STRUCT',
-    'mutable': 'MUTABLE',
+    'struct',
+    'mutable',
 
-    'parse': 'PARSE',
-    'trunc': 'TRUNC',
-    'typeof': 'TYPEOF',
+    'parse',
+    'trunc',
+    'typeof',
 
-    'push': 'PUSH',
-    'pop': 'POP',
-    'length': 'LENGTH',
+    'push',
+    'pop',
+    'length',
 
-    'uppercase': 'UPPERCASE',
-    'lowercase': 'LOWERCASE',
-    'println': 'PRINTLN',
-    'print': 'PRINT',
+    'uppercase',
+    'lowercase',
+    'println',
+    'print',
 
-    'log10': 'LOG10',
-    'log': 'LOG',
-    'sin': 'SIN',
-    'cos': 'COS',
-    'tan': 'TAN',
-    'sqrt': 'SQRT',
+    'log10',
+    'log',
+    'sin',
+    'cos',
+    'tan',
+    'sqrt',
 
-    'int64': 'iNT64',
-    'float64': 'fLOAT64',
-    'bool': 'bOOL',
-    'char': 'cHAR',
-    'string': 'sTRING',
+    'int64',
+    'float64',
+    'bool',
+    'char',
+    'string',
 
-    'global': 'GLOBAL',
-    'local': 'LOCAL',
+    'global',
+    'local',
 
-    'function': 'FUNCTION',
-    'end': 'END',
+    'function',
+    'end',
 
-    'if': 'IF',
-    'elseif': 'ELSEIF',
-    'else': 'ELSE',
+    'if',
+    'elseif',
+    'else',
 
-    'while': 'WHILE',
+    'while',
 
-    'for': 'FOR',
-    'in': 'IN',
+    'for',
+    'in',
 
-    'break': 'BREAK',
-    'continue': 'CONTINUE',
-    'return': 'RETURN'
+    'break',
+    'continue',
+    'return'
 }
 
 
 tokens = [
     # generales
+    'tab',
     'id',
     'int',
     'float',
@@ -78,6 +79,7 @@ tokens = [
 
     # operadores
     'puntocoma',
+    'punto',
 
     'corchetea',
     'corchetec',
@@ -110,13 +112,15 @@ tokens = [
 
     'dolar',
 
-    'dos_dospuntos'
-] + list(reservadas.values())
+    'dos_dospuntos',
+    'salto'
+] + list(reservadas)
 
 
-t_ignore = r'\t| '
+t_ignore = r' '
 # operadores
 t_puntocoma = r';'
+t_punto = r'\.'
 
 t_corchetea = r'\['
 t_corchetec = r'\]'
@@ -152,15 +156,23 @@ t_dos_dospuntos = r'::'
 def t_id(t):
     r'[a-zA-Z_ñÑ][a-zA-Z0-9_ñÑ]*'
     if t.value.lower() in reservadas:
-        t.value = t.value.upper()
+        #t.value = t.value.upper()
         t.type = t.value
-        t.value = t.value.lower()
+        #t.value = t.value.lower()
     return t
     
 
 def t_comment1(t):
     r'(\#=).*\n*.*(=\#)'
     pass
+
+def t_tab(t):
+    r'\t'
+    pass
+
+def t_salto(t):
+    r'\r*\n+'
+    t.lineno += t.value.count("\n")
 
 def t_comment2(t):
     r'(\#)(.)*(\n)'
@@ -190,8 +202,11 @@ def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
 
-#creando el analizador léxico 
-#EXPORTANDO
+
+
+# ----------------------------------------------------------------------------------------------------- 
+#-------------------------------------------- EXPORTANDO ----------------------------------------------
+# -----------------------------------------------------------------------------------------------------
 def fighting(texto):
     print('Importado con éxito!')
     lexer = lex.lex()
@@ -205,3 +220,5 @@ def fighting(texto):
 
 #EXTRAS
 # t_array = r'' para sintáctico
+
+fighting('println if else while Ana MariA dEl MoNtE true')

@@ -73,20 +73,20 @@
       </div>
       <div class="column" style="background-color:#aaa;">
         <h2>Entrada</h2>
-        <input type="text" class="form-control" id="entrada" name="entrada"></input>
+        <textarea  type="text" class="form-control" id="entrada" name="entrada"></textarea >
       </div>
       <div class="column2">
       </div>
       <div class="column" style="background-color:#bbb;">
         <h2>Salida</h2>
-        <input type="text" class="form-control" disabled id="salida"></input>
+        <textarea  type="text" class="form-control" disabled id="salida"></textarea >
       </div>
     </div>
 
   </form>
 
-  <p id="txtsalida">{{ mesg }}</p>
-  <p id="txtentrada" >{{ entrada }}</p>
+  <pre><p id="txtsalida">{{ mesg }}</p></pre>
+  <pre><p id="txtentrada" >{{ entrada }}</p></pre>
 
 
 </body>
