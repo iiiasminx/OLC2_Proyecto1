@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+from gramatica import fighting
 
 app = Flask(__name__, static_url_path='')
 
@@ -22,8 +23,9 @@ def reportes():
 def submit():
     if request.method == 'POST':
         entrada = request.form['entrada']
-        print(entrada)
-        mesg = 'este es mi codigo traducido y toda la onda'
+        #print(entrada)
+        mesg = fighting(entrada)
+        #mesg = 'este es mi codigo traducido y toda la onda' + entrada
         return render_template('index.html', mesg=mesg, entrada=entrada)
 
 @app.route('/submit', methods=['GET'])
