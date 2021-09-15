@@ -14,8 +14,8 @@ from sys import stdin
 precedence = (
     ('left','mas','menos'),
     ('left','asterisco','dividido'),
-    ('left', 'elevado'),
-    #('right','umenos'), #sujeto a cambios
+    ('left', 'elevado', 'modulo'),
+    ('left','umenos'), #sujeto a cambios
     ('left', 'parentesisa', 'parentesisc'),    
     )
 
@@ -29,17 +29,54 @@ def p_inicio(t):
 def p_instrucciones(t):
     '''instrucciones : instruccion instrucciones
                      | instruccion '''
+    print('instrucciones')
 
 def p_instruccion(t):
-    '''instruccion  : soperacion
-                    | sprint
-                    | sasignacion
-                    | sfuncion
-                    | snativa
-                    | sllamada_func
-                    | scondicionales
-                    | sloops
-                    | sstruct'''
+    '''instruccion  : soperacion'''
+    t[0] = t[1]
+    print('creeeo que la respuesta es: ', t[0])
+
+def p_soperacion(t):
+    '''soperacion : soperacion mas soperacion
+                    | soperacion menos soperacion
+                    | soperacion asterisco soperacion
+                    | soperacion dividido soperacion
+                    | soperacion modulo soperacion
+                    | soperacion elevado soperacion'''
+    if t[2] == '+'  : t[0] = t[1] + t[3]
+    elif t[2] == '-': t[0] = t[1] - t[3]
+    elif t[2] == '*': t[0] = t[1] * t[3]
+    elif t[2] == '/': t[0] = t[1] / t[3]
+    elif t[2] == '%': t[0] = t[1] % t[3]
+    elif t[2] == '^': t[0] = t[1] ** t[3]
+
+def p_soperacionUmenos(t):
+    '''soperacion : menos soperacion %prec umenos'''
+    t[0] = -t[2]
+
+def p_soperacionPar(t):
+    '''soperacion : parentesisa soperacion parentesisc'''
+    t[0] = t[2]
+
+def p_soperacionNumeros(t):
+    '''soperacion : int
+                    | float'''
+    t[0] = t[1]
+
+def p_sprint(t):
+    pass
+
+def p_sasignacion(t):
+    pass
+
+def p_sfuncion(t):
+    pass
+
+def p_snativa(t):
+    pass
+
+def p_sllamadafunc(t):
+    pass
 
 def p_scondicionales(t):
     pass

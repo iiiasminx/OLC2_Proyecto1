@@ -92,7 +92,7 @@ tokens = [
     'menos',
     'asterisco',  # este sirve para mas cosas, awas
     'dividido',
-    'porcentaje',  # se llama modulo pero eso no se me va a quedar
+    'modulo',  # se llama modulo pero eso no se me va a quedar
     'igual',
     'elevado',
 
@@ -141,7 +141,7 @@ t_mas = r'\+'
 t_menos = r'-'
 t_asterisco = r'\*'  # este sirve para mas cosas, awas
 t_dividido = r'/'
-t_porcentaje = r'%'  # se llama modulo pero eso no se me va a quedar
+t_modulo = r'%'  # se llama modulo pero eso no se me va a quedar
 t_igual = r'='
 t_elevado = r'\^'
 
@@ -155,7 +155,7 @@ t_dos_dospuntos = r'::'
 
 def t_id(t):
     r'[a-zA-Z_ñÑ][a-zA-Z0-9_ñÑ]*'
-    if t.value.lower() in reservadas:
+    if t.value.lower() in reservadas: #VER ESTO, PORQUE ES CASE SENSITIVE
         #t.value = t.value.upper()
         t.type = t.value
         #t.value = t.value.lower()
@@ -221,4 +221,4 @@ def fighting(texto):
 #EXTRAS
 # t_array = r'' para sintáctico
 
-fighting('println if else while Ana MariA dEl MoNtE true')
+#fighting('println if else while Ana MariA dEl MoNtE true')
