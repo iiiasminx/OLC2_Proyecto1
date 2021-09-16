@@ -14,6 +14,10 @@ import math
 
 global impresion
 impresion = ""
+global listaErrores
+listaErrores = []
+global listaSimbolos
+listaSimbolos = []
 
 #precedencia
 precedence = (
@@ -37,13 +41,13 @@ def p_inicio(t):
 
 def p_instrucciones(t):
     '''INSTRUCCIONES : INSTRUCCION INSTRUCCIONES
-                     | INSTRUCCION 
-                     | '''
+                     | INSTRUCCION'''
 
 def p_instruccion(t):
-    '''INSTRUCCION  : SOPERACIONES
-                    | IMPRIMIR
-                    | FUNCIONES'''    
+    '''INSTRUCCION  :  IMPRIMIR
+                    | FUNCIONES
+                    | SCOPE
+                    | DECLFUNC'''    
 
 def p_soperaciones(t):
     '''SOPERACIONES : SOPERACION
@@ -53,42 +57,98 @@ def p_soperaciones(t):
     t[0] = t[1]
     print('creeeo que la respuesta es: ', t[0])
 
-def p_subinstrucciones(t):
-    '''SUBINSTRUCCIONES : SUBINSTRUCCION SUBINSTRUCCIONES
-                     | SUBINSTRUCCION 
-                     | '''
+#  ------------------------------------FUNCIONES------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
 
-def p_subinstruccion(t):
-    '''SUBINSTRUCCION  : SOPERACIONES
-                        | IMPRIMIR
-                        | FUNCIONES'''  
+def p_declfunc(t):
+    '''DECLFUNC : function id parentesisa PARAMS parentesisc INSTRUCCIONES end puntocoma'''
+    print('LO DE ARRIBA ERA UNA FUNCION')
+
+def p_params(t):
+    '''PARAMS : PARAMS coma id
+            | id 
+            | '''
+#  ---------------------------------ASIGNACIONES------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+def p_sope(t):
+    '''SCOPE : global ASIGNACION
+            | local ASIGNACION
+            | ASIGNACION'''
+    t[0] = t[1]
+    if t[1] == 'global'  : print('SCOPE EN EL ANTERIOR')
+    elif t[1] == 'local'  : print('SCOPE EN EL ANTERIOR')
+    
+
+#cualquiera
+
+def p_asignaciones(t):
+    '''ASIGNACION : id igual SOPLOG puntocoma'''
+    print('ASIGNACION CUALQUIERA --', t[3])
+
+def p_asignaciones2(t):
+    '''ASIGNACION : id igual SOPLOG dos_dospuntos string puntocoma
+                | id igual SOPLOG dos_dospuntos char puntocoma
+                | id igual SOPLOG dos_dospuntos bool puntocoma
+                | id igual SOPLOG dos_dospuntos float64 puntocoma
+                | id igual SOPLOG dos_dospuntos int64 puntocoma''' 
+    print('ASIGNACION CUALQUIERA: ', t[5])
+
+#string 
+
+def p_asignaciones3(t):
+    '''ASIGNACION : id igual SOPSTRING puntocoma
+                | id igual SOPSTRING  dos_dospuntos string puntocoma
+                | id igual SOPSTRING  dos_dospuntos char puntocoma'''
+    print('ASIGNACION STRING ' + t[3])
+
+#nothing
+
+def p_asignaciones4(t):
+    '''ASIGNACION : id igual nothing puntocoma'''
+    print('ASIGNACION NOTHING --', t[3])
+
 #  ---------------------------------FUNCIONES---------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
 def p_funciones(t):
     '''FUNCIONES : FIF'''
 
+#  -------------------------------------- IF ---------------------------------------------------------
+
+#  -------------------------------------- IF ---------------------------------------------------------
+
 def p_fif(t):
-    '''FIF : if SOPLOG SUBINSTRUCCIONES FELSEIF
-            | if SOPLOG SUBINSTRUCCIONES FELSE
-            | if SOPLOG SUBINSTRUCCIONES end puntocoma''' # Podría poner un bool de dentro if ejecute, si no no xd
+    '''FIF : if SOPLOG INSTRUCCIONES FELSEIF
+            | if SOPLOG INSTRUCCIONES FELSE
+            | if SOPLOG INSTRUCCIONES end puntocoma''' 
+    print('IF 1')
 
 def p_felseif(t):
-    '''FELSEIF : elseif SOPLOG SUBINSTRUCCIONES FELSEIF
-            | elseif SOPLOG SUBINSTRUCCIONES FELSE
-            | elseif SOPLOG SUBINSTRUCCIONES end puntocoma'''
+    '''FELSEIF : elseif SOPLOG INSTRUCCIONES FELSEIF
+            | elseif SOPLOG INSTRUCCIONES FELSE
+            | elseif SOPLOG INSTRUCCIONES end puntocoma'''
+    print('ELSEIF 1')
         
 def p_felse(t):
-    '''FELSE : else SUBINSTRUCCIONES end puntocoma'''
+    '''FELSE : else INSTRUCCIONES end puntocoma'''
+    print('ELSE 1')
+
+
+
+# *********************************************************************************************************
+# *********************************************************************************************************
+# ****************************  A PARTIR DE ACÁ ESTA EL COSO CON TODO Y PARSER ****************************
+# *********************************************************************************************************
+# *********************************************************************************************************
+
 #  ---------------------------------IMPRIMIR----------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
 def p_sprint(t):
     '''IMPRIMIR : println parentesisa SCONTPRNT parentesisc puntocoma
-                | print parentesisa SCONTPRNT parentesisc puntocoma''' 
-    if t[1] == 'println'  : t[0] = str(t[3]) + "\n"
-    elif t[1] == 'print': t[0] = str(t[3])               
-    paraImprimir(t[0])
+                | print parentesisa SCONTPRNT parentesisc puntocoma'''
+    print('IMPRIMIR 1')
 
 def p_scontprint(t):
     '''SCONTPRNT : SCONTPRNT coma SCONTPRNT'''
@@ -120,6 +180,7 @@ def p_soplog(t):
     elif t[2] == '>=': t[0] = t[1] >= t[3] 
     elif t[2] == '==': t[0] = t[1] == t[3] 
     elif t[2] == '!=': t[0] = t[1] != t[3]   
+    
 
 def p_soplogPar(t):
     '''SOPLOG : parentesisa SOPLOG parentesisc'''
@@ -168,7 +229,8 @@ def p_sopstring(t):
 
 def p_sopstringterm(t):
     '''SOPSTRING : cadena
-                | caracter'''
+                | caracter
+                | SOPNATIV'''
     t[0] = t[1]
 
 #  ----------------------------OPERACIONES NUMÉRICAS--------------------------------------------------
@@ -221,41 +283,34 @@ def p_nathmath(t):
     t[0] = t[1]
 
 
-
-
-
-
-
-
-def p_sasignacion(t):
-    pass
-
-def p_sfuncion(t):
-    pass
-
-def p_snativa(t):
-    pass
-
-def p_sllamadafunc(t):
-    pass
-
-def p_sstruct(t):
-    pass
-
+#  --------------------------------------- ERRORES --------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
 def p_error(t):
-    print("Error sintáctico en '%s'" % t.value)
+    try: 
+        desc = 'Error sintáctico con ' + t.value
+        error1 = NodoError(desc, t.lineno, t.lexpos)
+        listaErrores.append(error1)
+        print("Error sintáctico en '%s'" % t.value)
+    except:
+        print('Algo pasó en el error :c')
 
 
 #  ----------------------------------------- OTROS --------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 def fighting2(texto):
+    #asignaciones iniciales
     global impresion 
     impresion = ''
+    global listaErrores
+    listaErrores = []
     paraImprimir('cosas que se imprimen -------------------------------------------------------\n')
 
     parser = yacc.yacc()
     result = parser.parse(texto)
-    #print(impresion)
+    
+    for i in listaErrores:
+        print(i.descripcion, ' ', i.fila, ' ', i.columna, ' ', i.fecha)
+
     return impresion
 
 def paraImprimir(texto):

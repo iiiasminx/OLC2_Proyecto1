@@ -157,7 +157,7 @@ def t_id(t):
     r'[a-zA-Z_ñÑ][a-zA-Z0-9_ñÑ]*'
     if t.value.lower() in reservadas: #VER ESTO, PORQUE ES CASE SENSITIVE
         #t.value = t.value.upper()
-        t.type = t.value
+        t.type = t.value.lower()
         #t.value = t.value.lower()
     return t
     
