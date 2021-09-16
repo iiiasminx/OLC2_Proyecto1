@@ -8,6 +8,7 @@ import os
 import codecs
 import re 
 from gramatica import fighting, tokens
+from cst import NodoSimbolo, NodoError, Exporte #Falta el AST cuando entienda que pex xdxd
 from sys import stdin
 import math
 
@@ -36,11 +37,13 @@ def p_inicio(t):
 
 def p_instrucciones(t):
     '''INSTRUCCIONES : INSTRUCCION INSTRUCCIONES
-                     | INSTRUCCION '''
+                     | INSTRUCCION 
+                     | '''
 
 def p_instruccion(t):
     '''INSTRUCCION  : SOPERACIONES
-                    | IMPRIMIR'''    
+                    | IMPRIMIR
+                    | FUNCIONES'''    
 
 def p_soperaciones(t):
     '''SOPERACIONES : SOPERACION
@@ -50,7 +53,33 @@ def p_soperaciones(t):
     t[0] = t[1]
     print('creeeo que la respuesta es: ', t[0])
 
+def p_subinstrucciones(t):
+    '''SUBINSTRUCCIONES : SUBINSTRUCCION SUBINSTRUCCIONES
+                     | SUBINSTRUCCION 
+                     | '''
 
+def p_subinstruccion(t):
+    '''SUBINSTRUCCION  : SOPERACIONES
+                        | IMPRIMIR
+                        | FUNCIONES'''  
+#  ---------------------------------FUNCIONES---------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+def p_funciones(t):
+    '''FUNCIONES : FIF'''
+
+def p_fif(t):
+    '''FIF : if SOPLOG SUBINSTRUCCIONES FELSEIF
+            | if SOPLOG SUBINSTRUCCIONES FELSE
+            | if SOPLOG SUBINSTRUCCIONES end puntocoma''' # Podría poner un bool de dentro if ejecute, si no no xd
+
+def p_felseif(t):
+    '''FELSEIF : elseif SOPLOG SUBINSTRUCCIONES FELSEIF
+            | elseif SOPLOG SUBINSTRUCCIONES FELSE
+            | elseif SOPLOG SUBINSTRUCCIONES end puntocoma'''
+        
+def p_felse(t):
+    '''FELSE : else SUBINSTRUCCIONES end puntocoma'''
 #  ---------------------------------IMPRIMIR----------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
@@ -101,7 +130,10 @@ def p_soplogterm(t):
     '''SOPLOG : true
             | false
             | int
-            | float '''
+            | float
+            | cadena
+            | caracter
+            | SOPERACION'''
     t[0] = t[1]
             
 
@@ -205,12 +237,6 @@ def p_snativa(t):
     pass
 
 def p_sllamadafunc(t):
-    pass
-
-def p_scondicionales(t):
-    pass
-
-def p_slooops(t):
     pass
 
 def p_sstruct(t):

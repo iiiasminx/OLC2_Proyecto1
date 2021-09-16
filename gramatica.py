@@ -173,6 +173,7 @@ def t_tab(t):
 def t_salto(t):
     r'\r*\n+'
     t.lineno += t.value.count("\n")
+    #return t
 
 def t_comment2(t):
     r'(\#)(.)*(\n)'
