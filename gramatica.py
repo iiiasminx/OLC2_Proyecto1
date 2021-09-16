@@ -70,8 +70,8 @@ tokens = [
     'id',
     'int',
     'float',
-    'char',
-    'string',
+    'caracter',
+    'cadena',
     'array',
 
     'comment1',
@@ -107,8 +107,8 @@ tokens = [
     'and',
     'not',
 
-    'comillasdobles',
-    'comillassimples',
+    #'comillasdobles',
+    #'comillassimples',
 
     'dolar',
 
@@ -188,12 +188,12 @@ def t_int(t):
     t.value = int(t.value)
     return t
 
-def t_char(t):
+def t_caracter(t):
     r'\'.*?\''
     t.value = t.value[1:-1] # remuevo las comillas
     return t 
 
-def t_string(t):
+def t_cadena(t):
     r'\".*?\"'
     t.value = t.value[1:-1] # remuevo las comillas
     return t 

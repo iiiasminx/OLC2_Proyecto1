@@ -25,8 +25,8 @@ def submit():
     if request.method == 'POST':
         entrada = request.form['entrada']
         print('Este es ->' + entrada)
-        mesg = fighting(entrada) #lexico
-        fighting2(entrada)
+        fighting(entrada) #lexico
+        mesg =  fighting2(entrada)
         #mesg = 'este es mi codigo traducido y toda la onda' + entrada
         return render_template('index.html', mesg=mesg, entrada=entrada)
 
