@@ -47,15 +47,70 @@ def p_instruccion(t):
     '''INSTRUCCION  :  IMPRIMIR
                     | FUNCIONES
                     | SCOPE
-                    | DECLFUNC'''    
+                    | DECLFUNC
+                    | LLAMADAFUNC
+                    | TRANSF
+                    | TYPESTRUCT'''    
 
 def p_soperaciones(t):
     '''SOPERACIONES : SOPERACION
                     | SOPSTRING
                     | SOPNATIV
-                    | SOPLOG'''
+                    | SOPLOG
+                    | DECLNATIV'''
+    t[0] = t[1]
+    
+
+#  ----------------------------------------TIPOS------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+def p_tipos(t):
+    '''TIPOS : int64
+            | float64
+            | bool
+            | char
+            | string'''
+    t[0] = t[1]
+
+def p_algo(t):
+    '''ALGO : SOPERACIONES
+            | id
+            | ARREGLO'''
     t[0] = t[1]
     print('creeeo que la respuesta es: ', t[0])
+
+#  -------------------------------------- STRUCT------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+def p_typestruct(t):
+    '''TYPESTRUCT : mutable STRUCT
+                    | STRUCT'''
+    print('Esto termina un struct')
+
+def p_struct(t):
+    '''STRUCT : struct id ATRIBUTOS end puntocoma'''
+
+def p_atributos(t):
+    '''ATRIBUTOS : ATRIBUTO ATRIBUTOS
+                | ATRIBUTO '''
+
+def p_atributo(t):
+    '''ATRIBUTO : id dos_dospuntos TIPOS puntocoma
+                | id puntocoma'''
+    print('atributo: ', t[1])
+
+
+#  ------------------------------------ ARREGLOS------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+def p_arreglo(t):
+    '''ARREGLO : corchetea ARRCONT corchetec'''
+    print('ESTO TERMINA UN ARREGLO')
+
+def p_arrcont(t):
+    '''ARRCONT : ARRCONT coma ALGO
+            | ALGO
+            | '''
 
 #  ------------------------------------FUNCIONES------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -68,6 +123,15 @@ def p_params(t):
     '''PARAMS : PARAMS coma id
             | id 
             | '''
+
+def p_llamadafunc(t):
+    '''LLAMADAFUNC : id parentesisa PARAMSFUNC parentesisc puntocoma'''
+    print('LLAMANDO A: ', t[1])
+
+def p_paramsfunc(t):
+    '''PARAMSFUNC : PARAMSFUNC coma ALGO
+                | ALGO
+                | '''
 #  ---------------------------------ASIGNACIONES------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
@@ -83,24 +147,12 @@ def p_sope(t):
 #cualquiera
 
 def p_asignaciones(t):
-    '''ASIGNACION : id igual SOPLOG puntocoma'''
+    '''ASIGNACION : id igual ALGO puntocoma'''
     print('ASIGNACION CUALQUIERA --', t[3])
 
 def p_asignaciones2(t):
-    '''ASIGNACION : id igual SOPLOG dos_dospuntos string puntocoma
-                | id igual SOPLOG dos_dospuntos char puntocoma
-                | id igual SOPLOG dos_dospuntos bool puntocoma
-                | id igual SOPLOG dos_dospuntos float64 puntocoma
-                | id igual SOPLOG dos_dospuntos int64 puntocoma''' 
+    '''ASIGNACION : id igual ALGO dos_dospuntos TIPOS puntocoma'''
     print('ASIGNACION CUALQUIERA: ', t[5])
-
-#string 
-
-def p_asignaciones3(t):
-    '''ASIGNACION : id igual SOPSTRING puntocoma
-                | id igual SOPSTRING  dos_dospuntos string puntocoma
-                | id igual SOPSTRING  dos_dospuntos char puntocoma'''
-    print('ASIGNACION STRING ' + t[3])
 
 #nothing
 
@@ -112,9 +164,34 @@ def p_asignaciones4(t):
 #-----------------------------------------------------------------------------------------------------
 
 def p_funciones(t):
-    '''FUNCIONES : FIF'''
+    '''FUNCIONES : FIF
+                | FWHILE
+                | FFOR'''
 
-#  -------------------------------------- IF ---------------------------------------------------------
+def p_transferencia(t):
+    '''TRANSF : break puntocoma
+            | continue puntocoma
+            | return puntocoma'''
+    print('SENTENCIA DE TRANSFERENCIA: ', t[1])
+
+#  -------------------------------------- FOR---------------------------------------------------------
+
+def p_ffor(t):
+    '''FFOR : for id in RANGO INSTRUCCIONES end puntocoma'''
+    print('Eso fue un for de', t[2], ' en ', t[4])
+
+def p_rangofor(t):
+    '''RANGO : int dospuntos int
+            | cadena'''
+    if str(t[1]).isnumeric():
+        t[0] =  t[3] - (t[1] - 1)
+    else:
+        t[0] = len(str(t[1]))
+#  ------------------------------------WHILE ---------------------------------------------------------
+
+def p_fwhile(t):
+    '''FWHILE : while SOPLOG INSTRUCCIONES end puntocoma'''
+    print('Eso fue un while si', t[2])
 
 #  -------------------------------------- IF ---------------------------------------------------------
 
@@ -134,13 +211,9 @@ def p_felse(t):
     '''FELSE : else INSTRUCCIONES end puntocoma'''
     print('ELSE 1')
 
-
-
-# *********************************************************************************************************
-# *********************************************************************************************************
-# ****************************  A PARTIR DE ACÁ ESTA EL COSO CON TODO Y PARSER ****************************
-# *********************************************************************************************************
-# *********************************************************************************************************
+def p_fifunilinea(t):
+    ''' FIFUNI : SOPLOG interrogacionc ALGO dospuntos ALGO'''
+    print('FIFUNI', t[1], ' SISI: ', t[3], ' SINO ', t[5])
 
 #  ---------------------------------IMPRIMIR----------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -155,10 +228,16 @@ def p_scontprint(t):
     t[0] = str(t[1]) + str(t[3])
 
 def p_scontprintterm(t):
-    '''SCONTPRNT : cadena
-                | caracter
-                | SOPERACIONES'''
+    '''SCONTPRNT :  ALGO
+                | FIFUNI'''
     t[0] = t[1]
+
+
+# *********************************************************************************************************
+# *********************************************************************************************************
+# ****************************  A PARTIR DE ACÁ ESTA EL COSO CON TODO Y PARSER ****************************
+# *********************************************************************************************************
+# *********************************************************************************************************
 
 #------------------------------OPERACIONES LOGICAS----------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -191,7 +270,7 @@ def p_soplogterm(t):
     '''SOPLOG : true
             | false
             | int
-            | float
+            | flotante
             | cadena
             | caracter
             | SOPERACION'''
@@ -203,15 +282,31 @@ def p_soplogterm(t):
 
 def p_sopnativ(t):
     '''SOPNATIV : uppercase parentesisa SOPN parentesisc
-                | lowercase parentesisa SOPN parentesisc'''
+                | lowercase parentesisa SOPN parentesisc
+                | length parentesisa SOPN parentesisc'''
     if t[1] == 'uppercase'  : t[0] = str(t[3]).upper()
     elif t[1] == 'lowercase'  : t[0] = str(t[3]).lower()
+    elif t[1] == 'length'  : t[0] = len(str(t[3]))
 
 def p_sopnativterm(t):
     ''' SOPN : cadena
-            | caracter'''
+            | caracter
+            | id
+            | SOPSTRING'''
     t[0] = t[1]
 
+def p_declnativ(t):
+    '''DECLNATIV : parse parentesisa TIPOS coma ALGO parentesisc 
+                | trunc parentesisa int64 coma flotante parentesisc
+                | float parentesisa int parentesisc
+                | string parentesisa ALGO parentesisc
+                | typeof parentesisa ALGO parentesisc'''
+    print('EN DECLNATIV 4.6.2 ->', t[1])
+    if t[1] == 'parse'  : t[0] = t[1]
+    elif t[1] == 'trunc': t[0] = t[1]
+    elif t[1] == 'float': t[0] = t[1]
+    elif t[1] == 'string': t[0] = t[1]
+    elif t[1] == 'typeof': t[0] = t[1]
 #------------------------------OPERACIONES STRING ----------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
@@ -230,7 +325,8 @@ def p_sopstring(t):
 def p_sopstringterm(t):
     '''SOPSTRING : cadena
                 | caracter
-                | SOPNATIV'''
+                | SOPNATIV
+                | id'''
     t[0] = t[1]
 
 #  ----------------------------OPERACIONES NUMÉRICAS--------------------------------------------------
@@ -267,11 +363,11 @@ def p_soperacionMath(t):
 
 def p_soperacionlog(t):
     '''SOPERACION : log parentesisa SOPERACION coma SOPERACION parentesisc'''
-    t[0] = math.log(t[3], t[5])
+    t[0] = math.log(t[5], t[3])
     
 def p_soperacionNumeros(t):
     '''SOPERACION : int
-                    | float'''
+                    | flotante'''
     t[0] = t[1]
 
 def p_nathmath(t):

@@ -29,6 +29,7 @@ reservadas = {
     'lowercase',
     'println',
     'print',
+    'float',
 
     'log10',
     'log',
@@ -69,7 +70,7 @@ tokens = [
     'tab',
     'id',
     'int',
-    'float',
+    'flotante',
     'caracter',
     'cadena',
     'array',
@@ -106,13 +107,12 @@ tokens = [
     'or',
     'and',
     'not',
-
-    #'comillasdobles',
-    #'comillassimples',
+    'interrogacionc',
 
     'dolar',
 
     'dos_dospuntos',
+    'dospuntos',
     'salto'
 ] + list(reservadas)
 
@@ -149,9 +149,11 @@ t_or = r'\|\|'
 t_and = r'\&\&'
 t_not = r'!'
 
-t_dolar = r'\$'
+t_interrogacionc = r'\?'
+
 
 t_dos_dospuntos = r'::'
+t_dospuntos = r':'
 
 def t_id(t):
     r'[a-zA-Z_ñÑ][a-zA-Z0-9_ñÑ]*'
@@ -179,7 +181,7 @@ def t_comment2(t):
     r'(\#)(.)*(\n)'
     pass
 
-def t_float(t):
+def t_flotante(t):
     r'([0-9]+\.[0-9]+)'
     t.value = float(t.value)
     return t
