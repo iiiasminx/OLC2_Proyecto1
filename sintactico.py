@@ -8,7 +8,7 @@ import os
 import codecs
 import re 
 from gramatica import fighting, tokens
-from cst import NodoSimbolo, NodoError, Exporte #Falta el AST cuando entienda que pex xdxd
+from cst import NodoSimbolo, NodoError, Exporte, GrafoCST #Falta el AST cuando entienda que pex xdxd
 from sys import stdin
 import math
 
@@ -20,6 +20,8 @@ global listaSimbolos
 listaSimbolos = []
 global contaerrores
 contaerrores = 0
+
+grafo = GrafoCST()
 
 #precedencia
 precedence = (
@@ -39,7 +41,7 @@ precedence = (
 #----------------------------------------------------------------------------------------------------
 def p_inicio(t):
     '''INICIO : INSTRUCCIONES'''
-    print("Se super acetpó",  t)
+    #print("Se super acetpó",  t)
 
 def p_instrucciones(t):
     '''INSTRUCCIONES : INSTRUCCION INSTRUCCIONES
@@ -54,7 +56,9 @@ def p_instruccion(t):
                     | TRANSF
                     | TYPESTRUCT
                     | LLAMADARR
-                    | STRUCTINI'''    
+                    | STRUCTINI
+                    | SOPERACIONES'''  #este ultimo es temporal
+    grafo.generarPadre(1)
 
 def p_soperaciones(t):
     '''SOPERACIONES : SOPSTRING
@@ -84,7 +88,7 @@ def p_algo(t):
             | LLAMADARR
             | STRUCTINI'''
     t[0] = t[1]
-    print('creeeo que la respuesta es: ', t[0])
+    #print('creeeo que la respuesta es: ', t[0])
 
 #  -------------------------------------- STRUCT------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -92,7 +96,7 @@ def p_algo(t):
 def p_typestruct(t):
     '''TYPESTRUCT : mutable STRUCT
                     | STRUCT'''
-    print('Esto termina un struct')
+    #print('Esto termina un struct')
 
 def p_struct(t):
     '''STRUCT : struct id ATRIBUTOS end puntocoma'''
@@ -104,11 +108,11 @@ def p_atributos(t):
 def p_atributo(t):
     '''ATRIBUTO : id dos_dospuntos TIPOS puntocoma
                 | id puntocoma'''
-    print('atributo: ', t[1])
+    #print('atributo: ', t[1])
 
 def p_creacionstruct(t):
     '''STRUCTINI : id parentesisa PARAMSFUNC parentesisc'''
-    print('ESTOY INICIANDO UN STRUCT')
+    #print('ESTOY INICIANDO UN STRUCT')
 
 def p_structasign(t):
     '''STRUCTASIGN : id punto id'''
@@ -118,7 +122,7 @@ def p_structasign(t):
 
 def p_arreglo(t):
     '''ARREGLO : corchetea ARRCONT corchetec'''
-    print('ESTO TERMINA UN ARREGLO')
+    #print('ESTO TERMINA UN ARREGLO')
 
 def p_arrcont(t):
     '''ARRCONT : ARRCONT coma ALGO
@@ -127,7 +131,7 @@ def p_arrcont(t):
 
 def p_llamadaarr(t):
     '''LLAMADARR : id INDARS'''
-    print('ESTO ES LA LLAMADA A ', t[1] ,' EN ÍNDICE', t[2])
+    #print('ESTO ES LA LLAMADA A ', t[1] ,' EN ÍNDICE', t[2])
 
 def p_indicearr(t):
     '''INDARS :  INDARS INDAR'''
@@ -149,7 +153,7 @@ def p_indar(t):
 
 def p_declfunc(t):
     '''DECLFUNC : function id parentesisa PARAMS parentesisc INSTRUCCIONES end puntocoma'''
-    print('LO DE ARRIBA ERA UNA FUNCION')
+    #print('LO DE ARRIBA ERA UNA FUNCION')
 
 def p_params(t):
     '''PARAMS : PARAMS coma id
@@ -158,7 +162,7 @@ def p_params(t):
 
 def p_llamadafunc(t):
     '''LLAMADAFUNC : id parentesisa PARAMSFUNC parentesisc puntocoma'''
-    print('LLAMANDO A: ', t[1])
+    #print('LLAMANDO A: ', t[1])
 
 def p_paramsfunc(t):
     '''PARAMSFUNC : PARAMSFUNC coma ALGO
@@ -187,22 +191,23 @@ def p_nombrealgo(t):
 
 def p_asignaciones3(t):
     '''ASIGNACION : NOMBREALGO igual SOPSTRING puntocoma'''
-    print('ASIGNACION STRING --', t[3])
+    #print('ASIGNACION STRING --', t[3])
 
 def p_asignaciones4(t):
     '''ASIGNACION : NOMBREALGO igual SOPSTRING dos_dospuntos TIPOS puntocoma'''
-    print('ASIGNACION STRING: ', t[5])
+    #print('ASIGNACION STRING: ', t[5])
 
 
 #cualquiera
 
 def p_asignaciones(t):
     '''ASIGNACION : NOMBREALGO igual ALGO puntocoma'''
-    print('ASIGNACION CUALQUIERA --', t[3])
+    #print('ASIGNACION CUALQUIERA --', t[3])
+
 
 def p_asignaciones2(t):
     '''ASIGNACION : NOMBREALGO igual ALGO dos_dospuntos TIPOS puntocoma'''
-    print('ASIGNACION CUALQUIERA: ', t[5])
+    #print('ASIGNACION CUALQUIERA: ', t[5])
 
 
 
@@ -210,7 +215,7 @@ def p_asignaciones2(t):
 
 def p_asignaciones4(t):
     '''ASIGNACION : NOMBREALGO igual nothing puntocoma'''
-    print('ASIGNACION NOTHING --', t[3])
+    #print('ASIGNACION NOTHING --', t[3])
 
 #  ---------------------------------FUNCIONES---------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -224,13 +229,13 @@ def p_transferencia(t):
     '''TRANSF : break puntocoma
             | continue puntocoma
             | return puntocoma'''
-    print('SENTENCIA DE TRANSFERENCIA: ', t[1])
+    #print('SENTENCIA DE TRANSFERENCIA: ', t[1])
 
 #  -------------------------------------- FOR---------------------------------------------------------
 
 def p_ffor(t):
     '''FFOR : for id in RANGO INSTRUCCIONES end puntocoma'''
-    print('Eso fue un for de', t[2], ' en ', t[4])
+    #print('Eso fue un for de', t[2], ' en ', t[4])
 
 def p_rangofor(t):
     '''RANGO : int dospuntos int
@@ -243,7 +248,7 @@ def p_rangofor(t):
 
 def p_fwhile(t):
     '''FWHILE : while SOPLOG INSTRUCCIONES end puntocoma'''
-    print('Eso fue un while si', t[2])
+    #print('Eso fue un while si', t[2])
 
 #  -------------------------------------- IF ---------------------------------------------------------
 
@@ -251,21 +256,21 @@ def p_fif(t):
     '''FIF : if SOPLOG INSTRUCCIONES FELSEIF
             | if SOPLOG INSTRUCCIONES FELSE
             | if SOPLOG INSTRUCCIONES end puntocoma''' 
-    print('IF 1')
+    #print('IF 1')
 
 def p_felseif(t):
     '''FELSEIF : elseif SOPLOG INSTRUCCIONES FELSEIF
             | elseif SOPLOG INSTRUCCIONES FELSE
             | elseif SOPLOG INSTRUCCIONES end puntocoma'''
-    print('ELSEIF 1')
+    #print('ELSEIF 1')
         
 def p_felse(t):
     '''FELSE : else INSTRUCCIONES end puntocoma'''
-    print('ELSE 1')
+    #print('ELSE 1')
 
 def p_fifunilinea(t):
     ''' FIFUNI : SOPLOG interrogacionc ALGO dospuntos ALGO'''
-    print('FIFUNI', t[1], ' SISI: ', t[3], ' SINO ', t[5])
+    #print('FIFUNI', t[1], ' SISI: ', t[3], ' SINO ', t[5])
 
 #  ---------------------------------IMPRIMIR----------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -273,7 +278,7 @@ def p_fifunilinea(t):
 def p_sprint(t):
     '''IMPRIMIR : println parentesisa SCONTPRNT parentesisc puntocoma
                 | print parentesisa SCONTPRNT parentesisc puntocoma'''
-    print('IMPRIMIR 1')
+    #print('IMPRIMIR 1')
 
 def p_scontprint(t):
     '''SCONTPRNT : SCONTPRNT coma SCONTPRNT'''
@@ -348,38 +353,64 @@ def p_sopnativterm(t):
     t[0] = t[1]
 
 def p_declnativ(t):
-    '''DECLNATIV : parse parentesisa TIPOS coma ALGO parentesisc 
-                | trunc parentesisa int64 coma flotante parentesisc
-                | float parentesisa int parentesisc
-                | string parentesisa ALGO parentesisc
-                | typeof parentesisa ALGO parentesisc'''
-    print('EN DECLNATIV 4.6.2 ->', t[1])
-    if t[1] == 'parse'  : t[0] = t[1]
-    elif t[1] == 'trunc': t[0] = t[1]
-    elif t[1] == 'float': t[0] = t[1]
-    elif t[1] == 'string': t[0] = t[1]
-    elif t[1] == 'typeof': t[0] = t[1]
+    '''DECLNATIV : parse parentesisa TIPOS coma ALGO parentesisc'''
+    #print('EN DECLNATIV 4.6.2 ->', t[1])
+    grafo.generarPadre(5)
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Type', t[4], 'Termino', t[6])
+
+def p_declnativ2(t):
+    '''DECLNATIV : trunc parentesisa int64 coma flotante parentesiscc'''
+    grafo.generarHijos(t[1], t[2], t[3], t[4], t[5], t[6])
+
+def p_declnativ3(t):
+    '''DECLNATIV :  float parentesisa int parentesisc'''
+    grafo.generarHijos(t[1], t[2], t[3], t[4])
+
+def p_declnativ4(t):
+    '''DECLNATIV :  string parentesisa ALGO parentesisc'''
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Termino', t[4])
+
+
+def p_declnativ5(t):
+    '''DECLNATIV : typeof parentesisa ALGO parentesisc'''
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Termino', t[4])
+
 #------------------------------OPERACIONES STRING ----------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
 def p_sopstring(t):
-    '''SOPSTRING : SOPSTRING asterisco SOPSTRING
-                | SOPSTRING elevado int'''
-    if t[2] == '*'  : t[0] = t[1] + t[3]
-    elif t[2] == '^': 
-        t[0] = ""
-        copia = t[1]
-        number = 0
-        while  number < t[3]:
-            t[0] = t[0] + copia
-            number = number +1
+    '''SOPSTRING : SOPSTRING asterisco SOPSTRING'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos("OPString", t[2], 'OPString')
+    t[0] = t[1] + t[3]
+
+
+def p_sopstring2(t):
+    '''SOPSTRING :  SOPSTRING elevado int'''
+    grafo.generarPadre(1)
+    grafo.generarHijos('OPString', t[2], t[3])
+    t[0] = ""
+    copia = t[1]
+    number = 0
+    while  number < t[3]:
+        t[0] = t[0] + copia
+        number = number +1
 
 def p_sopstringterm(t):
     '''SOPSTRING : cadena
                 | caracter
-                | SOPNATIV
                 | id'''
     t[0] = t[1]
+    grafo.generarHijos(t[1])
+
+def p_sopstringterm2(t):
+    '''SOPSTRING : SOPNATIV'''
+    t[0] = t[1]
+    grafo.generarPadre(1)
 
 #  ----------------------------OPERACIONES NUMÉRICAS--------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -390,6 +421,9 @@ def p_soperacion(t):
                     | SOPERACION dividido SOPERACION
                     | SOPERACION modulo SOPERACION
                     | SOPERACION elevado SOPERACION'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos("Operacion", t[2], 'Operacion')
     if t[2] == '+'  : t[0] = t[1] + t[3]
     elif t[2] == '-': t[0] = t[1] - t[3]
     elif t[2] == '*': t[0] = t[1] * t[3]
@@ -400,14 +434,22 @@ def p_soperacion(t):
 def p_soperacionUmenos(t):
     '''SOPERACION : menos SOPERACION %prec umenos'''
     t[0] = -t[2]
+    grafo.generarPadre(2)
+    grafo.generarHijos('-', 'Operacion')
 
 def p_soperacionPar(t):
     '''SOPERACION : parentesisa SOPERACION parentesisc'''
     t[0] = t[2]
+    grafo.generarPadre(2)
+    grafo.generarHijos("(", "Operacion", ")")
 
 def p_soperacionMath(t):
     '''SOPERACION : NATMATH parentesisa SOPERACION parentesisc'''
-    if t[1] == 'log10': t[0] = math.log10(t[3])
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)    
+    grafo.generarHijos('Función Matenática', t[2], "Operacion", t[4])
+    
+    if t[1] == 'log10': t[0] = math.log10(t[3])        
     elif t[1] == 'sin': t[0] = math.sin(t[3])
     elif t[1] == 'cos': t[0] = math.cos(t[3])
     elif t[1] == 'tan': t[0] = math.tan(t[3])
@@ -416,11 +458,18 @@ def p_soperacionMath(t):
 def p_soperacionlog(t):
     '''SOPERACION : log parentesisa SOPERACION coma SOPERACION parentesisc'''
     t[0] = math.log(t[5], t[3])
+    print('SOPLOG')
+    grafo.generarPadre(3)
+    grafo.generarPadre(5)
+    grafo.generarHijos(t[1], t[2], "Operacion", t[4], "Operacion", t[6])
+    
+    
     
 def p_soperacionNumeros(t):
     '''SOPERACION : int
                     | flotante'''
     t[0] = t[1]
+    grafo.generarHijos(t[1])
 
 def p_nathmath(t):
     '''NATMATH : log10
@@ -429,6 +478,7 @@ def p_nathmath(t):
                 | tan
                 | sqrt '''
     t[0] = t[1]
+    grafo.generarHijos(t[1])
 
 
 #  --------------------------------------- ERRORES --------------------------------------------------
@@ -440,7 +490,7 @@ def p_error(t):
         contaerrores = contaerrores+1
         error1 = NodoError(contaerrores, desc, t.lineno, t.lexpos)
         listaErrores.append(error1)
-        print("Error sintactico en '%s'" % t.value)
+        #print("Error sintactico en '%s'" % t.value)
     except:
         print('Algo pasó en el error :c')
 
@@ -460,9 +510,11 @@ def fighting2(texto):
     parser = yacc.yacc()
     result = parser.parse(texto)
     
-    for i in listaErrores:
-        print(i.descripcion, ' ', i.fila, ' ', i.columna, ' ', i.fecha)
-
+    #for i in listaErrores:
+    #    #print(i.descripcion, ' ', i.fila, ' ', i.columna, ' ', i.fecha)
+    #print("\n\n\n")
+    global grafo
+    print(grafo.textoNodo, '\n', grafo.textoEdges)
     exportacion = Exporte(impresion, '', '', listaErrores)
 
     return exportacion

@@ -30,13 +30,67 @@ class NodoSimbolo:
         self.columna = columna
 
 # ------------------------------------- AST ------------------------------------
-class NodoAST:
+class Nodo:
     def __init__(self):
-        texto = ""
-        contador = 0
+        pass
+    pass
+
+class NodoAST:
+    def __init__(self, nombre, hijos):
+        self.nombre = nombre
+        self.hijos = hijos #hijos es una de NodosAST
+   
 
 class GrafoCST:    
 
-    def  generarHijos( listahijos ):
+    pilahijos = []  #pila de arrays de nodos [[],[],[],[]] lista de listas if u may
+
+    #declaración de nodos
+    textoNodo = ""
+    pilaNodos = []
+
+    #declaración de relaciones de unos a otros
+    pilaLimites = []
+    textoEdges = ""
+
+    contador = 0
+    texto = []
+
+    #Genera los padres en funcion de los ultimos datos en la pila de Hijos
+    #la posición es la posición de la producción en la que está
+    #ej UNO : cadena DOS
+    #generarpadre(2)
+    def generarPadre(self, posicion):
+        posicion -= 1
+        limites = self.pilahijos.pop()
+        
+        for temp in limites:
+            dictaux = {
+                "from" : self.contador + posicion,
+                "to" : temp["id"]
+            }
+            self.pilaLimites.append(dictaux)
+            strxx = str(self.contador+posicion) + " -> " + str(temp["id"]) + "\n"
+            self.textoEdges += strxx
+
+
+    #genera los hijos del cosito, solo recibe strings
+    def generarHijos(self, *listahijos ): #este es cuando genera solo strings (?)
+
+        hijos = []
+
         for elemento in listahijos:
-            pass
+            hijo = {
+                "id" : self.contador,
+                "label": elemento #str(elemento)
+            }
+            hijos.append(hijo)              #lista de hijos del padre
+            self.pilaNodos.append(hijo)     #lista de hijos general -- ESTO ME SIRVE PARA EL INTÉRPRETE
+            straux = str(self.contador) + "[label= \"" + str(elemento) +"\"]\n"
+            self.textoNodo += straux
+            self.contador += 1
+        
+        self.pilahijos.append(hijos) #pila de arrays de nodos [[],[],[],[]] lista de listas if u may
+
+    def generarTexto(self, txt):
+        self.texto.append[txt]

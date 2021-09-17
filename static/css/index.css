@@ -2,6 +2,14 @@
     box-sizing: border-box;
   }
 
+  canvas {
+    margin: auto;
+    width: 70%;
+    display: block;
+    padding: 10px;
+    border: 1px solid white;
+}
+
   /* Create two equal columns that floats next to each other */
   .column {
     float: left;
