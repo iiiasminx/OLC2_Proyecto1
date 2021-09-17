@@ -1,6 +1,7 @@
 from datetime import datetime
 
-# ----------------------------------- OBJ EXPORTACION ---------------------------
+# ----------------------------------- OBJ EXPORTACION ------------------------------
+#-----------------------------------------------------------------------------------
 
 class Exporte:
     def __init__(self, interpretacion, tabla_simbolos, grafo, tabla_errores):
@@ -9,7 +10,8 @@ class Exporte:
         self.grafo = grafo
         self.tabla_errores = tabla_errores
 
-# ------------------------------------- TABLA ERRORES ---------------------------
+# ------------------------------------- TABLA ERRORES -----------------------------
+#-----------------------------------------------------------------------------------
 class NodoError:
 
     now = datetime.now()
@@ -20,7 +22,8 @@ class NodoError:
         self.fila = fila
         self.columna = columna
 
-# ------------------------------ TABLA DE SÍMBOLOS -----------------------------
+# ------------------------------ TABLA DE SÍMBOLOS ---------------------------------
+#-----------------------------------------------------------------------------------
 class NodoSimbolo:
     def __init__(self, nombre, tipo, ambito, fila, columna):
         self.nombre = nombre
@@ -30,16 +33,7 @@ class NodoSimbolo:
         self.columna = columna
 
 # ------------------------------------- AST ------------------------------------
-class Nodo:
-    def __init__(self):
-        pass
-    pass
-
-class NodoAST:
-    def __init__(self, nombre, hijos):
-        self.nombre = nombre
-        self.hijos = hijos #hijos es una de NodosAST
-   
+#-----------------------------------------------------------------------------------
 
 class GrafoCST:    
 
@@ -94,3 +88,25 @@ class GrafoCST:
 
     def generarTexto(self, txt):
         self.texto.append[txt]
+
+
+# ----------------------------------INSTRUCCION ------------------------------------
+#-----------------------------------------------------------------------------------
+
+class Instruccion:
+    def __init__(self, tipo, args):
+        self.tipo = tipo
+        self.args = args #Este es un arreglo con lo que necesito saber para las instrucciones
+
+# ------------------------------------- COSOS X ------------------------------------
+#-----------------------------------------------------------------------------------
+class Nodo:
+    def __init__(self):
+        pass
+    pass
+
+class NodoAST:
+    def __init__(self, nombre, hijos):
+        self.nombre = nombre
+        self.hijos = hijos #hijos es una de NodosAST
+   

@@ -40,9 +40,28 @@ precedence = (
 #  ------------------------------------------INICIO--------------------------------------------------
 #----------------------------------------------------------------------------------------------------
 def p_inicio(t):
-    '''INICIO : INSTRUCCIONES'''
+    '''INICIO : INSTRUCCIONES2'''
     #print("Se super acetpó",  t)
 
+def p_instrucciones2(t):
+    '''INSTRUCCIONES2 : INSTRUCCION2 INSTRUCCIONES2
+                     | INSTRUCCION2'''
+
+def p_instruccion2(t):
+    '''INSTRUCCION2  :  IMPRIMIR
+                    | FUNCIONES
+                    | SCOPE
+                    | DECLFUNC
+                    | LLAMADAFUNC
+                    | TRANSF
+                    | TYPESTRUCT
+                    | LLAMADARR
+                    | STRUCTINI
+                    | SOPERACIONES'''  #este ultimo es temporal
+    grafo.generarPadre(1)   
+
+
+#LO QUE VA ADENTRO DEL TEXTO
 def p_instrucciones(t):
     '''INSTRUCCIONES : INSTRUCCION INSTRUCCIONES
                      | INSTRUCCION'''
@@ -58,7 +77,7 @@ def p_instruccion(t):
                     | LLAMADARR
                     | STRUCTINI
                     | SOPERACIONES'''  #este ultimo es temporal
-    grafo.generarPadre(1)
+
 
 def p_soperaciones(t):
     '''SOPERACIONES : SOPSTRING
@@ -191,31 +210,48 @@ def p_nombrealgo(t):
 
 def p_asignaciones3(t):
     '''ASIGNACION : NOMBREALGO igual SOPSTRING puntocoma'''
-    #print('ASIGNACION STRING --', t[3])
+    #grafo.generarHijos('prueba')
+    grafo.generarPadre(3)    
+    grafo.generarPadre(1)
+    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4]) 
 
 def p_asignaciones4(t):
     '''ASIGNACION : NOMBREALGO igual SOPSTRING dos_dospuntos TIPOS puntocoma'''
-    #print('ASIGNACION STRING: ', t[5])
+    #grafo.generarHijos('prueba')
+    #grafo.generarHijos('prueba')
+    grafo.generarPadre(5)    
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4], 'Tipo', t[6])
 
 
 #cualquiera
 
 def p_asignaciones(t):
     '''ASIGNACION : NOMBREALGO igual ALGO puntocoma'''
-    #print('ASIGNACION CUALQUIERA --', t[3])
+    #grafo.generarHijos('prueba')
+    grafo.generarPadre(3)    
+    grafo.generarPadre(1)
+    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4])  
 
 
 def p_asignaciones2(t):
     '''ASIGNACION : NOMBREALGO igual ALGO dos_dospuntos TIPOS puntocoma'''
-    #print('ASIGNACION CUALQUIERA: ', t[5])
-
+    #grafo.generarHijos('prueba')
+    #grafo.generarHijos('prueba')
+    grafo.generarPadre(5)    
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4], 'Tipo', t[6])
 
 
 #nothing
 
 def p_asignaciones4(t):
     '''ASIGNACION : NOMBREALGO igual nothing puntocoma'''
-    #print('ASIGNACION NOTHING --', t[3])
+    #grafo.generarHijos('prueba')
+    grafo.generarPadre(1)
+    grafo.generarHijos('Identificador', t[2], t[3], t[4])
 
 #  ---------------------------------FUNCIONES---------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -224,53 +260,85 @@ def p_funciones(t):
     '''FUNCIONES : FIF
                 | FWHILE
                 | FFOR'''
+    grafo.generarPadre(1)
+    grafo.generarHijos('FUNCIÓN')
 
 def p_transferencia(t):
     '''TRANSF : break puntocoma
             | continue puntocoma
             | return puntocoma'''
-    #print('SENTENCIA DE TRANSFERENCIA: ', t[1])
+    grafo.generarHijos(t[1], t[2])
 
 #  -------------------------------------- FOR---------------------------------------------------------
 
 def p_ffor(t):
     '''FFOR : for id in RANGO INSTRUCCIONES end puntocoma'''
-    #print('Eso fue un for de', t[2], ' en ', t[4])
+    grafo.generarPadre(5)
+    grafo.generarPadre(4)
+    grafo.generarHijos(t[1], t[2], t[3], 'Rango', 'Instrucciones', t[6], t[7])
 
 def p_rangofor(t):
-    '''RANGO : int dospuntos int
-            | cadena'''
-    if str(t[1]).isnumeric():
-        t[0] =  t[3] - (t[1] - 1)
-    else:
-        t[0] = len(str(t[1]))
+    '''RANGO : int dospuntos int'''
+    grafo.generarHijos(t[1], t[2], t[3])
+    t[0] =  t[3] - (t[1] - 1)
+
+def p_rangofor2(t):
+    '''RANGO : cadena'''
+    grafo.generarHijos(t[1])
+    t[0] = len(str(t[1]))
 #  ------------------------------------WHILE ---------------------------------------------------------
 
 def p_fwhile(t):
     '''FWHILE : while SOPLOG INSTRUCCIONES end puntocoma'''
-    #print('Eso fue un while si', t[2])
+    grafo.generarPadre(3)
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4], t[5])
 
 #  -------------------------------------- IF ---------------------------------------------------------
 
 def p_fif(t):
     '''FIF : if SOPLOG INSTRUCCIONES FELSEIF
-            | if SOPLOG INSTRUCCIONES FELSE
-            | if SOPLOG INSTRUCCIONES end puntocoma''' 
-    #print('IF 1')
+            | if SOPLOG INSTRUCCIONES FELSE''' 
+    grafo.generarPadre(4)
+    grafo.generarPadre(3)
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', 'Condicional')
+
+
+def p_fif2(t):
+    '''FIF :  if SOPLOG INSTRUCCIONES end puntocoma''' 
+    grafo.generarPadre(3)
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4], t[5])
+    print('BUSQ: ', grafo.textoEdges)
+   
 
 def p_felseif(t):
     '''FELSEIF : elseif SOPLOG INSTRUCCIONES FELSEIF
-            | elseif SOPLOG INSTRUCCIONES FELSE
-            | elseif SOPLOG INSTRUCCIONES end puntocoma'''
-    #print('ELSEIF 1')
+            | elseif SOPLOG INSTRUCCIONES FELSE'''
+    grafo.generarPadre(4)
+    grafo.generarPadre(3)
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', 'Condicional')
+
+def p_felseif2(t):
+    '''FELSEIF : elseif SOPLOG INSTRUCCIONES end puntocoma'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4], t[5])
+    
         
 def p_felse(t):
     '''FELSE : else INSTRUCCIONES end puntocoma'''
-    #print('ELSE 1')
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Instrucciones', t[3], t[4])
 
 def p_fifunilinea(t):
     ''' FIFUNI : SOPLOG interrogacionc ALGO dospuntos ALGO'''
-    #print('FIFUNI', t[1], ' SISI: ', t[3], ' SINO ', t[5])
+    grafo.generarPadre(5)
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Operacion', t[2], 'Termino', t[4], 'Termino')
 
 #  ---------------------------------IMPRIMIR----------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -278,16 +346,23 @@ def p_fifunilinea(t):
 def p_sprint(t):
     '''IMPRIMIR : println parentesisa SCONTPRNT parentesisc puntocoma
                 | print parentesisa SCONTPRNT parentesisc puntocoma'''
-    #print('IMPRIMIR 1')
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Terminos', t[4], t[5])
 
 def p_scontprint(t):
     '''SCONTPRNT : SCONTPRNT coma SCONTPRNT'''
     t[0] = str(t[1]) + str(t[3])
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Termino', t[2], 'Termino')
 
 def p_scontprintterm(t):
     '''SCONTPRNT :  ALGO
                 | FIFUNI'''
     t[0] = t[1]
+    grafo.generarPadre(1)
+    grafo.generarHijos('CONTENIDO')
+    
 
 
 # *********************************************************************************************************
@@ -308,6 +383,10 @@ def p_soplog(t):
             | SOPLOG menoriwal SOPLOG
             | SOPLOG iwaliwal SOPLOG
             | SOPLOG distintoque SOPLOG'''
+    #grafo.generarHijos('prueba')
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Operacion', t[2], 'Operacion')
     if t[2] == '&&'  : t[0] = t[1] and t[3]
     elif t[2] == '||': t[0] = t[1] or t[3] 
     elif t[2] == '<': t[0] = t[1] < t[3] 
@@ -321,7 +400,15 @@ def p_soplog(t):
 def p_soplogPar(t):
     '''SOPLOG : parentesisa SOPLOG parentesisc'''
     t[0] = t[2]
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Operacion', t[3])
 
+def p_soplogterm2(t):
+    '''SOPLOG : SOPERACION'''
+    t[0] = t[1]
+    #grafo.generarPadre(1)
+    #grafo.generarHijos('OPERACIÓN LÓGICA')
+    
 
 def p_soplogterm(t):
     '''SOPLOG : true
@@ -329,9 +416,11 @@ def p_soplogterm(t):
             | int
             | flotante
             | cadena
-            | caracter
-            | SOPERACION'''
+            | caracter'''
     t[0] = t[1]
+    grafo.generarHijos(t[1])
+
+
             
 
 #------------------------------OPERACIONES NATIVAS----------------------------------------------------
@@ -341,6 +430,9 @@ def p_sopnativ(t):
     '''SOPNATIV : uppercase parentesisa SOPN parentesisc
                 | lowercase parentesisa SOPN parentesisc
                 | length parentesisa SOPN parentesisc'''
+    #grafo.generarHijos('prueba')
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Termino', t[4])
     if t[1] == 'uppercase'  : t[0] = str(t[3]).upper()
     elif t[1] == 'lowercase'  : t[0] = str(t[3]).lower()
     elif t[1] == 'length'  : t[0] = len(str(t[3]))
@@ -348,20 +440,26 @@ def p_sopnativ(t):
 def p_sopnativterm(t):
     ''' SOPN : cadena
             | caracter
-            | id
-            | SOPSTRING'''
+            | id'''
     t[0] = t[1]
+    grafo.generarHijos(t[1])
+
+def p_sopnativterm(t):
+    ''' SOPN :  SOPSTRING'''
+    t[0] = t[1]
+    grafo.generarPadre(1)
+
 
 def p_declnativ(t):
     '''DECLNATIV : parse parentesisa TIPOS coma ALGO parentesisc'''
-    #print('EN DECLNATIV 4.6.2 ->', t[1])
     grafo.generarPadre(5)
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Type', t[4], 'Termino', t[6])
 
 def p_declnativ2(t):
-    '''DECLNATIV : trunc parentesisa int64 coma flotante parentesiscc'''
+    '''DECLNATIV : trunc parentesisa int64 coma flotante parentesisc'''
     grafo.generarHijos(t[1], t[2], t[3], t[4], t[5], t[6])
+
 
 def p_declnativ3(t):
     '''DECLNATIV :  float parentesisa int parentesisc'''
@@ -369,9 +467,9 @@ def p_declnativ3(t):
 
 def p_declnativ4(t):
     '''DECLNATIV :  string parentesisa ALGO parentesisc'''
+    #grafo.generarHijos('algo')
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Termino', t[4])
-
 
 def p_declnativ5(t):
     '''DECLNATIV : typeof parentesisa ALGO parentesisc'''
@@ -461,8 +559,7 @@ def p_soperacionlog(t):
     print('SOPLOG')
     grafo.generarPadre(3)
     grafo.generarPadre(5)
-    grafo.generarHijos(t[1], t[2], "Operacion", t[4], "Operacion", t[6])
-    
+    grafo.generarHijos(t[1], t[2], "Operacion", t[4], "Operacion", t[6])   
     
     
 def p_soperacionNumeros(t):
@@ -470,7 +567,7 @@ def p_soperacionNumeros(t):
                     | flotante'''
     t[0] = t[1]
     grafo.generarHijos(t[1])
-
+    
 def p_nathmath(t):
     '''NATMATH : log10
                 | sin
@@ -505,6 +602,10 @@ def fighting2(texto):
     listaErrores = []
     global contaerrores
     contaerrores = 0
+    global grafo
+    grafo.textoNodo = ""
+    grafo.textoEdges = ""
+    grafo.contador = 0
     paraImprimir('cosas que se imprimen -------------------------------------------------------\n')
 
     parser = yacc.yacc()
@@ -513,7 +614,6 @@ def fighting2(texto):
     #for i in listaErrores:
     #    #print(i.descripcion, ' ', i.fila, ' ', i.columna, ' ', i.fecha)
     #print("\n\n\n")
-    global grafo
     print(grafo.textoNodo, '\n', grafo.textoEdges)
     exportacion = Exporte(impresion, '', '', listaErrores)
 
