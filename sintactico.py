@@ -50,12 +50,14 @@ def p_instruccion(t):
                     | DECLFUNC
                     | LLAMADAFUNC
                     | TRANSF
-                    | TYPESTRUCT'''    
+                    | TYPESTRUCT
+                    | LLAMADARR
+                    | STRUCTINI'''    
 
 def p_soperaciones(t):
-    '''SOPERACIONES : SOPERACION
-                    | SOPSTRING
+    '''SOPERACIONES : SOPSTRING
                     | SOPNATIV
+                    | SOPERACION
                     | SOPLOG
                     | DECLNATIV'''
     t[0] = t[1]
@@ -74,8 +76,11 @@ def p_tipos(t):
 
 def p_algo(t):
     '''ALGO : SOPERACIONES
+            | STRUCTASIGN
             | id
-            | ARREGLO'''
+            | ARREGLO
+            | LLAMADARR
+            | STRUCTINI'''
     t[0] = t[1]
     print('creeeo que la respuesta es: ', t[0])
 
@@ -99,7 +104,13 @@ def p_atributo(t):
                 | id puntocoma'''
     print('atributo: ', t[1])
 
+def p_creacionstruct(t):
+    '''STRUCTINI : id parentesisa PARAMSFUNC parentesisc'''
+    print('ESTOY INICIANDO UN STRUCT')
 
+def p_structasign(t):
+    '''STRUCTASIGN : id punto id'''
+    t[0] = t[1] + t[2] + t[3]
 #  ------------------------------------ ARREGLOS------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
@@ -111,6 +122,25 @@ def p_arrcont(t):
     '''ARRCONT : ARRCONT coma ALGO
             | ALGO
             | '''
+
+def p_llamadaarr(t):
+    '''LLAMADARR : id INDARS'''
+    print('ESTO ES LA LLAMADA A ', t[1] ,' EN ÍNDICE', t[2])
+
+def p_indicearr(t):
+    '''INDARS :  INDARS INDAR'''
+    t[0] = []
+    t[0].append(t[1])
+    t[0].append(t[2])  
+    
+def p_indicearr2(t):
+    '''INDARS : INDAR'''
+    t[0] = t[1] 
+
+def p_indar(t):
+    '''INDAR : corchetea id corchetec
+            | corchetea SOPERACION corchetec'''
+    t[0] = t[2]
 
 #  ------------------------------------FUNCIONES------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -146,18 +176,38 @@ def p_sope(t):
 
 #cualquiera
 
+def p_nombrealgo(t):
+    '''NOMBREALGO : LLAMADARR
+                | STRUCTASIGN
+                | id'''
+
+#string
+
+def p_asignaciones3(t):
+    '''ASIGNACION : NOMBREALGO igual SOPSTRING puntocoma'''
+    print('ASIGNACION STRING --', t[3])
+
+def p_asignaciones4(t):
+    '''ASIGNACION : NOMBREALGO igual SOPSTRING dos_dospuntos TIPOS puntocoma'''
+    print('ASIGNACION STRING: ', t[5])
+
+
+#cualquiera
+
 def p_asignaciones(t):
-    '''ASIGNACION : id igual ALGO puntocoma'''
+    '''ASIGNACION : NOMBREALGO igual ALGO puntocoma'''
     print('ASIGNACION CUALQUIERA --', t[3])
 
 def p_asignaciones2(t):
-    '''ASIGNACION : id igual ALGO dos_dospuntos TIPOS puntocoma'''
+    '''ASIGNACION : NOMBREALGO igual ALGO dos_dospuntos TIPOS puntocoma'''
     print('ASIGNACION CUALQUIERA: ', t[5])
+
+
 
 #nothing
 
 def p_asignaciones4(t):
-    '''ASIGNACION : id igual nothing puntocoma'''
+    '''ASIGNACION : NOMBREALGO igual nothing puntocoma'''
     print('ASIGNACION NOTHING --', t[3])
 
 #  ---------------------------------FUNCIONES---------------------------------------------------------
