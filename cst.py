@@ -14,7 +14,8 @@ class NodoError:
 
     now = datetime.now()
     fecha = now.strftime("%d/%m/%Y %H:%M:%S")
-    def __init__(self, descripcion, fila, columna):
+    def __init__(self, contador, descripcion, fila, columna):
+        self.contador = contador
         self.descripcion = descripcion
         self.fila = fila
         self.columna = columna

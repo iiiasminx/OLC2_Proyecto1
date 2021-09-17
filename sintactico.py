@@ -18,6 +18,8 @@ global listaErrores
 listaErrores = []
 global listaSimbolos
 listaSimbolos = []
+global contaerrores
+contaerrores = 0
 
 #precedencia
 precedence = (
@@ -433,10 +435,12 @@ def p_nathmath(t):
 #-----------------------------------------------------------------------------------------------------
 def p_error(t):
     try: 
-        desc = 'Error sintáctico con ' + t.value
-        error1 = NodoError(desc, t.lineno, t.lexpos)
+        desc = 'Error sintactico con \"' + t.value + '\"'
+        global contaerrores
+        contaerrores = contaerrores+1
+        error1 = NodoError(contaerrores, desc, t.lineno, t.lexpos)
         listaErrores.append(error1)
-        print("Error sintáctico en '%s'" % t.value)
+        print("Error sintactico en '%s'" % t.value)
     except:
         print('Algo pasó en el error :c')
 
@@ -449,6 +453,8 @@ def fighting2(texto):
     impresion = ''
     global listaErrores
     listaErrores = []
+    global contaerrores
+    contaerrores = 0
     paraImprimir('cosas que se imprimen -------------------------------------------------------\n')
 
     parser = yacc.yacc()
@@ -457,7 +463,11 @@ def fighting2(texto):
     for i in listaErrores:
         print(i.descripcion, ' ', i.fila, ' ', i.columna, ' ', i.fecha)
 
-    return impresion
+    exportacion = Exporte(impresion, '', '', listaErrores)
+
+    return exportacion
+
+
 
 def paraImprimir(texto):
     global impresion 

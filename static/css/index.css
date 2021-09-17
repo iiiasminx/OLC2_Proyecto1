@@ -19,6 +19,14 @@
     /* Should be removed. Only for demonstration */
   }
 
+  .column3 {
+    float: left;
+    width: 5%;
+    padding: 10px;
+    height: 400px;
+    /* Should be removed. Only for demonstration */
+  }
+
   /* Clear floats after the columns */
   .row:after {
     content: "";

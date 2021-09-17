@@ -51,9 +51,6 @@
           <li class="nav-item">
             <a class="nav-link" href="about">About me!</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="reportes">Reportes</a>
-          </li>
         </ul>
 
       </div>
@@ -63,9 +60,9 @@
   <p></p>
   <p></p>
   <br>
-  <form action="/submit" method="POST"> 
+  <form action="/submit" method="POST">
     <h2>&emsp;Intérprete
-    <input id="done" type="submit" value="Analizar" class="btn btn-primary" />
+      <input id="done" type="submit" value="Analizar" class="btn btn-primary" />
     </h2>
     <br>
     <div class="row form-group">
@@ -73,20 +70,81 @@
       </div>
       <div class="column" style="background-color:#aaa;">
         <h2>Entrada</h2>
-        <textarea  type="text" class="form-control" id="entrada" name="entrada"></textarea >
+        <textarea type="text" class="form-control" id="entrada" name="entrada"></textarea>
       </div>
       <div class="column2">
       </div>
       <div class="column" style="background-color:#bbb;">
         <h2>Salida</h2>
-        <textarea  type="text" class="form-control" disabled id="salida"></textarea >
+        <textarea type="text" class="form-control" disabled id="salida"></textarea>
       </div>
     </div>
-
   </form>
+
+  </br></br>
+
+  <div class="row form-group">
+    <div class="column2">
+    </div>
+    <div class="column">
+
+      <form>
+        <h2>&emsp;Reporte de Errores</h2>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">No.</th>
+              <th scope="col">Descripción</th>
+              <th scope="col">Fila</th>
+              <th scope="col">Columna</th>
+              <th scope="col">Hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for error in listaErrores %}
+
+            <tr>
+              <td>{{error.contador}}</td>
+              <td>{{error.descripcion}}</td>
+              <td>{{error.fila}}</td>
+              <td>{{error.columna}}</td>
+              <td>{{error.fecha}}</td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </form>
+    </div>
+    <div class="column2">
+    </div>
+    <div class="column">
+
+      <form>
+        <h2>&emsp;Tabla de Símbolos</h2>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Ámbito</th>
+              <th scope="col">Fila</th>
+              <th scope="col">Columna</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
+      </form>
+    </div>
+  </div>
+
+
 
   <pre><p id="txtsalida">{{ mesg }}</p></pre>
   <pre><p id="txtentrada" >{{ entrada }}</p></pre>
+  <pre><p id="txterrores" >{{ listaErrores }}</p></pre>
 
 
 </body>

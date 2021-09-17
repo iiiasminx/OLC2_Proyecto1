@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, jsonify
+import json
+
 from gramatica import fighting
 from sintactico import fighting2
+from cst import NodoSimbolo, NodoError, Exporte #Falta el AST cuando entienda que pex xdxd
 
 app = Flask(__name__, static_url_path='')
 
@@ -26,9 +29,18 @@ def submit():
         entrada = request.form['entrada']
         print('Este es ->' + entrada)
         fighting(entrada) #lexico
-        mesg =  fighting2(entrada)
-        #mesg = 'este es mi codigo traducido y toda la onda' + entrada
-        return render_template('index.html', mesg=mesg, entrada=entrada)
+
+        #todo lo que viene del analizador
+        importe =  fighting2(entrada) 
+
+        # codigo interpretado
+        mesg = importe.interpretacion
+
+        #lista de errores
+        listaErrores = importe.tabla_errores
+        json_string2 = json.dumps([ob.__dict__ for ob in listaErrores])
+
+        return render_template('index.html', mesg=mesg, entrada=entrada, listaErrores=listaErrores)
 
 @app.route('/submit', methods=['GET'])
 def submit2():

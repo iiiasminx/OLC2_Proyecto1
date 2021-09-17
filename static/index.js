@@ -27,6 +27,7 @@ $(document).ready(function () {
   //labels que no se pueden ver
   document.getElementById("txtsalida").style.display = 'none';
   document.getElementById("txtentrada").style.display = 'none';
+  document.getElementById("txterrores").style.display = 'none';
 
   if (window.location.href.indexOf("submit") > -1) {
     //editorSalida.getDoc().setValue('var msg = "Hi";');
