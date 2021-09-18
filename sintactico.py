@@ -41,11 +41,21 @@ precedence = (
 #----------------------------------------------------------------------------------------------------
 def p_inicio(t):
     '''INICIO : INSTRUCCIONES2'''
-    #print("Se super acetpó",  t)
+    grafo.generarPadre(1)
+    grafo.generarHijos('INICIO')
+
 
 def p_instrucciones2(t):
-    '''INSTRUCCIONES2 : INSTRUCCION2 INSTRUCCIONES2
-                     | INSTRUCCION2'''
+    '''INSTRUCCIONES2 : INSTRUCCION2 puntocoma INSTRUCCIONES2'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Instruccion', t[2], 'Instrucciones')
+
+
+def p_instrucciones21(t):
+    '''INSTRUCCIONES2 :  INSTRUCCION2 puntocoma'''
+    grafo.generarPadre(1)
+    grafo.generarHijos('Instruccion', t[2])
 
 def p_instruccion2(t):
     '''INSTRUCCION2  :  IMPRIMIR
@@ -54,12 +64,8 @@ def p_instruccion2(t):
                     | DECLFUNC
                     | LLAMADAFUNC
                     | TRANSF
-                    | TYPESTRUCT
-                    | LLAMADARR
-                    | STRUCTINI
                     | SOPERACIONES'''  #este ultimo es temporal
-    grafo.generarPadre(1)   
-
+    #grafo.generarPadre(1)   
 
 #LO QUE VA ADENTRO DEL TEXTO
 def p_instrucciones(t):
@@ -73,9 +79,6 @@ def p_instruccion(t):
                     | DECLFUNC
                     | LLAMADAFUNC
                     | TRANSF
-                    | TYPESTRUCT
-                    | LLAMADARR
-                    | STRUCTINI
                     | SOPERACIONES'''  #este ultimo es temporal
 
 
@@ -98,95 +101,63 @@ def p_tipos(t):
             | char
             | string'''
     t[0] = t[1]
+    grafo.generarHijos(t[1])
 
 def p_algo(t):
-    '''ALGO : SOPERACIONES
-            | STRUCTASIGN
-            | id
-            | ARREGLO
-            | LLAMADARR
-            | STRUCTINI'''
+    '''ALGO : SOPERACIONES'''
     t[0] = t[1]
-    #print('creeeo que la respuesta es: ', t[0])
+    grafo.generarPadre(1)
+    grafo.generarHijos('Data')
 
-#  -------------------------------------- STRUCT------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------
-
-def p_typestruct(t):
-    '''TYPESTRUCT : mutable STRUCT
-                    | STRUCT'''
-    #print('Esto termina un struct')
-
-def p_struct(t):
-    '''STRUCT : struct id ATRIBUTOS end puntocoma'''
-
-def p_atributos(t):
-    '''ATRIBUTOS : ATRIBUTO ATRIBUTOS
-                | ATRIBUTO '''
-
-def p_atributo(t):
-    '''ATRIBUTO : id dos_dospuntos TIPOS puntocoma
-                | id puntocoma'''
-    #print('atributo: ', t[1])
-
-def p_creacionstruct(t):
-    '''STRUCTINI : id parentesisa PARAMSFUNC parentesisc'''
-    #print('ESTOY INICIANDO UN STRUCT')
-
-def p_structasign(t):
-    '''STRUCTASIGN : id punto id'''
-    t[0] = t[1] + t[2] + t[3]
-#  ------------------------------------ ARREGLOS------------------------------------------------------
-#-----------------------------------------------------------------------------------------------------
-
-def p_arreglo(t):
-    '''ARREGLO : corchetea ARRCONT corchetec'''
-    #print('ESTO TERMINA UN ARREGLO')
-
-def p_arrcont(t):
-    '''ARRCONT : ARRCONT coma ALGO
-            | ALGO
-            | '''
-
-def p_llamadaarr(t):
-    '''LLAMADARR : id INDARS'''
-    #print('ESTO ES LA LLAMADA A ', t[1] ,' EN ÍNDICE', t[2])
-
-def p_indicearr(t):
-    '''INDARS :  INDARS INDAR'''
-    t[0] = []
-    t[0].append(t[1])
-    t[0].append(t[2])  
+def p_algo2(t):
+    '''ALGO : id'''
+    t[0] = t[1]
+    grafo.generarHijos(t[1])
     
-def p_indicearr2(t):
-    '''INDARS : INDAR'''
-    t[0] = t[1] 
 
-def p_indar(t):
-    '''INDAR : corchetea id corchetec
-            | corchetea SOPERACION corchetec'''
-    t[0] = t[2]
 
 #  ------------------------------------FUNCIONES------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
 def p_declfunc(t):
     '''DECLFUNC : function id parentesisa PARAMS parentesisc INSTRUCCIONES end puntocoma'''
-    #print('LO DE ARRIBA ERA UNA FUNCION')
+    grafo.generarPadre(6)
+    grafo.generarPadre(4)
+    grafo.generarHijos(t[1], t[2], t[3], 'Parametros', t[5], 'Instrucciones', t[7], t[8])
 
 def p_params(t):
-    '''PARAMS : PARAMS coma id
-            | id 
-            | '''
+    '''PARAMS : PARAMS coma PARAMS '''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Param', t[2], 'Param')
+
+
+def p_params2(t):
+    '''PARAMS : id '''
+    grafo.generarHijos(t[1])
+
+def p_params3(t):
+    '''PARAMS :  '''
+    grafo.generarHijos('')
 
 def p_llamadafunc(t):
     '''LLAMADAFUNC : id parentesisa PARAMSFUNC parentesisc puntocoma'''
-    #print('LLAMANDO A: ', t[1])
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Parámetros', t[4], t[5])
 
 def p_paramsfunc(t):
-    '''PARAMSFUNC : PARAMSFUNC coma ALGO
-                | ALGO
-                | '''
+    '''PARAMSFUNC : PARAMSFUNC coma PARAMSFUNC'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Param', t[2], 'Param')
+
+def p_paramsfunc3(t):
+    '''PARAMSFUNC :  ALGO'''    
+    #grafo.generarHijos('prueba')
+
+def p_paramsfunc2(t):
+    '''PARAMSFUNC :  '''
+    grafo.generarHijos('')
 #  ---------------------------------ASIGNACIONES------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
@@ -195,16 +166,29 @@ def p_sope(t):
             | local ASIGNACION
             | ASIGNACION'''
     t[0] = t[1]
-    if t[1] == 'global'  : print('SCOPE EN EL ANTERIOR')
-    elif t[1] == 'local'  : print('SCOPE EN EL ANTERIOR')
+    if t[1] == 'global'  : 
+        grafo.generarPadre(2)
+        grafo.generarHijos(t[1], 'Asign')
+    elif t[1] == 'local'  : 
+        grafo.generarPadre(2)
+        grafo.generarHijos(t[1], 'Asign')
+    else:
+        x= 1
+        #grafo.generarPadre(1)
+        #grafo.generarHijos('ASIGNACION')
     
 
 #cualquiera
 
 def p_nombrealgo(t):
-    '''NOMBREALGO : LLAMADARR
-                | STRUCTASIGN
-                | id'''
+    '''NOMBREALGO : id'''
+    grafo.generarPadre(1)
+    grafo.generarHijos('Identificador')
+    
+
+def p_nombrealgo(t):
+    '''NOMBREALGO : id'''
+    grafo.generarHijos(t[1])
 
 #string
 
