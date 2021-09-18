@@ -64,13 +64,23 @@ def p_instruccion2(t):
                     | DECLFUNC
                     | LLAMADAFUNC
                     | TRANSF
-                    | SOPERACIONES'''  #este ultimo es temporal
+                    | SOPERACIONES
+                    | TYPESTRUCT'''  
     #grafo.generarPadre(1)   
 
 #LO QUE VA ADENTRO DEL TEXTO
-def p_instrucciones(t):
-    '''INSTRUCCIONES : INSTRUCCION INSTRUCCIONES
-                     | INSTRUCCION'''
+def p_instrucciones1(t):
+    '''INSTRUCCIONES : INSTRUCCION puntocoma INSTRUCCIONES'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Instruccion', t[2], 'Instrucciones')
+
+
+def p_instrucciones11(t):
+    '''INSTRUCCIONES :  INSTRUCCION puntocoma'''
+    grafo.generarPadre(1)
+    grafo.generarHijos('Instruccion', t[2])
+
 
 def p_instruccion(t):
     '''INSTRUCCION  :  IMPRIMIR
@@ -79,7 +89,8 @@ def p_instruccion(t):
                     | DECLFUNC
                     | LLAMADAFUNC
                     | TRANSF
-                    | SOPERACIONES'''  #este ultimo es temporal
+                    | SOPERACIONES
+                    | TYPESTRUCT'''  #este ultimo es temporal
 
 
 def p_soperaciones(t):
@@ -104,26 +115,125 @@ def p_tipos(t):
     grafo.generarHijos(t[1])
 
 def p_algo(t):
-    '''ALGO : SOPERACIONES'''
+    '''ALGO : SOPERACIONES
+            | ARREGLO
+            | LLAMADARR
+            | STRUCTINI'''
     t[0] = t[1]
-    grafo.generarPadre(1)
-    grafo.generarHijos('Data')
+    #grafo.generarPadre(1)
+    #grafo.generarHijos('Data')
 
 def p_algo2(t):
     '''ALGO : id'''
     t[0] = t[1]
     grafo.generarHijos(t[1])
     
+#  -------------------------------------- STRUCT------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
 
+def p_typestruct(t):
+    '''TYPESTRUCT : STRUCT'''
+    grafo.generarPadre(1)
+    grafo.generarHijos('Struct')
+    
+def p_typestruct2(t):
+    '''TYPESTRUCT : mutable STRUCT'''
+    grafo.generarPadre(1)
+    grafo.generarHijos(t[1], 'Struct')
+    
+
+def p_struct(t):
+    '''STRUCT : struct id ATRIBUTOS end'''
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Atributos', t[4])
+
+def p_atributos(t):
+    '''ATRIBUTOS : ATRIBUTO  puntocoma ATRIBUTOS'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Atributo', t[2], 'Atributo')
+
+def p_atributos2(t):
+    '''ATRIBUTOS :  ATRIBUTO  puntocoma'''
+    grafo.generarPadre(1)
+    grafo.generarHijos('Atributo', t[2])
+
+def p_atributo(t):
+    '''ATRIBUTO : id dos_dospuntos TIPOS ''' 
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Type')
+
+def p_atributo2(t):
+    '''ATRIBUTO :  id ''' #quite el ; de acá
+    grafo.generarHijos(t[1])
+
+def p_creacionstruct(t):
+    '''STRUCTINI : id parentesisa PARAMSFUNC parentesisc'''
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Params', t[4])
+
+
+def p_structasign(t):
+    '''STRUCTASIGN : id punto id'''
+    t[0] = t[1] + t[2] + t[3]
+    grafo.generarHijos(t[1], t[2], t[3])
+
+#  ------------------------------------ ARREGLOS------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+def p_arreglo(t):
+    '''ARREGLO : corchetea ARRCONT corchetec'''
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Contenido', t[3])
+
+def p_arrcont(t):
+    '''ARRCONT : ARRCONT coma ARRCONT '''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Valor', t[2], 'Contenido')
+
+def p_arrcont2(t):
+    '''ARRCONT :  ALGO '''
+
+def p_arrcont3(t):
+    '''ARRCONT :  '''
+    grafo.generarHijos('')
+
+def p_llamadaarr(t):
+    '''LLAMADARR : id INDARS'''
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Indices')
+
+def p_indarcvzx(t):
+    '''INDARS : INDAR corchetec INDARS'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Indice', t[2], 'Indices')
+
+def p_indars2(t):
+    '''INDARS : INDAR corchetec'''
+    grafo.generarPadre(1)
+    grafo.generarHijos('Indice', t[2])
+
+def p_indar2(t):
+    '''INDAR : corchetea id'''
+    t[0] = t[2]
+    grafo.generarHijos(t[1], t[2])
+
+def p_indar(t):
+    '''INDAR :  corchetea SOPERACION '''
+    t[0] = t[2]
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Operación')
 
 #  ------------------------------------FUNCIONES------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
 def p_declfunc(t):
-    '''DECLFUNC : function id parentesisa PARAMS parentesisc INSTRUCCIONES end puntocoma'''
+    '''DECLFUNC : function id parentesisa PARAMS parentesisc INSTRUCCIONES end '''
     grafo.generarPadre(6)
     grafo.generarPadre(4)
-    grafo.generarHijos(t[1], t[2], t[3], 'Parametros', t[5], 'Instrucciones', t[7], t[8])
+    grafo.generarHijos(t[1], t[2], t[3], 'Parametros', t[5], 'Instrucciones', t[7])
 
 def p_params(t):
     '''PARAMS : PARAMS coma PARAMS '''
@@ -141,9 +251,9 @@ def p_params3(t):
     grafo.generarHijos('')
 
 def p_llamadafunc(t):
-    '''LLAMADAFUNC : id parentesisa PARAMSFUNC parentesisc puntocoma'''
+    '''LLAMADAFUNC : id parentesisa PARAMSFUNC parentesisc'''
     grafo.generarPadre(3)
-    grafo.generarHijos(t[1], t[2], 'Parámetros', t[4], t[5])
+    grafo.generarHijos(t[1], t[2], 'Parámetros', t[4])
 
 def p_paramsfunc(t):
     '''PARAMSFUNC : PARAMSFUNC coma PARAMSFUNC'''
@@ -181,61 +291,62 @@ def p_sope(t):
 #cualquiera
 
 def p_nombrealgo(t):
-    '''NOMBREALGO : id'''
-    grafo.generarPadre(1)
-    grafo.generarHijos('Identificador')
+    '''NOMBREALGO : LLAMADARR
+                | STRUCTASIGN'''
+    #grafo.generarPadre(1)
+    #grafo.generarHijos('Identificador')
     
 
-def p_nombrealgo(t):
+def p_nombrealgo2(t):
     '''NOMBREALGO : id'''
     grafo.generarHijos(t[1])
 
 #string
 
 def p_asignaciones3(t):
-    '''ASIGNACION : NOMBREALGO igual SOPSTRING puntocoma'''
+    '''ASIGNACION : NOMBREALGO igual SOPSTRING '''
     #grafo.generarHijos('prueba')
     grafo.generarPadre(3)    
     grafo.generarPadre(1)
-    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4]) 
+    grafo.generarHijos('Identificador', t[2], 'Contenido') 
 
 def p_asignaciones4(t):
-    '''ASIGNACION : NOMBREALGO igual SOPSTRING dos_dospuntos TIPOS puntocoma'''
+    '''ASIGNACION : NOMBREALGO igual SOPSTRING dos_dospuntos TIPOS '''
     #grafo.generarHijos('prueba')
     #grafo.generarHijos('prueba')
     grafo.generarPadre(5)    
     grafo.generarPadre(3)
     grafo.generarPadre(1)
-    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4], 'Tipo', t[6])
+    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4], 'Tipo')
 
 
 #cualquiera
 
 def p_asignaciones(t):
-    '''ASIGNACION : NOMBREALGO igual ALGO puntocoma'''
+    '''ASIGNACION : NOMBREALGO igual ALGO '''
     #grafo.generarHijos('prueba')
     grafo.generarPadre(3)    
     grafo.generarPadre(1)
-    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4])  
+    grafo.generarHijos('Identificador', t[2], 'Contenido')  
 
 
 def p_asignaciones2(t):
-    '''ASIGNACION : NOMBREALGO igual ALGO dos_dospuntos TIPOS puntocoma'''
+    '''ASIGNACION : NOMBREALGO igual ALGO dos_dospuntos TIPOS '''
     #grafo.generarHijos('prueba')
     #grafo.generarHijos('prueba')
     grafo.generarPadre(5)    
     grafo.generarPadre(3)
     grafo.generarPadre(1)
-    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4], 'Tipo', t[6])
+    grafo.generarHijos('Identificador', t[2], 'Contenido', t[4], 'Tipo')
 
 
 #nothing
 
 def p_asignaciones4(t):
-    '''ASIGNACION : NOMBREALGO igual nothing puntocoma'''
+    '''ASIGNACION : NOMBREALGO igual nothing '''
     #grafo.generarHijos('prueba')
     grafo.generarPadre(1)
-    grafo.generarHijos('Identificador', t[2], t[3], t[4])
+    grafo.generarHijos('Identificador', t[2], t[3])
 
 #  ---------------------------------FUNCIONES---------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -248,18 +359,18 @@ def p_funciones(t):
     grafo.generarHijos('FUNCIÓN')
 
 def p_transferencia(t):
-    '''TRANSF : break puntocoma
-            | continue puntocoma
-            | return puntocoma'''
-    grafo.generarHijos(t[1], t[2])
+    '''TRANSF : break 
+            | continue 
+            | return '''
+    grafo.generarHijos(t[1])
 
 #  -------------------------------------- FOR---------------------------------------------------------
 
 def p_ffor(t):
-    '''FFOR : for id in RANGO INSTRUCCIONES end puntocoma'''
+    '''FFOR : for id in RANGO INSTRUCCIONES end'''
     grafo.generarPadre(5)
     grafo.generarPadre(4)
-    grafo.generarHijos(t[1], t[2], t[3], 'Rango', 'Instrucciones', t[6], t[7])
+    grafo.generarHijos(t[1], t[2], t[3], 'Rango', 'Instrucciones', t[6])
 
 def p_rangofor(t):
     '''RANGO : int dospuntos int'''
@@ -273,10 +384,10 @@ def p_rangofor2(t):
 #  ------------------------------------WHILE ---------------------------------------------------------
 
 def p_fwhile(t):
-    '''FWHILE : while SOPLOG INSTRUCCIONES end puntocoma'''
+    '''FWHILE : while SOPLOG INSTRUCCIONES end'''
     grafo.generarPadre(3)
     grafo.generarPadre(2)
-    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4], t[5])
+    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4])
 
 #  -------------------------------------- IF ---------------------------------------------------------
 
@@ -290,10 +401,10 @@ def p_fif(t):
 
 
 def p_fif2(t):
-    '''FIF :  if SOPLOG INSTRUCCIONES end puntocoma''' 
+    '''FIF :  if SOPLOG INSTRUCCIONES end''' 
     grafo.generarPadre(3)
     grafo.generarPadre(2)
-    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4], t[5])
+    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4])
     print('BUSQ: ', grafo.textoEdges)
    
 
@@ -306,16 +417,16 @@ def p_felseif(t):
     grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', 'Condicional')
 
 def p_felseif2(t):
-    '''FELSEIF : elseif SOPLOG INSTRUCCIONES end puntocoma'''
+    '''FELSEIF : elseif SOPLOG INSTRUCCIONES end'''
     grafo.generarPadre(3)
     grafo.generarPadre(2)
-    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4], t[5])
+    grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4])
     
         
 def p_felse(t):
-    '''FELSE : else INSTRUCCIONES end puntocoma'''
+    '''FELSE : else INSTRUCCIONES end'''
     grafo.generarPadre(2)
-    grafo.generarHijos(t[1], 'Instrucciones', t[3], t[4])
+    grafo.generarHijos(t[1], 'Instrucciones', t[3])
 
 def p_fifunilinea(t):
     ''' FIFUNI : SOPLOG interrogacionc ALGO dospuntos ALGO'''
@@ -328,10 +439,10 @@ def p_fifunilinea(t):
 #-----------------------------------------------------------------------------------------------------
 
 def p_sprint(t):
-    '''IMPRIMIR : println parentesisa SCONTPRNT parentesisc puntocoma
-                | print parentesisa SCONTPRNT parentesisc puntocoma'''
+    '''IMPRIMIR : println parentesisa SCONTPRNT parentesisc 
+                | print parentesisa SCONTPRNT parentesisc '''
     grafo.generarPadre(3)
-    grafo.generarHijos(t[1], t[2], 'Terminos', t[4], t[5])
+    grafo.generarHijos(t[1], t[2], 'Terminos', t[4])
 
 def p_scontprint(t):
     '''SCONTPRNT : SCONTPRNT coma SCONTPRNT'''
@@ -345,7 +456,7 @@ def p_scontprintterm(t):
                 | FIFUNI'''
     t[0] = t[1]
     grafo.generarPadre(1)
-    grafo.generarHijos('CONTENIDO')
+    grafo.generarHijos('Contenido')
     
 
 
@@ -572,8 +683,8 @@ def p_error(t):
         error1 = NodoError(contaerrores, desc, t.lineno, t.lexpos)
         listaErrores.append(error1)
         #print("Error sintactico en '%s'" % t.value)
-    except:
-        print('Algo pasó en el error :c')
+    except Exception as e:
+        print('Algo pasó en el error :c ', e)
 
 
 #  ----------------------------------------- OTROS --------------------------------------------------
