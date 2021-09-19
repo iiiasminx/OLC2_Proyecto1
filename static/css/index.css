@@ -2,7 +2,7 @@
     box-sizing: border-box;
   }
 
-  canvas {
+  .graph {
     margin: auto;
     width: 70%;
     display: block;

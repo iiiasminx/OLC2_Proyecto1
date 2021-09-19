@@ -39,8 +39,10 @@ def submit():
         #lista de errores
         listaErrores = importe.tabla_errores
         json_string2 = json.dumps([ob.__dict__ for ob in listaErrores])
+        #grafo en dot
+        grafo = importe.grafo
 
-        return render_template('index.html', mesg=mesg, entrada=entrada, listaErrores=listaErrores)
+        return render_template('index.html', mesg=mesg, entrada=entrada, listaErrores=listaErrores, grafo = grafo)
 
 @app.route('/submit', methods=['GET'])
 def submit2():

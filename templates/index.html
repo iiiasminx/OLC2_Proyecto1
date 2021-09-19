@@ -32,6 +32,10 @@
 
   <!--CHART JS-->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+  <!--DOT JS-->
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-graphviz@4.0.0/build/d3-graphviz.min.js"></script>
+
 
 </head>
 
@@ -83,6 +87,23 @@
       </div>
     </div>
   </form>
+  </br></br>
+  <h2>Reportes</h2>
+  </br></br>
+  <div class="row form-group">
+    <div class="column2">
+    </div>
+    <div class="column" style="background-color:#454547;">
+      <h2>AST DOT</h2>
+      <textarea type="text" class="form-control" id="dott" disabled name="dott"></textarea>
+    </div>
+    <div class="column2">
+    </div>
+    <div class="column" style="background-color:#4f4f52;">
+      <h2>AST</h2>
+      <div id="graph" style="text-align: center;"></div>
+    </div>
+  </div>
 
   </br></br>
 
@@ -136,16 +157,18 @@
             </tr>
           </thead>
           <tbody>
-            
+
           </tbody>
         </table>
       </form>
     </div>
   </div>
 
+
+
   <pre><p id="txtsalida">{{ mesg }}</p></pre>
   <pre><p id="txtentrada" >{{ entrada }}</p></pre>
-  <pre><p id="txterrores" >{{ listaErrores }}</p></pre>
+  <pre><p id="txterrores" >{{ grafo }}</p></pre>
 
 
 </body>

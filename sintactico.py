@@ -709,8 +709,9 @@ def fighting2(texto):
     #for i in listaErrores:
     #    #print(i.descripcion, ' ', i.fila, ' ', i.columna, ' ', i.fecha)
     #print("\n\n\n")
-    print(grafo.textoNodo, '\n', grafo.textoEdges)
-    exportacion = Exporte(impresion, '', '', listaErrores)
+    migrafo = 'digraph G { \n' + grafo.textoNodo + '\n' + grafo.textoEdges +'}'
+    print(migrafo)
+    exportacion = Exporte(impresion, '', migrafo, listaErrores)
 
     return exportacion
 
