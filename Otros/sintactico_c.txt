@@ -1,0 +1,107 @@
+
+
+#------------------------------OPERACIONES LOGICAS----------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+def p_soplog(t):
+    '''SOPLOG : SOPLOG and SOPLOG
+            | SOPLOG or SOPLOG
+            | SOPLOG mayorque SOPLOG
+            | SOPLOG menorque SOPLOG
+            | SOPLOG mayoriwal SOPLOG
+            | SOPLOG menoriwal SOPLOG
+            | SOPLOG iwaliwal SOPLOG
+            | SOPLOG distintoque SOPLOG'''
+    #grafo.generarHijos('prueba')
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Operacion', t[2], 'Operacion')
+    
+
+def p_soplogPar(t):
+    '''SOPLOG : parentesisa SOPLOG parentesisc'''
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Operacion', t[3])
+
+def p_soplogterm2(t):
+    '''SOPLOG : SOPERACION'''
+    
+
+def p_soplogterm(t):
+    '''SOPLOG : true
+            | false
+            | int
+            | flotante
+            | cadena
+            | caracter
+            | id'''
+    grafo.generarHijos(t[1])
+
+
+#  ----------------------------OPERACIONES NUMÉRICAS--------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+def p_soperacion(t):
+    '''SOPERACION : SOPERACION mas SOPERACION
+                    | SOPERACION menos SOPERACION
+                    | SOPERACION asterisco SOPERACION
+                    | SOPERACION dividido SOPERACION
+                    | SOPERACION modulo SOPERACION
+                    | SOPERACION elevado SOPERACION'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos("Operacion", t[2], 'Operacion')
+    if t[2] == '+'  : t[0] = t[1] + t[3]
+    elif t[2] == '-': t[0] = t[1] - t[3]
+    elif t[2] == '*': t[0] = t[1] * t[3]
+    elif t[2] == '/': t[0] = t[1] / t[3]
+    elif t[2] == '%': t[0] = t[1] % t[3]
+    elif t[2] == '^': t[0] = t[1] ** t[3]
+
+def p_soperacionUmenos(t):
+    '''SOPERACION : menos SOPERACION %prec umenos'''
+    t[0] = -t[2]
+    grafo.generarPadre(2)
+    grafo.generarHijos('-', 'Operacion')
+
+def p_soperacionPar(t):
+    '''SOPERACION : parentesisa SOPERACION parentesisc'''
+    t[0] = t[2]
+    grafo.generarPadre(2)
+    grafo.generarHijos("(", "Operacion", ")")
+
+def p_soperacionMath(t):
+    '''SOPERACION : NATMATH parentesisa SOPERACION parentesisc'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)    
+    grafo.generarHijos('Función Matenática', t[2], "Operacion", t[4])
+    
+    if t[1] == 'log10': t[0] = math.log10(t[3])        
+    elif t[1] == 'sin': t[0] = math.sin(t[3])
+    elif t[1] == 'cos': t[0] = math.cos(t[3])
+    elif t[1] == 'tan': t[0] = math.tan(t[3])
+    elif t[1] == 'sqrt': t[0] = math.sqrt(t[3])
+
+def p_soperacionlog(t):
+    '''SOPERACION : log parentesisa SOPERACION coma SOPERACION parentesisc'''
+    t[0] = math.log(t[5], t[3])
+    print('SOPLOG')
+    grafo.generarPadre(3)
+    grafo.generarPadre(5)
+    grafo.generarHijos(t[1], t[2], "Operacion", t[4], "Operacion", t[6])   
+    
+    
+def p_soperacionNumeros(t):
+    '''SOPERACION : int
+                    | flotante'''
+    t[0] = t[1]
+    grafo.generarHijos(t[1])
+    
+def p_nathmath(t):
+    '''NATMATH : log10
+                | sin
+                | cos
+                | tan
+                | sqrt '''
+    t[0] = t[1]
+    grafo.generarHijos(t[1])
+

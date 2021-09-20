@@ -1,103 +1,100 @@
-# ----------------------------------------------------------------------------------------------------- 
-#---------------------------------------- INICIO SEMÁNTICO --------------------------------------------
-# -----------------------------------------------------------------------------------------------------
-from cst import NodoSimbolo
-
-txt = ""
-contador = 0
-
-
-#para el semántico
-contascope = 0
-condicion = True
-asignaciones = []
-cambios = []
-
-def incrementarscope():
-    global contascope
-    contascope += 1
-    return contascope
-
-class Nodo:
-    pass #no contiene nada pero tengo que heredar de acá 
-
-#  -----------------------------------INSTRUCCIONES--------------------------------------------------
-#----------------------------------------------------------------------------------------------------
-
-#el plan general es tener un array de instrucciones de modo tipo_instruccion, scope, *params
-#el tipo instruccion es un switch case, donde 1 es print, 2 if ...
-#el scope es un contador, donde entre mas anidado esté, peor gg entonces si una funcion es false, 
-#solo sigo recorriendo el array hasta que el scope sea uno mas
-
-class Instruccion:
-
-    id = 0
-    def __init__(self, tipo: int, scope: int, parametros = []):
-        self.tipo = tipo
-        self.scope = scope
-        self.parametros = parametros #los params son lo que necesito para interpretar
-        #de acá termino con un objeto con tipo, scope y parpametros
-
-class Impresion:
-    def __init__(self, scope, parametros):
-        self.scope = scope
-        self.parametros = parametros
-
-
 #  ------------------------------------------INICIO--------------------------------------------------
 #----------------------------------------------------------------------------------------------------
 
+class Instruccion:
+    '''This is an abstract class'''
 
 
-class Semantico:
+class Impresion:
+    def __init__(self,  texto) :
+        self.texto = texto
 
-    pilahijos = []  #pila de arrays de nodos [[[], [],[]],[],[],[]] lista de listas if u may
-
-    contador = 0
-    pilaimpresion = []
-    pilaAsignacion = []
-
-    #Interpreta los padres en funcion de los ultimos datos en la pila de Hijos
-    def interpretarPadres(self, posicion, instruccionPadre: Instruccion):
-        posicion -= 1
-        ultimoshijos = self.pilahijos.pop()
+class Asignacion:
+    def __init__(self,  nombre, valor, scope =0) :
+        self.nombre = nombre
+        self.valor = valor
+        self.scope = scope
         
-        if instruccionPadre.tipo == 3: #CAMBIAR ESTO, PERO SUPONTGAMOS QUE ES UN IF
-            if instruccionPadre.parametros[0] == True:
-                for hijo in ultimoshijos:
-                    if hijo.tipo == 1 or hijo.tipo == 2: #si es un print o asignacion
-                        self.interpretarhijos([hijo])
+
+# Creacion de Funciones
+
+class DefFuncion:
+    def __init__(self,  nombre, params, instrucciones) :
+        self.nombre = nombre
+        self.params = params
+        self.instrucciones = instrucciones
+
+class FParse:
+    def __init__(self,  term1, term2) :
+        self.term1 = term1
+        self.term2 = term2
+
+class FTrunc:
+    def __init__(self,  term1) :
+        self.term1 = term1
+
+class FFloat:
+    def __init__(self,  term1) :
+        self.term1 = term1
+
+class FString:
+    def __init__(self,  term1) :
+        self.term1 = term1
+
+class Ftypeof:
+    def __init__(self,  term1) :
+        self.term1 = term1
 
 
-    #genra las operaciones planas Y las operaciones que ya están anidadas (?)
-    #Este solo sirve para guardar las instrucciones, para saber que están allí. cuando esté 
-    # interpretando padres, entoonces ya las interpreto
-    def interpretarhijos(self, instrucciones = [] ): 
+#condicionales
 
-        hijos = []
-        for instruccion in instrucciones: #por cada instruccion en lista de instrucciones
-            
-            #acá estoy metiendo la instruccion en la lista de hijos
-            hijos.append(instruccion)              #lista de hijos del padre
+class FIF:
+    def __init__(self,  oplog, instrucciones) :
+        self.oplog = oplog
+        self.instrucciones = instrucciones
 
-            instruccion.id = self.contador
+class FElseIF:
+    def __init__(self,  oplog, instrucciones) :
+        self.oplog = oplog
+        self.instrucciones = instrucciones
 
-            self.contador += 1
-        
-        self.pilahijos.append(hijos) #pila de arrays de nodos [[],[],[],[]] lista de listas if u may
+class FELSE:
+    def __init__(self,  instrucciones) :
+        self.instrucciones = instrucciones
+
+class FWhile:
+    def __init__(self,  oplog, instrucciones) :
+        self.oplog = oplog
+        self.instrucciones = instrucciones
+
+class FFor:
+    def __init__(self,  rango, instrucciones) :
+        self.rango = rango
+        self.instrucciones = instrucciones
+
+#struct
+
+class DeclStruct:
+    def __init__(self,  nombre, caracteristicas, tipo=0) :
+        self.nombre = nombre
+        self.caracteristicas = caracteristicas
+        self.tipo = tipo
+
+class ConstruccionStruct:
+    def __init__(self,  nombre, tipoStruct, caracteristicas) :
+        self.nombre = nombre
+        self.caracteristicas = caracteristicas
+        self.tipoStruct = tipoStruct
+
+class AsignacionAtributosStruct:
+    def __init__(self,  struct, atributo, valor) :
+        self.struct = struct
+        self.atributo = atributo
+        self.valor = valor
+
+class AccesoAtributo:
+    def __init__(self,  atributo, valor) :
+        self.atributo = atributo
+        self.valor = valor
 
 
-    #cada cosa entra acá cuando se termina de leer toda la instruccion
-    #COMO ES TEXTO PLANO SE GUARDA EN EL DE LOS HIJOS
-    def interpretar(self, instruccion: Instruccion):
-        if instruccion.tipo == 1:
-                self.pilaAsignacion.append(instruccion)
-                print('asignacion')
-        elif instruccion.tipo == 2:
-                self.pilaimpresion.append(instruccion)
-                print('impresion')
-
-
-    def terminar(self):
-        print('Pila de impresion', self.pilaimpresion)
-        print('Pila de Asignaciones', self.pilaAsignacion)

@@ -70,7 +70,10 @@ class GrafoCST:
             }
             hijos.append(hijo)              #lista de hijos del padre
             self.pilaNodos.append(hijo)     #lista de hijos general -- ESTO ME SIRVE PARA EL INTÉRPRETE
-            straux = str(self.contador) + "[label= \"" + str(elemento) +"\"]\n"
+
+            auc = str(elemento).replace('"', '\'')
+
+            straux = str(self.contador) + "[label= \"" + auc +"\"]\n"
             self.textoNodo += straux
             self.contador += 1
         

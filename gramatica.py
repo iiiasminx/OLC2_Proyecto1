@@ -193,12 +193,12 @@ def t_int(t):
 
 def t_caracter(t):
     r'\'.*?\''
-    t.value = t.value[1:-1] # remuevo las comillas
+    #t.value = t.value[1:-1] # remuevo las comillas
     return t 
 
 def t_cadena(t):
     r'\".*?\"'
-    t.value = t.value[1:-1] # remuevo las comillas
+    #t.value = t.value[1:-1] # remuevo las comillas
     return t 
 
 def t_error(t):
