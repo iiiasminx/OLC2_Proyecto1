@@ -8,7 +8,8 @@ import os
 import codecs
 import re 
 from gramatica import fighting, tokens
-from cst import NodoSimbolo, NodoError, Exporte, GrafoCST #Falta el AST cuando entienda que pex xdxd
+from cst import NodoError, Exporte, GrafoCST 
+from semantico import *
 from sys import stdin
 import math
 
@@ -22,6 +23,7 @@ global contaerrores
 contaerrores = 0
 
 grafo = GrafoCST()
+#sintactico = Sintactico()
 
 #precedencia
 precedence = (
@@ -43,6 +45,7 @@ def p_inicio(t):
     '''INICIO : INSTRUCCIONES2'''
     grafo.generarPadre(1)
     grafo.generarHijos('INICIO')
+
 
 
 def p_instrucciones2(t):
@@ -98,7 +101,8 @@ def p_soperaciones(t):
                     | SOPNATIV
                     | SOPERACION
                     | SOPLOG
-                    | DECLNATIV'''
+                    | DECLNATIV
+                    | OPIDLOG'''
     t[0] = t[1]
     
 
@@ -283,9 +287,8 @@ def p_sope(t):
         grafo.generarPadre(2)
         grafo.generarHijos(t[1], 'Asign')
     else:
-        x= 1
-        #grafo.generarPadre(1)
-        #grafo.generarHijos('ASIGNACION')
+        x = 1
+        
     
 
 #cualquiera
@@ -443,6 +446,7 @@ def p_sprint(t):
                 | print parentesisa SCONTPRNT parentesisc '''
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Terminos', t[4])
+    
 
 def p_scontprint(t):
     '''SCONTPRNT : SCONTPRNT coma SCONTPRNT'''
@@ -458,6 +462,71 @@ def p_scontprintterm(t):
     grafo.generarPadre(1)
     grafo.generarHijos('Contenido')
     
+
+#  -------------------------------OPERACION CON ID ---------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+def operacionid(t):
+    '''OPIDLOG : OPIDLOG and OPIDLOG
+            | OPIDLOG or OPIDLOG
+            | OPIDLOG mayorque OPIDLOG
+            | OPIDLOG menorque OPIDLOG
+            | OPIDLOG mayoriwal OPIDLOG
+            | OPIDLOG menoriwal OPIDLOG
+            | OPIDLOG iwaliwal OPIDLOG
+            | OPIDLOG distintoque OPIDLOG'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos('Operacion', t[2], 'Operacion')
+
+def p_sopid(t):
+    '''OPIDLOG : parentesisa OPIDLOG parentesisc'''
+    grafo.generarPadre(2)
+    grafo.generarHijos(t[1], 'Operacion', t[3])
+
+def p_sopid2(t):
+    '''OPIDLOG : SOPERACIONES
+                | OPID'''
+
+def p_sopid3(t):
+    '''OPID : OPID mas OPID
+                    | OPID menos OPID
+                    | OPID asterisco OPID
+                    | OPID dividido OPID
+                    | OPID modulo OPID
+                    | OPID elevado OPID'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)
+    grafo.generarHijos("Operacion", t[2], 'Operacion')
+
+
+def p_sopid4(t):
+    '''OPID : menos OPID %prec umenos'''
+    grafo.generarPadre(2)
+    grafo.generarHijos('-', 'Operacion') 
+
+def p_sopid8(t):
+    '''OPID : parentesisa OPID parentesisc'''
+    grafo.generarPadre(2)
+    grafo.generarHijos("(", "Operacion", ")")
+
+def p_sopid7(t):
+    '''OPID : NATMATH parentesisa OPID parentesisc'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(1)    
+    grafo.generarHijos('Función Matenática', t[2], "Operacion", t[4])
+
+def p_sopid6(t):
+    '''OPID : log parentesisa OPID coma OPID parentesisc'''
+    grafo.generarPadre(3)
+    grafo.generarPadre(5)
+    grafo.generarHijos(t[1], t[2], "Operacion", t[4], "Operacion", t[6]) 
+
+def p_sopid5(t):
+    '''OPID : int
+            | flotante
+            | id'''
+    grafo.generarHijos(t[1])
 
 
 # *********************************************************************************************************
@@ -600,6 +669,7 @@ def p_sopstringterm(t):
     t[0] = t[1]
     grafo.generarHijos(t[1])
 
+
 def p_sopstringterm2(t):
     '''SOPSTRING : SOPNATIV'''
     t[0] = t[1]
@@ -710,7 +780,7 @@ def fighting2(texto):
     #    #print(i.descripcion, ' ', i.fila, ' ', i.columna, ' ', i.fecha)
     #print("\n\n\n")
     migrafo = 'digraph G { \n' + grafo.textoNodo + '\n' + grafo.textoEdges +'}'
-    print(migrafo)
+    #print(migrafo)
     exportacion = Exporte(impresion, '', migrafo, listaErrores)
 
     return exportacion

@@ -22,16 +22,6 @@ class NodoError:
         self.fila = fila
         self.columna = columna
 
-# ------------------------------ TABLA DE SÍMBOLOS ---------------------------------
-#-----------------------------------------------------------------------------------
-class NodoSimbolo:
-    def __init__(self, nombre, tipo, ambito, fila, columna):
-        self.nombre = nombre
-        self.tipo = tipo
-        self.ambito = ambito
-        self.fila = fila
-        self.columna = columna
-
 # ------------------------------------- AST ------------------------------------
 #-----------------------------------------------------------------------------------
 
@@ -90,23 +80,40 @@ class GrafoCST:
         self.texto.append[txt]
 
 
-# ----------------------------------INSTRUCCION ------------------------------------
+
+# ------------------------------ TABLA DE SÍMBOLOS ---------------------------------
 #-----------------------------------------------------------------------------------
+class NodoSimbolo:
+    def __init__(self, id, nombre, tipo, ambito, fila, columna):
+        self.id = id            # 1-> a= 2;
+        self.nombre = nombre    # a
+        self.tipo = tipo        # int (?)
+        self.ambito = ambito    #global
+        self.fila = fila        #5
+        self.columna = columna  #21
 
-class Instruccion:
-    def __init__(self, tipo, args):
-        self.tipo = tipo
-        self.args = args #Este es un arreglo con lo que necesito saber para las instrucciones
 
-# ------------------------------------- COSOS X ------------------------------------
-#-----------------------------------------------------------------------------------
-class Nodo:
-    def __init__(self):
-        pass
-    pass
+class TablaSimbolos:
 
-class NodoAST:
-    def __init__(self, nombre, hijos):
-        self.nombre = nombre
-        self.hijos = hijos #hijos es una de NodosAST
+    def __init__(self, simbolos = {}) : #el init recibe un array de símbolos
+        self.simbolos = simbolos
+
+    def añadir(self, simbolo) :
+        self.simbolos[simbolo.id] = simbolo
+
+    def obtener(self, id, contaerrores, lineno, lexpos) :
+        if not id in self.simbolos :
+            desc = 'Variable no definida'
+            error1 = NodoError(contaerrores, desc, lineno, lexpos)
+            return error1
+
+        return self.simbolos[id]
+
+    def actualizar(self, simbolo, contaerrores, lineno, lexpos) :
+        if not simbolo.id in self.simbolos :
+            desc = 'Variable no definida'
+            error1 = NodoError(contaerrores, desc, lineno, lexpos)
+            return error1
+        else :
+            self.simbolos[simbolo.id] = simbolo
    

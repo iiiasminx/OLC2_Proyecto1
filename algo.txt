@@ -1,0 +1,596 @@
+
+#  ------------------------------------------INICIO--------------------------------------------------
+#----------------------------------------------------------------------------------------------------
+class inicio(Nodo):
+   x = '''INICIO : INSTRUCCIONES2'''
+
+   def __init__(self, INSTRUCCIONES2, name):
+       self.name = name
+       self.INSTRUCCIONES2 = INSTRUCCIONES2
+    
+
+
+class instrucciones2(Nodo):
+   x = '''INSTRUCCIONES2 : INSTRUCCION2 puntocoma INSTRUCCIONES2'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+
+class instrucciones21(Nodo):
+   x = '''INSTRUCCIONES2 :  INSTRUCCION2 puntocoma'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class instruccion2(Nodo):
+   x = '''INSTRUCCION2  :  IMPRIMIR
+                    | FUNCIONES
+                    | SCOPE
+                    | DECLFUNC
+                    | LLAMADAFUNC
+                    | TRANSF
+                    | SOPERACIONES
+                    | TYPESTRUCT'''  
+    #
+
+#LO QUE VA ADENTRO DEL TEXTO
+class instrucciones1(Nodo):
+   x = '''INSTRUCCIONES : INSTRUCCION puntocoma INSTRUCCIONES'''
+
+   def __init__(self):
+       x = 1   
+
+
+
+
+class instrucciones11(Nodo):
+   x = '''INSTRUCCIONES :  INSTRUCCION puntocoma'''
+
+   def __init__(self):
+       x = 1   
+    
+
+
+class instruccion(Nodo):
+   x = '''INSTRUCCION  :  IMPRIMIR
+                    | FUNCIONES
+                    | SCOPE
+                    | DECLFUNC
+                    | LLAMADAFUNC
+                    | TRANSF
+                    | SOPERACIONES
+                    | TYPESTRUCT'''  #este ultimo es temporal
+
+
+class soperaciones(Nodo):
+   x = '''SOPERACIONES : SOPSTRING
+                    | SOPNATIV
+                    | SOPERACION
+                    | SOPLOG
+                    | DECLNATIV
+                    | OPIDLOG'''
+
+   def __init__(self):
+       x = 1   
+
+#  ----------------------------------------TIPOS------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+class tipos(Nodo):
+   x = '''TIPOS : int64
+            | float64
+            | bool
+            | char
+            | string'''
+
+   def __init__(self):
+       x = 1   
+
+class algo(Nodo):
+   x = '''ALGO : SOPERACIONES
+            | ARREGLO
+            | LLAMADARR
+            | STRUCTINI'''
+
+   def __init__(self,name):
+       self.name = name
+class algo2(Nodo):
+   x = '''ALGO : id'''
+
+   def __init__(self):
+       x = 1   
+    
+#  -------------------------------------- STRUCT------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+class typestruct(Nodo):
+   x = '''TYPESTRUCT : STRUCT'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+class typestruct2(Nodo):
+   x = '''TYPESTRUCT : mutable STRUCT'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+class struct(Nodo):
+   x = '''STRUCT : struct id ATRIBUTOS end'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class atributos(Nodo):
+   x = '''ATRIBUTOS : ATRIBUTO  puntocoma ATRIBUTOS'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+class atributos2(Nodo):
+   x = '''ATRIBUTOS :  ATRIBUTO  puntocoma'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class atributo(Nodo):
+   x = '''ATRIBUTO : id dos_dospuntos TIPOSx = ''' 
+    
+    
+
+class atributo2(Nodo):
+   x = '''ATRIBUTO :  idx = ''' #quite el ; de acá
+    
+
+class creacionstruct(Nodo):
+   x = '''STRUCTINI : id parentesisa PARAMSFUNC parentesisc'''
+
+   def __init__(self):
+       x = 1   
+    
+
+
+class structasign(Nodo):
+   x = '''STRUCTASIGN : id punto id'''
+
+   def __init__(self):
+       x = 1   
+    
+
+#  ------------------------------------ ARREGLOS------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+class arreglo(Nodo):
+   x = '''ARREGLO : corchetea ARRCONT corchetec'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class arrcont(Nodo):
+   x = '''ARRCONT : ARRCONT coma ARRCONTx = '''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+class arrcont2(Nodo):
+   x = '''ARRCONT :  ALGOx = '''
+
+   def __init__(self,name):
+       self.name = name
+class arrcont3(Nodo):
+   x = '''ARRCONT : x = '''
+
+   def __init__(self):
+       x = 1   
+
+class llamadaarr(Nodo):
+   x = '''LLAMADARR : id INDARS'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class indarcvzx(Nodo):
+   x = '''INDARS : INDAR corchetec INDARS'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+class indars2(Nodo):
+   x = '''INDARS : INDAR corchetec'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class indar2(Nodo):
+   x = '''INDAR : corchetea id'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class indar(Nodo):
+   x = '''INDAR :  corchetea SOPERACIONx = '''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+#  ------------------------------------FUNCIONES------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+class declfunc(Nodo):
+   x = '''DECLFUNC : function id parentesisa PARAMS parentesisc INSTRUCCIONES endx = '''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+class params(Nodo):
+   x = '''PARAMS : PARAMS coma PARAMSx = '''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+
+class params2(Nodo):
+   x = '''PARAMS : idx = '''
+
+   def __init__(self):
+       x = 1   
+
+class params3(Nodo):
+   x = '''PARAMS : x = '''
+
+   def __init__(self):
+       x = 1   
+
+class llamadafunc(Nodo):
+   x = '''LLAMADAFUNC : id parentesisa PARAMSFUNC parentesisc'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class paramsfunc(Nodo):
+   x = '''PARAMSFUNC : PARAMSFUNC coma PARAMSFUNC'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+class paramsfunc3(Nodo):
+   x = '''PARAMSFUNC :  ALGO'''    
+    #
+
+class paramsfunc2(Nodo):
+   x = '''PARAMSFUNC : x = '''
+
+   def __init__(self):
+       x = 1   
+#  ---------------------------------ASIGNACIONES------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+class sope(Nodo):
+   x = '''SCOPE : global ASIGNACION
+            | local ASIGNACION
+            | ASIGNACION'''
+
+   def __init__(self):
+       x = 1       
+    
+
+#cualquiera
+
+class nombrealgo(Nodo):
+   x = '''NOMBREALGO : LLAMADARR
+                | STRUCTASIGN'''
+
+   def __init__(self):
+       x = 1   #
+    #
+    
+
+class nombrealgo2(Nodo):
+   x = '''NOMBREALGO : id'''
+
+   def __init__(self):
+       x = 1   
+
+#string
+
+class asignaciones3(Nodo):
+   x = '''ASIGNACION : NOMBREALGO igual SOPSTRINGx = '''
+
+   def __init__(self):
+       x = 1   #
+    
+    
+    
+
+class asignaciones4(Nodo):
+   x = '''ASIGNACION : NOMBREALGO igual SOPSTRING dos_dospuntos TIPOSx = '''
+
+   def __init__(self):
+       x = 1   #
+    #
+    
+    
+    
+    
+
+
+#cualquiera
+
+class asignaciones(Nodo):
+   x = '''ASIGNACION : NOMBREALGO igual ALGOx = '''
+
+   def __init__(self):
+       x = 1   #
+    
+    
+    
+
+
+class asignaciones2(Nodo):
+   x = '''ASIGNACION : NOMBREALGO igual ALGO dos_dospuntos TIPOSx = '''
+
+   def __init__(self):
+       x = 1   #
+    #
+    
+    
+    
+    
+
+
+#nothing
+
+class asignaciones4(Nodo):
+   x = '''ASIGNACION : NOMBREALGO igual nothingx = '''
+
+   def __init__(self):
+       x = 1   #
+    
+    
+
+#  ---------------------------------FUNCIONES---------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+class funciones(Nodo):
+   x = '''FUNCIONES : FIF
+                | FWHILE
+                | FFOR'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class transferencia(Nodo):
+   x = '''TRANSF : break 
+            | continue 
+            | returnx = '''
+
+   def __init__(self):
+       x = 1   
+
+#  -------------------------------------- FOR---------------------------------------------------------
+
+class ffor(Nodo):
+   x = '''FFOR : for id in RANGO INSTRUCCIONES end'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+class rangofor(Nodo):
+   x = '''RANGO : int dospuntos int'''
+
+   def __init__(self):
+       x = 1   
+
+
+class rangofor2(Nodo):
+   x = '''RANGO : cadena'''
+
+   def __init__(self):
+       x = 1   
+
+#  ------------------------------------WHILE ---------------------------------------------------------
+
+class fwhile(Nodo):
+   x = '''FWHILE : while SOPLOG INSTRUCCIONES end'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+
+#  -------------------------------------- IF ---------------------------------------------------------
+
+class fif(Nodo):
+   x = '''FIF : if SOPLOG INSTRUCCIONES FELSEIF
+            | if SOPLOG INSTRUCCIONES FELSE''' 
+    
+    
+    
+    
+
+
+class fif2(Nodo):
+   x = '''FIF :  if SOPLOG INSTRUCCIONES end''' 
+    
+    
+
+   
+
+class felseif(Nodo):
+   x = '''FELSEIF : elseif SOPLOG INSTRUCCIONES FELSEIF
+            | elseif SOPLOG INSTRUCCIONES FELSE'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+    
+
+class felseif2(Nodo):
+   x = '''FELSEIF : elseif SOPLOG INSTRUCCIONES end'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+    
+        
+class felse(Nodo):
+   x = '''FELSE : else INSTRUCCIONES end'''
+
+   def __init__(self):
+       x = 1   
+    
+
+class fifunilinea(Nodo):
+   x = ''' FIFUNI : SOPLOG interrogacionc ALGO dospuntos ALGO'''
+
+   def __init__(self):
+       x = 1   
+    
+    
+    
+
+#  ---------------------------------IMPRIMIR----------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+class sprint(Nodo):
+   x = '''IMPRIMIR : println parentesisa SCONTPRNT parentesisc 
+                | print parentesisa SCONTPRNT parentesisc '''
+
+   def __init__(self, term1):
+       self.term1 = term1     
+    
+
+class scontprint(Nodo):
+   x = '''SCONTPRNT : SCONTPRNT coma SCONTPRNT'''
+
+   def __init__(self, term1, term2):
+       self.term1 = term1  
+       self.term2 = term2   
+    
+
+class scontprintterm(Nodo):
+   x = '''SCONTPRNT :  ALGO
+                | FIFUNI'''
+
+   def __init__(self, term1):
+       self.term1 = term1  
+    
+
+#  -------------------------------OPERACION CON ID ---------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+def operacionid(Nodo):
+   x = '''OPIDLOG : OPIDLOG and OPIDLOG
+            | OPIDLOG or OPIDLOG
+            | OPIDLOG mayorque OPIDLOG
+            | OPIDLOG menorque OPIDLOG
+            | OPIDLOG mayoriwal OPIDLOG
+            | OPIDLOG menoriwal OPIDLOG
+            | OPIDLOG iwaliwal OPIDLOG
+            | OPIDLOG distintoque OPIDLOG'''
+
+   def __init__(self, term1, signo, term2):
+       self.term1 = term1 
+       self.term2 = term2
+       self.signo = signo  
+    
+    
+
+class sopid(Nodo):
+   x = '''OPIDLOG : parentesisa OPIDLOG parentesisc'''
+
+   def __init__(self, term1):
+       self.term1 = term1
+    
+
+class sopid2(Nodo):
+   x = '''OPIDLOG : SOPERACIONES
+                | OPID'''
+
+   def __init__(self, term1):
+       self.term1 = term1
+
+
+class sopid3(Nodo):
+   x = '''OPID : OPID mas OPID
+                    | OPID menos OPID
+                    | OPID asterisco OPID
+                    | OPID dividido OPID
+                    | OPID modulo OPID
+                    | OPID elevado OPID'''
+
+   def __init__(self, term1, signo, term2):
+       self.term1 = term1 
+       self.term2 = term2
+       self.signo = signo
+    
+
+class sopid4(Nodo):
+   x = '''OPID : menos OPID %prec umenos'''
+
+   def __init__(self, term1):
+       self.term1 = term1
+    
+
+class sopid8(Nodo):
+   x = '''OPID : parentesisa OPID parentesisc'''
+
+   def __init__(self, term1):
+       self.term1 = term1 
+    
+
+class sopid7(Nodo):
+   x = '''OPID : NATMATH parentesisa OPID parentesisc'''
+
+   def __init__(self, term1):
+       self.term1 = term1
+    
+
+class sopid6(Nodo):
+   x = '''OPID : log parentesisa OPID coma OPID parentesisc'''
+
+   def __init__(self, term1, term2):
+       self.term1 = term1
+       self.term2 = term2 
+    
+
+class sopid5(Nodo):
+   x = '''OPID : int
+            | flotante
+            | id'''
+
+   def __init__(self):
+       x = 1   
