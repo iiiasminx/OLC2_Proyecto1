@@ -12,17 +12,20 @@ from cst import NodoError, Exporte, GrafoCST
 from sys import stdin
 import math
 
+from operaciones import *
+from semantico import *
+
 global impresion
 impresion = ""
 global listaErrores
 listaErrores = []
-global listaSimbolos
-listaSimbolos = []
 global contaerrores
 contaerrores = 0
 
 grafo = GrafoCST()
-contawhiles = 0
+
+# cosas para el semántico 
+
 
 #precedencia
 precedence = (
@@ -359,6 +362,11 @@ def p_asignaciones4(t):
     grafo.generarPadre(1)
     grafo.generarHijos('Identificador', t[2], t[3])
 
+def p_asignaciones5(t):
+    '''ASIGNACION : NOMBREALGO  '''
+    grafo.generarPadre(1)
+    grafo.generarHijos('Identificador')
+
 
 #  ---------------------------------FUNCIONES---------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -542,6 +550,7 @@ def p_soplog(t):
     grafo.generarPadre(3)
     grafo.generarPadre(1)
     grafo.generarHijos('Operacion', t[2], 'Operacion')
+    t[0] = OPLogica(t[1], t[2], t[3])
     
 
 def p_soplogPar(t):
@@ -549,22 +558,35 @@ def p_soplogPar(t):
     
     grafo.generarPadre(2)
     grafo.generarHijos(t[1], 'Operacion', t[3])
+    t[0] = t[2]
 
 def p_soplogterm2(t):
     '''SOPLOG : OPID'''
+    t[0] = t[1]
     
 
 def p_soplogterm(t):
-    '''SOPLOG : true
-            | false
-            | int
-            | flotante
-            | cadena
-            | caracter
-            | id'''
-    
+    '''SOPLOG : int
+            | flotante'''    
     grafo.generarHijos(t[1])
+    t[0] = OPNum(t[1])
 
+def p_soplogterm3(t):
+    '''SOPLOG : cadena
+            | caracter'''    
+    grafo.generarHijos(t[1])
+    t[0] = OPCadena(t[1])
+
+def p_soplogterm4(t):
+    '''SOPLOG : id'''    
+    grafo.generarHijos(t[1])
+    t[0] = OPID(t[1])
+
+def p_soplogterm(t):
+    '''SOPLOG : true
+            | false'''    
+    grafo.generarHijos(t[1])
+    t[0] = OPBool(t[1])
             
 
 #------------------------------OPERACIONES NATIVAS----------------------------------------------------
@@ -574,18 +596,16 @@ def p_sopnativ(t):
     '''SOPNATIV : uppercase parentesisa SOPN parentesisc
                 | lowercase parentesisa SOPN parentesisc
                 | length parentesisa SOPN parentesisc'''
-    #grafo.generarPadre(3)
+    grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Termino', t[4])
+    if t[1] == 'uppercase' : t[0] = OPUppercase(t[3])
+    elif t[1] == 'lowercase' : t[0] = OPLowercase(t[3])
+    else : t[0] == OPLength(t[3])
+
 
 def p_sopnativterm(t):
-    ''' SOPN : cadena
-            | caracter
-            | id'''    
-    grafo.generarHijos(t[1])
-
-def p_sopnativterm(t):
-    ''' SOPN :  SOPSTRING'''    
-    grafo.generarPadre(1)
+    ''' SOPN :  SOPSTRING''' 
+    t[0] = t[1]
 
 
 def p_declnativ(t):
@@ -593,25 +613,33 @@ def p_declnativ(t):
     grafo.generarPadre(5)
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Type', t[4], 'Termino', t[6])
+    t[0] = FParse(t[3], t[5])
 
 def p_declnativ2(t):
-    '''DECLNATIV : trunc parentesisa int64 coma flotante parentesisc'''
-    grafo.generarHijos(t[1], t[2], t[3], t[4], t[5], t[6])
+    '''DECLNATIV : trunc parentesisa int64 coma ALGO parentesisc'''
+    grafo.generarPadre(5)
+    grafo.generarHijos(t[1], t[2], t[3], t[4], 'Termino', t[6])
+    t[0] = FTrunc(t[3])
 
 
 def p_declnativ3(t):
-    '''DECLNATIV :  float parentesisa int parentesisc'''
-    grafo.generarHijos(t[1], t[2], t[3], t[4])
+    '''DECLNATIV :  float parentesisa ALGO parentesisc'''
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Termino', t[4])
+    t[0] = FFloat(t[3])
 
 def p_declnativ4(t):
     '''DECLNATIV :  string parentesisa ALGO parentesisc'''
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Termino', t[4])
+    t[0] = FString(t[3])
 
 def p_declnativ5(t):
     '''DECLNATIV : typeof parentesisa ALGO parentesisc'''
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Termino', t[4])
+    
+    t[0] = Ftypeof(t[3])
 
 #------------------------------OPERACIONES STRING ----------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -621,28 +649,41 @@ def p_sopstring(t):
     grafo.generarPadre(3)
     grafo.generarPadre(1)
     grafo.generarHijos("OPString", t[2], 'OPString')
-    
+    t[0] = OPMergeString(t[1], t[3])
 
 
 def p_sopstring2(t):
-    '''SOPSTRING :  SOPSTRING elevado int
-                | SOPSTRING elevado id'''
+    '''SOPSTRING :  SOPSTRING elevado int'''
     grafo.generarPadre(1)
     grafo.generarHijos('OPString', t[2], t[3])
+
+    t[0] = OPElevarString(t[1], OPNum(t[3]))
+
+def p_sopstring3(t):
+    '''SOPSTRING :  SOPSTRING elevado id'''
+    grafo.generarPadre(1)
+    grafo.generarHijos('OPString', t[2], t[3])
+
+    t[0] = OPElevarString(t[1], OPID(t[3]))
     
 
 def p_sopstringterm(t):
     '''SOPSTRING : cadena
-                | caracter
-                | id'''
+                | caracter'''
     
     grafo.generarHijos(t[1])
+    t[0] = OPCadena(t[1])
+
+def p_sopstringterm3(t):
+    '''SOPSTRING : id'''    
+    grafo.generarHijos(t[1])
+    t[0] = OPID(t[1])
 
 
 def p_sopstringterm2(t):
-    '''SOPSTRING : SOPNATIV'''
-    
+    '''SOPSTRING : SOPNATIV'''    
     grafo.generarPadre(1)
+    t[0] = t[1]
 
 #  ----------------------------OPERACIONES NUMÉRICAS--------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -655,6 +696,7 @@ def p_nathmath(t):
                 | tan
                 | sqrt '''
     grafo.generarHijos(t[1])
+    t[0] = t[1]
 
 
 #  --------------------------------------- ERRORES --------------------------------------------------
