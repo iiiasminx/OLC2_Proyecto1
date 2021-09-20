@@ -5,7 +5,11 @@ class Instruccion:
     '''This is an abstract class'''
 
 
-class Impresion(Instruccion):
+class Impresion(Instruccion): #esto puede ser un arreglo, o cualquier cosa la vdd aiuda
+    def __init__(self,  texto) :
+        self.texto = texto
+
+class Impresionln(Instruccion): #esto puede ser un arreglo, o cualquier cosa la vdd aiuda
     def __init__(self,  texto) :
         self.texto = texto
 
@@ -15,11 +19,20 @@ class Declaracion(Instruccion):
         self.scope = scope
 
 class Asignacion(Instruccion):
-    def __init__(self,  nombre, valor, scope =0) :
+    def __init__(self,  nombre, valor) :
         self.nombre = nombre
         self.valor = valor
-        self.scope = scope
+
+class AsignacionTipada(Instruccion):
+    def __init__(self,  nombre, valor, tipo) :
+        self.nombre = nombre
+        self.valor = valor
+        self.tipo = tipo
         
+class Scope(Instruccion):
+    def __init__(self,  asignacion, scope = "local") :
+        self.asignacion = asignacion
+        self.scope = scope
 
 # Creacion de Funciones
 
@@ -28,6 +41,24 @@ class DefFuncion(Instruccion):
         self.nombre = nombre
         self.params = params
         self.instrucciones = instrucciones
+
+class DefFuncParam(Instruccion):
+    def __init__(self,  param) :
+        self.param = param
+
+class DefFuncParams(Instruccion):
+    def __init__(self,  *params) :
+        self.params = params
+
+class FuncParams(Instruccion):
+    def __init__(self,  *params) :
+        self.params = params
+
+class LlamadaFuncion(Instruccion):
+    def __init__(self,  funcion, params) :
+        self.funcion = funcion
+        self.params = params
+
 
 class FParse(Instruccion):
     def __init__(self,  term1, term2) :
@@ -51,24 +82,24 @@ class Ftypeof(Instruccion):
         self.term1 = term1
 
 
-class LlamadaFuncion(Instruccion):
-    def __init__(self,  funcion, params) :
-        self.funcion = funcion
-        self.params = params
 
 #condicionales
 
-class FIF(Instruccion):
+class FIFuni(Instruccion):
     def __init__(self,  oplog, instruccionesv, instruccionesF) :
         self.oplog = oplog
         self.instruccionesv = instruccionesv
         self.instruccionesF = instruccionesF
 
-class FElseIF(Instruccion):
-    def __init__(self,  oplog, instruccionesv, instruccionesF) :
+class FIF(Instruccion):
+    def __init__(self,  oplog, instruccionesv) :
         self.oplog = oplog
         self.instruccionesv = instruccionesv
-        self.instruccionesF = instruccionesF
+
+class FElseIF(Instruccion):
+    def __init__(self,  oplog, instruccionesv) :
+        self.oplog = oplog
+        self.instruccionesv = instruccionesv
 
 class FELSE(Instruccion):
     def __init__(self,  instrucciones) :
@@ -83,6 +114,11 @@ class FFor(Instruccion):
     def __init__(self,  rango, instrucciones) :
         self.rango = rango
         self.instrucciones = instrucciones
+
+class FForRangoNum(Instruccion):
+    def __init__(self,  term1, term2) :
+        self.term1 = term1
+        self.term2 = term2
 
 class SBreak(Instruccion):
     pass

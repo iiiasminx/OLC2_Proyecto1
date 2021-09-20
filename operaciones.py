@@ -124,3 +124,39 @@ class OPID(Expnum) : #si viene un id, de qué hereda? :c
 
     def __init__(self, id = "") :
         self.id = id
+
+class OPNothing() : #no viene nada
+
+    def __init__(self, id = "") :
+        self.id = id
+
+class OPType() : #no viene nada
+
+    def __init__(self, id ) :
+        self.id = id
+
+
+# Arreglos ------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+
+#lado izq del iwal
+class LlamadaArr():
+    def __init__(self, nombre, inds) :
+        self.nombre = nombre
+        self.inds = inds
+
+class OPIndArr():
+    def __init__(self, id = 0) :
+        self.id = id
+
+class OPIndArrs():
+    def __init__(self, *ids) :
+        self.ids = ids
+
+#lado derecho del iwal
+class Arrcont():
+    def __init__(self, *id) :
+        self.id = id
+
+# Structs -------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
