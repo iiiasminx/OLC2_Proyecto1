@@ -117,8 +117,6 @@ class OPBool(ExpBool) : #si viene un id, de qué hereda? :c
         self.id = id
 
 
-
-
 class OPLogica() :
     def __init__(self, term1, operador, term2) :
         self.term1 = term1

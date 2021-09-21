@@ -12,6 +12,7 @@ ts_global = cst.TablaSimbolos()
 contaerrores = 0
 listasemanticos = []
 textoimpresion = ""
+contabucle = 0
 
 def fightingfinal(texto):
     exportef = fighting2(texto)
@@ -26,7 +27,9 @@ def fightingfinal(texto):
     global textoimpresion
     textoimpresion = "Lo que imprimo va acá :3 ---------------------\n"
     global ts_global
-    ts_global = cst.TablaSimbolos()
+    ts_global.simbolos.clear()
+
+    
     procesarInstrucciones(arbol, ts_global)
 
     #print(ts_global.simbolos)
@@ -42,6 +45,8 @@ def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
     for instruccion in ast:
         print(contador)
         contador += 1
+        global contabucle
+        contabucle = 0
         if isinstance(instruccion, Impresion): intImpresion(instruccion, tablaSimbolos)
         elif isinstance(instruccion, Impresionln): intImpresionLN(instruccion, tablaSimbolos)
 
@@ -92,7 +97,7 @@ def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
             listasemanticos.append(nuevo)
 
         
-        #print('\n', instruccion)
+        print('\n', instruccion)
 
 # ------------------------------------------------------------------------- 
 # Inicio Auxiliares -------------------------------------------------------
@@ -144,7 +149,14 @@ def tipoVariable(var):
     elif 'None' in x:
         return 'None'
 
-
+def errordeTipos(nombre_instruccion):
+    desc = "Error semántico con la instruccion: "+ nombre_instruccion +". Los tipos no son compatibles"
+    global contaerrores
+    nuevo = cst.NodoErrorSemantico(desc)
+    nuevo.contador = contaerrores
+    contaerrores += 1
+    global listasemanticos
+    listasemanticos.append(nuevo)
 # ------------------------------------------------------------------------- 
 # Inicio Operaciones ------------------------------------------------------
 # ------------------------------------------------------------------------- 
@@ -236,6 +248,10 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
             return'Failed'
     else:
         print('viendo si se va a las lógicas')
+        global contabucle
+        contabucle += 1
+        if contabucle > 20:
+            return None
         return resolverBooleana(Exp, tablaSimbolos)
 
 
@@ -296,6 +312,60 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             return None
 
         return math.log(exp2, exp1)
+    elif isinstance(Exp, FParse):
+        exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
+        exp2 = resolverNumerica(Exp.term2, tablaSimbolos)
+
+        if exp1 == 'Failed' or exp2 == 'Failed':
+            return None
+
+        if exp1 == 'Float64':
+            try:  
+                return float(exp2)
+            except:
+                errordeTipos('Parse')
+            return None
+        elif exp1 == 'Int64':
+            try:  
+                return int(exp2)
+            except:
+                errordeTipos('Parse')
+            return None
+        else:
+            errordeTipos('Parse')
+            return None
+    elif isinstance(Exp, FTrunc):
+        exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
+        if exp1 == 'Failed':
+            return None
+
+        try:  
+            return math.trunc(float(exp1))
+        except:
+            errordeTipos('Trunc')
+            return None      
+    elif isinstance(Exp, FFloat):
+        exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
+        if exp1 == 'Failed':
+            return None
+
+        try:  
+            return float(exp1)
+        except:
+            errordeTipos('Float')
+            return None        
+    elif isinstance(Exp, FString):
+        exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
+        if exp1 == 'Failed':
+            return None
+
+        return str(exp1)
+    elif isinstance(Exp, Ftypeof):
+        exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
+        if exp1 == 'Failed':
+            return None
+
+        return tipoVariable(exp1)
     elif isinstance(Exp, OPNum):
         return Exp.val
     elif isinstance(Exp, OPID):
@@ -305,8 +375,14 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
         else: 
             print('FALLA EN ID')
             return'Failed'
+    elif isinstance(Exp, OPType):
+        return getTipo(Exp)
     else: 
         print('viendo si se va a las cadenas')
+        global contabucle
+        contabucle += 1
+        if contabucle > 20:
+            return None
         return resolverCadena(Exp, tablaSimbolos)
 
 
@@ -347,6 +423,10 @@ def resolverBooleana(Exp, tablaSimbolos: cst.TablaSimbolos):
             return'Failed'
     else: 
         print('viendo si se va a los numeros')
+        global contabucle
+        contabucle += 1
+        if contabucle > 20:
+            return None
         return resolverNumerica(Exp, tablaSimbolos)
 
 

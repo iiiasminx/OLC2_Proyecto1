@@ -748,6 +748,12 @@ def p_declnativ2(t):
     '''DECLNATIV : trunc parentesisa int64 coma ALGO parentesisc'''
     grafo.generarPadre(5)
     grafo.generarHijos(t[1], t[2], t[3], t[4], 'Termino', t[6])
+    t[0] = FTrunc(t[5])
+
+def p_declnativ2(t):
+    '''DECLNATIV : trunc parentesisa ALGO parentesisc'''
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Termino', t[4])
     t[0] = FTrunc(t[3])
 
 
@@ -810,7 +816,8 @@ def p_sopstringterm3(t):
 
 
 def p_sopstringterm2(t):
-    '''SOPSTRING : SOPNATIV'''    
+    '''SOPSTRING : SOPNATIV
+                | DECLNATIV'''    
     #grafo.generarPadre(1)
     #grafo.generarHijos('OPNativ')
     t[0] = t[1]

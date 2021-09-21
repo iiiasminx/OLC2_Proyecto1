@@ -154,7 +154,7 @@ Rule 136   SOPNATIV -> lowercase parentesisa SOPN parentesisc
 Rule 137   SOPNATIV -> length parentesisa SOPN parentesisc
 Rule 138   SOPN -> SOPSTRING
 Rule 139   DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc
-Rule 140   DECLNATIV -> trunc parentesisa int64 coma ALGO parentesisc
+Rule 140   DECLNATIV -> trunc parentesisa ALGO parentesisc
 Rule 141   DECLNATIV -> float parentesisa ALGO parentesisc
 Rule 142   DECLNATIV -> string parentesisa ALGO parentesisc
 Rule 143   DECLNATIV -> typeof parentesisa ALGO parentesisc
@@ -165,11 +165,12 @@ Rule 147   SOPSTRING -> cadena
 Rule 148   SOPSTRING -> caracter
 Rule 149   SOPSTRING -> id
 Rule 150   SOPSTRING -> SOPNATIV
-Rule 151   NATMATH -> log10
-Rule 152   NATMATH -> sin
-Rule 153   NATMATH -> cos
-Rule 154   NATMATH -> tan
-Rule 155   NATMATH -> sqrt
+Rule 151   SOPSTRING -> DECLNATIV
+Rule 152   NATMATH -> log10
+Rule 153   NATMATH -> sin
+Rule 154   NATMATH -> cos
+Rule 155   NATMATH -> tan
+Rule 156   NATMATH -> sqrt
 
 Terminals, with rules where they appear
 
@@ -181,13 +182,13 @@ break                : 83
 cadena               : 89 118 130 147
 caracter             : 119 131 148
 char                 : 30
-coma                 : 50 60 65 101 114 139 140
+coma                 : 50 60 65 101 114 139
 comment1             : 
 comment2             : 
 continue             : 84
 corchetea            : 49 57 58
 corchetec            : 49 55 56
-cos                  : 153
+cos                  : 154
 distintoque          : 127
 dividido             : 108
 dolar                : 
@@ -210,13 +211,13 @@ if                   : 91 92 93
 igual                : 75 76 77 78
 in                   : 87
 int                  : 115 145
-int64                : 27 140
+int64                : 27
 interrogacionc       : 98
 iwaliwal             : 126
 length               : 137
 local                : 70
 log                  : 114
-log10                : 151
+log10                : 152
 lowercase            : 136
 mas                  : 105
 mayoriwal            : 124
@@ -240,12 +241,12 @@ puntocoma            : 2 3 12 13 41 42
 push                 : 
 return               : 85 86
 salto                : 
-sin                  : 152
-sqrt                 : 155
+sin                  : 153
+sqrt                 : 156
 string               : 31 142
 struct               : 40
 tab                  : 
-tan                  : 154
+tan                  : 155
 true                 : 133
 trunc                : 140
 typeof               : 143
@@ -262,7 +263,7 @@ ASIGNACION           : 69 70 71
 ATRIBUTO             : 41 42
 ATRIBUTOS            : 40 41
 DECLFUNC             : 7 17
-DECLNATIV            : 26
+DECLNATIV            : 26 151
 FELSE                : 92 95
 FELSEIF              : 91 94
 FFOR                 : 82
@@ -358,6 +359,7 @@ state 0
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -392,7 +394,7 @@ state 0
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -400,11 +402,11 @@ state 0
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
@@ -530,6 +532,7 @@ state 2
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -564,7 +567,7 @@ state 2
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -572,11 +575,11 @@ state 2
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
@@ -749,11 +752,11 @@ state 13
     (132) SOPLOG -> . id
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 13
@@ -971,6 +974,7 @@ state 25
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -1005,15 +1009,15 @@ state 25
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     puntocoma       reduce using rule 85 (TRANSF -> return .)
     id              shift and go to state 85
@@ -1171,13 +1175,26 @@ state 29
 state 30
 
     (26) SOPERACIONES -> DECLNATIV .
+    (151) SOPSTRING -> DECLNATIV .
 
+  ! reduce/reduce conflict for puntocoma resolved using rule 26 (SOPERACIONES -> DECLNATIV .)
+  ! reduce/reduce conflict for parentesisc resolved using rule 26 (SOPERACIONES -> DECLNATIV .)
+  ! reduce/reduce conflict for coma resolved using rule 26 (SOPERACIONES -> DECLNATIV .)
+  ! reduce/reduce conflict for corchetec resolved using rule 26 (SOPERACIONES -> DECLNATIV .)
+  ! reduce/reduce conflict for dospuntos resolved using rule 26 (SOPERACIONES -> DECLNATIV .)
     puntocoma       reduce using rule 26 (SOPERACIONES -> DECLNATIV .)
     parentesisc     reduce using rule 26 (SOPERACIONES -> DECLNATIV .)
     coma            reduce using rule 26 (SOPERACIONES -> DECLNATIV .)
     corchetec       reduce using rule 26 (SOPERACIONES -> DECLNATIV .)
-    dos_dospuntos   reduce using rule 26 (SOPERACIONES -> DECLNATIV .)
     dospuntos       reduce using rule 26 (SOPERACIONES -> DECLNATIV .)
+    asterisco       reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    elevado         reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+
+  ! puntocoma       [ reduce using rule 151 (SOPSTRING -> DECLNATIV .) ]
+  ! parentesisc     [ reduce using rule 151 (SOPSTRING -> DECLNATIV .) ]
+  ! coma            [ reduce using rule 151 (SOPSTRING -> DECLNATIV .) ]
+  ! corchetec       [ reduce using rule 151 (SOPSTRING -> DECLNATIV .) ]
+  ! dospuntos       [ reduce using rule 151 (SOPSTRING -> DECLNATIV .) ]
 
 
 state 31
@@ -1231,11 +1248,11 @@ state 33
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -1290,11 +1307,11 @@ state 34
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -1582,11 +1599,11 @@ state 43
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -1804,7 +1821,7 @@ state 49
 
 state 50
 
-    (140) DECLNATIV -> trunc . parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> trunc . parentesisa ALGO parentesisc
 
     parentesisa     shift and go to state 124
 
@@ -1857,37 +1874,37 @@ state 56
 
 state 57
 
-    (151) NATMATH -> log10 .
+    (152) NATMATH -> log10 .
 
-    parentesisa     reduce using rule 151 (NATMATH -> log10 .)
+    parentesisa     reduce using rule 152 (NATMATH -> log10 .)
 
 
 state 58
 
-    (152) NATMATH -> sin .
+    (153) NATMATH -> sin .
 
-    parentesisa     reduce using rule 152 (NATMATH -> sin .)
+    parentesisa     reduce using rule 153 (NATMATH -> sin .)
 
 
 state 59
 
-    (153) NATMATH -> cos .
+    (154) NATMATH -> cos .
 
-    parentesisa     reduce using rule 153 (NATMATH -> cos .)
+    parentesisa     reduce using rule 154 (NATMATH -> cos .)
 
 
 state 60
 
-    (154) NATMATH -> tan .
+    (155) NATMATH -> tan .
 
-    parentesisa     reduce using rule 154 (NATMATH -> tan .)
+    parentesisa     reduce using rule 155 (NATMATH -> tan .)
 
 
 state 61
 
-    (155) NATMATH -> sqrt .
+    (156) NATMATH -> sqrt .
 
-    parentesisa     reduce using rule 155 (NATMATH -> sqrt .)
+    parentesisa     reduce using rule 156 (NATMATH -> sqrt .)
 
 
 state 62
@@ -1992,6 +2009,7 @@ state 65
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -2011,15 +2029,15 @@ state 65
     (118) OPID -> . cadena
     (119) OPID -> . caracter
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     id              shift and go to state 135
     corchetea       shift and go to state 86
@@ -2281,6 +2299,7 @@ state 71
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -2300,15 +2319,15 @@ state 71
     (118) OPID -> . cadena
     (119) OPID -> . caracter
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     id              shift and go to state 135
     corchetea       shift and go to state 86
@@ -2421,6 +2440,7 @@ state 76
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -2455,15 +2475,15 @@ state 76
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisc     reduce using rule 68 (PARAMSFUNC -> .)
     coma            reduce using rule 68 (PARAMSFUNC -> .)
@@ -2550,11 +2570,11 @@ state 79
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     id              shift and go to state 149
     menos           shift and go to state 43
@@ -2744,6 +2764,7 @@ state 86
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -2778,15 +2799,15 @@ state 86
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     corchetec       reduce using rule 53 (ARRCONT -> .)
     coma            reduce using rule 53 (ARRCONT -> .)
@@ -2839,9 +2860,15 @@ state 87
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
+    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
+    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
+    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
+    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
 
     cadena          shift and go to state 157
     caracter        shift and go to state 158
@@ -2849,17 +2876,23 @@ state 87
     uppercase       shift and go to state 40
     lowercase       shift and go to state 41
     length          shift and go to state 42
+    parse           shift and go to state 49
+    trunc           shift and go to state 50
+    float           shift and go to state 51
+    string          shift and go to state 52
+    typeof          shift and go to state 53
 
     SOPSTRING                      shift and go to state 155
     SOPNATIV                       shift and go to state 159
+    DECLNATIV                      shift and go to state 160
 
 state 88
 
     (145) SOPSTRING -> SOPSTRING elevado . int
     (146) SOPSTRING -> SOPSTRING elevado . id
 
-    int             shift and go to state 160
-    id              shift and go to state 161
+    int             shift and go to state 161
+    id              shift and go to state 162
 
 
 state 89
@@ -2880,11 +2913,11 @@ state 89
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -2900,7 +2933,7 @@ state 89
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 162
+    OPID                           shift and go to state 163
     NATMATH                        shift and go to state 44
 
 state 90
@@ -2921,11 +2954,11 @@ state 90
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -2941,7 +2974,7 @@ state 90
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 163
+    OPID                           shift and go to state 164
     NATMATH                        shift and go to state 44
 
 state 91
@@ -2962,11 +2995,11 @@ state 91
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -2982,7 +3015,7 @@ state 91
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 164
+    OPID                           shift and go to state 165
     NATMATH                        shift and go to state 44
 
 state 92
@@ -3003,11 +3036,11 @@ state 92
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -3023,7 +3056,7 @@ state 92
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 165
+    OPID                           shift and go to state 166
     NATMATH                        shift and go to state 44
 
 state 93
@@ -3044,11 +3077,11 @@ state 93
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -3064,7 +3097,7 @@ state 93
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 166
+    OPID                           shift and go to state 167
     NATMATH                        shift and go to state 44
 
 state 94
@@ -3085,11 +3118,11 @@ state 94
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -3105,7 +3138,7 @@ state 94
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 167
+    OPID                           shift and go to state 168
     NATMATH                        shift and go to state 44
 
 state 95
@@ -3141,11 +3174,11 @@ state 95
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -3163,7 +3196,7 @@ state 95
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPLOG                         shift and go to state 168
+    SOPLOG                         shift and go to state 169
     OPID                           shift and go to state 106
     NATMATH                        shift and go to state 44
 
@@ -3200,11 +3233,11 @@ state 96
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -3222,7 +3255,7 @@ state 96
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPLOG                         shift and go to state 169
+    SOPLOG                         shift and go to state 170
     OPID                           shift and go to state 106
     NATMATH                        shift and go to state 44
 
@@ -3259,11 +3292,11 @@ state 97
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -3281,7 +3314,7 @@ state 97
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPLOG                         shift and go to state 170
+    SOPLOG                         shift and go to state 171
     OPID                           shift and go to state 106
     NATMATH                        shift and go to state 44
 
@@ -3318,11 +3351,11 @@ state 98
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -3340,7 +3373,7 @@ state 98
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPLOG                         shift and go to state 171
+    SOPLOG                         shift and go to state 172
     OPID                           shift and go to state 106
     NATMATH                        shift and go to state 44
 
@@ -3377,11 +3410,11 @@ state 99
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -3399,7 +3432,7 @@ state 99
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPLOG                         shift and go to state 172
+    SOPLOG                         shift and go to state 173
     OPID                           shift and go to state 106
     NATMATH                        shift and go to state 44
 
@@ -3436,11 +3469,11 @@ state 100
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -3458,7 +3491,7 @@ state 100
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPLOG                         shift and go to state 173
+    SOPLOG                         shift and go to state 174
     OPID                           shift and go to state 106
     NATMATH                        shift and go to state 44
 
@@ -3495,11 +3528,11 @@ state 101
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -3517,7 +3550,7 @@ state 101
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPLOG                         shift and go to state 174
+    SOPLOG                         shift and go to state 175
     OPID                           shift and go to state 106
     NATMATH                        shift and go to state 44
 
@@ -3554,11 +3587,11 @@ state 102
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -3576,7 +3609,7 @@ state 102
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPLOG                         shift and go to state 175
+    SOPLOG                         shift and go to state 176
     OPID                           shift and go to state 106
     NATMATH                        shift and go to state 44
 
@@ -3648,6 +3681,7 @@ state 104
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -3682,7 +3716,7 @@ state 104
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -3690,11 +3724,11 @@ state 104
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
@@ -3746,16 +3780,16 @@ state 104
     sqrt            shift and go to state 61
 
     SOPLOG                         shift and go to state 29
-    INSTRUCCIONES                  shift and go to state 176
-    INSTRUCCION                    shift and go to state 177
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCIONES                  shift and go to state 177
+    INSTRUCCION                    shift and go to state 178
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -3805,11 +3839,11 @@ state 105
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -3828,7 +3862,7 @@ state 105
     sqrt            shift and go to state 61
 
     SOPLOG                         shift and go to state 67
-    OPID                           shift and go to state 186
+    OPID                           shift and go to state 187
     NATMATH                        shift and go to state 44
 
 state 106
@@ -4459,6 +4493,7 @@ state 110
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -4493,7 +4528,7 @@ state 110
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -4501,11 +4536,11 @@ state 110
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
@@ -4557,16 +4592,16 @@ state 110
     sqrt            shift and go to state 61
 
     SOPLOG                         shift and go to state 29
-    INSTRUCCIONES                  shift and go to state 187
-    INSTRUCCION                    shift and go to state 177
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCIONES                  shift and go to state 188
+    INSTRUCCION                    shift and go to state 178
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -4586,7 +4621,7 @@ state 111
 
     (87) FFOR -> for id . in RANGO INSTRUCCIONES end
 
-    in              shift and go to state 188
+    in              shift and go to state 189
 
 
 state 112
@@ -4602,6 +4637,7 @@ state 112
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (33) ALGO -> . SOPERACIONES
     (34) ALGO -> . ARREGLO
     (35) ALGO -> . LLAMADARR
@@ -4610,6 +4646,11 @@ state 112
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
+    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
+    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
+    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
+    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
     (22) SOPERACIONES -> . SOPSTRING
     (23) SOPERACIONES -> . SOPNATIV
     (24) SOPERACIONES -> . OPID
@@ -4648,24 +4689,24 @@ state 112
     (132) SOPLOG -> . id
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
-    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
-    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
-    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
-    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
-    nothing         shift and go to state 191
+    nothing         shift and go to state 192
     cadena          shift and go to state 38
     caracter        shift and go to state 39
-    id              shift and go to state 192
+    id              shift and go to state 193
     uppercase       shift and go to state 40
     lowercase       shift and go to state 41
     length          shift and go to state 42
+    parse           shift and go to state 49
+    trunc           shift and go to state 50
+    float           shift and go to state 51
+    string          shift and go to state 52
+    typeof          shift and go to state 53
     corchetea       shift and go to state 86
     menos           shift and go to state 43
     parentesisa     shift and go to state 13
@@ -4674,27 +4715,22 @@ state 112
     flotante        shift and go to state 46
     true            shift and go to state 47
     false           shift and go to state 48
-    parse           shift and go to state 49
-    trunc           shift and go to state 50
-    float           shift and go to state 51
-    string          shift and go to state 52
-    typeof          shift and go to state 53
     log10           shift and go to state 57
     sin             shift and go to state 58
     cos             shift and go to state 59
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPSTRING                      shift and go to state 189
-    ALGO                           shift and go to state 190
-    SOPNATIV                       shift and go to state 193
+    SOPSTRING                      shift and go to state 190
+    ALGO                           shift and go to state 191
+    SOPNATIV                       shift and go to state 194
+    DECLNATIV                      shift and go to state 195
     SOPERACIONES                   shift and go to state 81
     ARREGLO                        shift and go to state 82
     LLAMADARR                      shift and go to state 83
     STRUCTINI                      shift and go to state 84
     OPID                           shift and go to state 28
     SOPLOG                         shift and go to state 29
-    DECLNATIV                      shift and go to state 30
     NATMATH                        shift and go to state 44
 
 state 113
@@ -4708,9 +4744,15 @@ state 113
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
+    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
+    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
+    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
+    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
 
     cadena          shift and go to state 157
     caracter        shift and go to state 158
@@ -4718,10 +4760,16 @@ state 113
     uppercase       shift and go to state 40
     lowercase       shift and go to state 41
     length          shift and go to state 42
+    parse           shift and go to state 49
+    trunc           shift and go to state 50
+    float           shift and go to state 51
+    string          shift and go to state 52
+    typeof          shift and go to state 53
 
-    SOPN                           shift and go to state 194
-    SOPSTRING                      shift and go to state 195
+    SOPN                           shift and go to state 196
+    SOPSTRING                      shift and go to state 197
     SOPNATIV                       shift and go to state 159
+    DECLNATIV                      shift and go to state 160
 
 state 114
 
@@ -4734,9 +4782,15 @@ state 114
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
+    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
+    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
+    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
+    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
 
     cadena          shift and go to state 157
     caracter        shift and go to state 158
@@ -4744,10 +4798,16 @@ state 114
     uppercase       shift and go to state 40
     lowercase       shift and go to state 41
     length          shift and go to state 42
+    parse           shift and go to state 49
+    trunc           shift and go to state 50
+    float           shift and go to state 51
+    string          shift and go to state 52
+    typeof          shift and go to state 53
 
-    SOPN                           shift and go to state 196
-    SOPSTRING                      shift and go to state 195
+    SOPN                           shift and go to state 198
+    SOPSTRING                      shift and go to state 197
     SOPNATIV                       shift and go to state 159
+    DECLNATIV                      shift and go to state 160
 
 state 115
 
@@ -4760,9 +4820,15 @@ state 115
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
+    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
+    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
+    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
+    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
 
     cadena          shift and go to state 157
     caracter        shift and go to state 158
@@ -4770,10 +4836,16 @@ state 115
     uppercase       shift and go to state 40
     lowercase       shift and go to state 41
     length          shift and go to state 42
+    parse           shift and go to state 49
+    trunc           shift and go to state 50
+    float           shift and go to state 51
+    string          shift and go to state 52
+    typeof          shift and go to state 53
 
-    SOPN                           shift and go to state 197
-    SOPSTRING                      shift and go to state 195
+    SOPN                           shift and go to state 199
+    SOPSTRING                      shift and go to state 197
     SOPNATIV                       shift and go to state 159
+    DECLNATIV                      shift and go to state 160
 
 state 116
 
@@ -4868,11 +4940,11 @@ state 117
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -4888,7 +4960,7 @@ state 117
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 198
+    OPID                           shift and go to state 200
     NATMATH                        shift and go to state 44
 
 state 118
@@ -5095,11 +5167,11 @@ state 121
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -5116,7 +5188,7 @@ state 121
     sqrt            shift and go to state 61
 
     NATMATH                        shift and go to state 44
-    OPID                           shift and go to state 199
+    OPID                           shift and go to state 201
 
 state 122
 
@@ -5136,11 +5208,11 @@ state 122
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -5156,7 +5228,7 @@ state 122
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 200
+    OPID                           shift and go to state 202
     NATMATH                        shift and go to state 44
 
 state 123
@@ -5169,25 +5241,18 @@ state 123
     (31) TIPOS -> . string
     (32) TIPOS -> . id
 
-    int64           shift and go to state 202
-    float64         shift and go to state 203
-    bool            shift and go to state 204
-    char            shift and go to state 205
-    string          shift and go to state 206
-    id              shift and go to state 207
+    int64           shift and go to state 204
+    float64         shift and go to state 205
+    bool            shift and go to state 206
+    char            shift and go to state 207
+    string          shift and go to state 208
+    id              shift and go to state 209
 
-    TIPOS                          shift and go to state 201
+    TIPOS                          shift and go to state 203
 
 state 124
 
-    (140) DECLNATIV -> trunc parentesisa . int64 coma ALGO parentesisc
-
-    int64           shift and go to state 208
-
-
-state 125
-
-    (141) DECLNATIV -> float parentesisa . ALGO parentesisc
+    (140) DECLNATIV -> trunc parentesisa . ALGO parentesisc
     (33) ALGO -> . SOPERACIONES
     (34) ALGO -> . ARREGLO
     (35) ALGO -> . LLAMADARR
@@ -5208,6 +5273,7 @@ state 125
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -5242,119 +5308,15 @@ state 125
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
-
-    id              shift and go to state 85
-    corchetea       shift and go to state 86
-    cadena          shift and go to state 38
-    caracter        shift and go to state 39
-    uppercase       shift and go to state 40
-    lowercase       shift and go to state 41
-    length          shift and go to state 42
-    menos           shift and go to state 43
-    parentesisa     shift and go to state 13
-    log             shift and go to state 45
-    int             shift and go to state 37
-    flotante        shift and go to state 46
-    true            shift and go to state 47
-    false           shift and go to state 48
-    parse           shift and go to state 49
-    trunc           shift and go to state 50
-    float           shift and go to state 51
-    string          shift and go to state 52
-    typeof          shift and go to state 53
-    log10           shift and go to state 57
-    sin             shift and go to state 58
-    cos             shift and go to state 59
-    tan             shift and go to state 60
-    sqrt            shift and go to state 61
-
-    ALGO                           shift and go to state 209
-    SOPERACIONES                   shift and go to state 81
-    ARREGLO                        shift and go to state 82
-    LLAMADARR                      shift and go to state 83
-    STRUCTINI                      shift and go to state 84
-    SOPSTRING                      shift and go to state 26
-    SOPNATIV                       shift and go to state 27
-    OPID                           shift and go to state 28
-    SOPLOG                         shift and go to state 29
-    DECLNATIV                      shift and go to state 30
-    NATMATH                        shift and go to state 44
-
-state 126
-
-    (142) DECLNATIV -> string parentesisa . ALGO parentesisc
-    (33) ALGO -> . SOPERACIONES
-    (34) ALGO -> . ARREGLO
-    (35) ALGO -> . LLAMADARR
-    (36) ALGO -> . STRUCTINI
-    (37) ALGO -> . id
-    (22) SOPERACIONES -> . SOPSTRING
-    (23) SOPERACIONES -> . SOPNATIV
-    (24) SOPERACIONES -> . OPID
-    (25) SOPERACIONES -> . SOPLOG
-    (26) SOPERACIONES -> . DECLNATIV
-    (49) ARREGLO -> . corchetea ARRCONTS corchetec
-    (54) LLAMADARR -> . id INDARS
-    (45) STRUCTINI -> . id parentesisa PARAMSFUNC parentesisc
-    (144) SOPSTRING -> . SOPSTRING asterisco SOPSTRING
-    (145) SOPSTRING -> . SOPSTRING elevado int
-    (146) SOPSTRING -> . SOPSTRING elevado id
-    (147) SOPSTRING -> . cadena
-    (148) SOPSTRING -> . caracter
-    (149) SOPSTRING -> . id
-    (150) SOPSTRING -> . SOPNATIV
-    (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
-    (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
-    (137) SOPNATIV -> . length parentesisa SOPN parentesisc
-    (105) OPID -> . OPID mas OPID
-    (106) OPID -> . OPID menos OPID
-    (107) OPID -> . OPID asterisco OPID
-    (108) OPID -> . OPID dividido OPID
-    (109) OPID -> . OPID modulo OPID
-    (110) OPID -> . OPID elevado OPID
-    (111) OPID -> . menos OPID
-    (112) OPID -> . parentesisa OPID parentesisc
-    (113) OPID -> . NATMATH parentesisa OPID parentesisc
-    (114) OPID -> . log parentesisa OPID coma OPID parentesisc
-    (115) OPID -> . int
-    (116) OPID -> . flotante
-    (117) OPID -> . id
-    (118) OPID -> . cadena
-    (119) OPID -> . caracter
-    (120) SOPLOG -> . SOPLOG and SOPLOG
-    (121) SOPLOG -> . SOPLOG or SOPLOG
-    (122) SOPLOG -> . SOPLOG mayorque SOPLOG
-    (123) SOPLOG -> . SOPLOG menorque SOPLOG
-    (124) SOPLOG -> . SOPLOG mayoriwal SOPLOG
-    (125) SOPLOG -> . SOPLOG menoriwal SOPLOG
-    (126) SOPLOG -> . SOPLOG iwaliwal SOPLOG
-    (127) SOPLOG -> . SOPLOG distintoque SOPLOG
-    (128) SOPLOG -> . parentesisa SOPLOG parentesisc
-    (129) SOPLOG -> . OPID
-    (130) SOPLOG -> . cadena
-    (131) SOPLOG -> . caracter
-    (132) SOPLOG -> . id
-    (133) SOPLOG -> . true
-    (134) SOPLOG -> . false
-    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
-    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
-    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
-    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     id              shift and go to state 85
     corchetea       shift and go to state 86
@@ -5393,9 +5355,9 @@ state 126
     DECLNATIV                      shift and go to state 30
     NATMATH                        shift and go to state 44
 
-state 127
+state 125
 
-    (143) DECLNATIV -> typeof parentesisa . ALGO parentesisc
+    (141) DECLNATIV -> float parentesisa . ALGO parentesisc
     (33) ALGO -> . SOPERACIONES
     (34) ALGO -> . ARREGLO
     (35) ALGO -> . LLAMADARR
@@ -5416,6 +5378,7 @@ state 127
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -5450,15 +5413,15 @@ state 127
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     id              shift and go to state 85
     corchetea       shift and go to state 86
@@ -5497,6 +5460,216 @@ state 127
     DECLNATIV                      shift and go to state 30
     NATMATH                        shift and go to state 44
 
+state 126
+
+    (142) DECLNATIV -> string parentesisa . ALGO parentesisc
+    (33) ALGO -> . SOPERACIONES
+    (34) ALGO -> . ARREGLO
+    (35) ALGO -> . LLAMADARR
+    (36) ALGO -> . STRUCTINI
+    (37) ALGO -> . id
+    (22) SOPERACIONES -> . SOPSTRING
+    (23) SOPERACIONES -> . SOPNATIV
+    (24) SOPERACIONES -> . OPID
+    (25) SOPERACIONES -> . SOPLOG
+    (26) SOPERACIONES -> . DECLNATIV
+    (49) ARREGLO -> . corchetea ARRCONTS corchetec
+    (54) LLAMADARR -> . id INDARS
+    (45) STRUCTINI -> . id parentesisa PARAMSFUNC parentesisc
+    (144) SOPSTRING -> . SOPSTRING asterisco SOPSTRING
+    (145) SOPSTRING -> . SOPSTRING elevado int
+    (146) SOPSTRING -> . SOPSTRING elevado id
+    (147) SOPSTRING -> . cadena
+    (148) SOPSTRING -> . caracter
+    (149) SOPSTRING -> . id
+    (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
+    (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
+    (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
+    (137) SOPNATIV -> . length parentesisa SOPN parentesisc
+    (105) OPID -> . OPID mas OPID
+    (106) OPID -> . OPID menos OPID
+    (107) OPID -> . OPID asterisco OPID
+    (108) OPID -> . OPID dividido OPID
+    (109) OPID -> . OPID modulo OPID
+    (110) OPID -> . OPID elevado OPID
+    (111) OPID -> . menos OPID
+    (112) OPID -> . parentesisa OPID parentesisc
+    (113) OPID -> . NATMATH parentesisa OPID parentesisc
+    (114) OPID -> . log parentesisa OPID coma OPID parentesisc
+    (115) OPID -> . int
+    (116) OPID -> . flotante
+    (117) OPID -> . id
+    (118) OPID -> . cadena
+    (119) OPID -> . caracter
+    (120) SOPLOG -> . SOPLOG and SOPLOG
+    (121) SOPLOG -> . SOPLOG or SOPLOG
+    (122) SOPLOG -> . SOPLOG mayorque SOPLOG
+    (123) SOPLOG -> . SOPLOG menorque SOPLOG
+    (124) SOPLOG -> . SOPLOG mayoriwal SOPLOG
+    (125) SOPLOG -> . SOPLOG menoriwal SOPLOG
+    (126) SOPLOG -> . SOPLOG iwaliwal SOPLOG
+    (127) SOPLOG -> . SOPLOG distintoque SOPLOG
+    (128) SOPLOG -> . parentesisa SOPLOG parentesisc
+    (129) SOPLOG -> . OPID
+    (130) SOPLOG -> . cadena
+    (131) SOPLOG -> . caracter
+    (132) SOPLOG -> . id
+    (133) SOPLOG -> . true
+    (134) SOPLOG -> . false
+    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
+    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
+    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
+    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
+
+    id              shift and go to state 85
+    corchetea       shift and go to state 86
+    cadena          shift and go to state 38
+    caracter        shift and go to state 39
+    uppercase       shift and go to state 40
+    lowercase       shift and go to state 41
+    length          shift and go to state 42
+    menos           shift and go to state 43
+    parentesisa     shift and go to state 13
+    log             shift and go to state 45
+    int             shift and go to state 37
+    flotante        shift and go to state 46
+    true            shift and go to state 47
+    false           shift and go to state 48
+    parse           shift and go to state 49
+    trunc           shift and go to state 50
+    float           shift and go to state 51
+    string          shift and go to state 52
+    typeof          shift and go to state 53
+    log10           shift and go to state 57
+    sin             shift and go to state 58
+    cos             shift and go to state 59
+    tan             shift and go to state 60
+    sqrt            shift and go to state 61
+
+    ALGO                           shift and go to state 212
+    SOPERACIONES                   shift and go to state 81
+    ARREGLO                        shift and go to state 82
+    LLAMADARR                      shift and go to state 83
+    STRUCTINI                      shift and go to state 84
+    SOPSTRING                      shift and go to state 26
+    SOPNATIV                       shift and go to state 27
+    OPID                           shift and go to state 28
+    SOPLOG                         shift and go to state 29
+    DECLNATIV                      shift and go to state 30
+    NATMATH                        shift and go to state 44
+
+state 127
+
+    (143) DECLNATIV -> typeof parentesisa . ALGO parentesisc
+    (33) ALGO -> . SOPERACIONES
+    (34) ALGO -> . ARREGLO
+    (35) ALGO -> . LLAMADARR
+    (36) ALGO -> . STRUCTINI
+    (37) ALGO -> . id
+    (22) SOPERACIONES -> . SOPSTRING
+    (23) SOPERACIONES -> . SOPNATIV
+    (24) SOPERACIONES -> . OPID
+    (25) SOPERACIONES -> . SOPLOG
+    (26) SOPERACIONES -> . DECLNATIV
+    (49) ARREGLO -> . corchetea ARRCONTS corchetec
+    (54) LLAMADARR -> . id INDARS
+    (45) STRUCTINI -> . id parentesisa PARAMSFUNC parentesisc
+    (144) SOPSTRING -> . SOPSTRING asterisco SOPSTRING
+    (145) SOPSTRING -> . SOPSTRING elevado int
+    (146) SOPSTRING -> . SOPSTRING elevado id
+    (147) SOPSTRING -> . cadena
+    (148) SOPSTRING -> . caracter
+    (149) SOPSTRING -> . id
+    (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
+    (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
+    (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
+    (137) SOPNATIV -> . length parentesisa SOPN parentesisc
+    (105) OPID -> . OPID mas OPID
+    (106) OPID -> . OPID menos OPID
+    (107) OPID -> . OPID asterisco OPID
+    (108) OPID -> . OPID dividido OPID
+    (109) OPID -> . OPID modulo OPID
+    (110) OPID -> . OPID elevado OPID
+    (111) OPID -> . menos OPID
+    (112) OPID -> . parentesisa OPID parentesisc
+    (113) OPID -> . NATMATH parentesisa OPID parentesisc
+    (114) OPID -> . log parentesisa OPID coma OPID parentesisc
+    (115) OPID -> . int
+    (116) OPID -> . flotante
+    (117) OPID -> . id
+    (118) OPID -> . cadena
+    (119) OPID -> . caracter
+    (120) SOPLOG -> . SOPLOG and SOPLOG
+    (121) SOPLOG -> . SOPLOG or SOPLOG
+    (122) SOPLOG -> . SOPLOG mayorque SOPLOG
+    (123) SOPLOG -> . SOPLOG menorque SOPLOG
+    (124) SOPLOG -> . SOPLOG mayoriwal SOPLOG
+    (125) SOPLOG -> . SOPLOG menoriwal SOPLOG
+    (126) SOPLOG -> . SOPLOG iwaliwal SOPLOG
+    (127) SOPLOG -> . SOPLOG distintoque SOPLOG
+    (128) SOPLOG -> . parentesisa SOPLOG parentesisc
+    (129) SOPLOG -> . OPID
+    (130) SOPLOG -> . cadena
+    (131) SOPLOG -> . caracter
+    (132) SOPLOG -> . id
+    (133) SOPLOG -> . true
+    (134) SOPLOG -> . false
+    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
+    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
+    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
+    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
+
+    id              shift and go to state 85
+    corchetea       shift and go to state 86
+    cadena          shift and go to state 38
+    caracter        shift and go to state 39
+    uppercase       shift and go to state 40
+    lowercase       shift and go to state 41
+    length          shift and go to state 42
+    menos           shift and go to state 43
+    parentesisa     shift and go to state 13
+    log             shift and go to state 45
+    int             shift and go to state 37
+    flotante        shift and go to state 46
+    true            shift and go to state 47
+    false           shift and go to state 48
+    parse           shift and go to state 49
+    trunc           shift and go to state 50
+    float           shift and go to state 51
+    string          shift and go to state 52
+    typeof          shift and go to state 53
+    log10           shift and go to state 57
+    sin             shift and go to state 58
+    cos             shift and go to state 59
+    tan             shift and go to state 60
+    sqrt            shift and go to state 61
+
+    ALGO                           shift and go to state 213
+    SOPERACIONES                   shift and go to state 81
+    ARREGLO                        shift and go to state 82
+    LLAMADARR                      shift and go to state 83
+    STRUCTINI                      shift and go to state 84
+    SOPSTRING                      shift and go to state 26
+    SOPNATIV                       shift and go to state 27
+    OPID                           shift and go to state 28
+    SOPLOG                         shift and go to state 29
+    DECLNATIV                      shift and go to state 30
+    NATMATH                        shift and go to state 44
+
 state 128
 
     (40) STRUCT -> struct id . ATRIBUTOS end
@@ -5505,19 +5678,19 @@ state 128
     (43) ATRIBUTO -> . id dos_dospuntos TIPOS
     (44) ATRIBUTO -> . id
 
-    id              shift and go to state 212
+    id              shift and go to state 214
 
-    ATRIBUTOS                      shift and go to state 213
-    ATRIBUTO                       shift and go to state 214
+    ATRIBUTOS                      shift and go to state 215
+    ATRIBUTO                       shift and go to state 216
 
 state 129
 
     (47) STRUCTASIGNS -> STRUCTASIGNS punto . STRUCTASIGN
     (46) STRUCTASIGN -> . id
 
-    id              shift and go to state 216
+    id              shift and go to state 218
 
-    STRUCTASIGN                    shift and go to state 215
+    STRUCTASIGN                    shift and go to state 217
 
 state 130
 
@@ -5567,8 +5740,8 @@ state 131
     (99) IMPRIMIR -> println parentesisa SCONTPRNTS . parentesisc
     (101) SCONTPRNTS -> SCONTPRNTS . coma SCONTPRNT
 
-    parentesisc     shift and go to state 217
-    coma            shift and go to state 218
+    parentesisc     shift and go to state 219
+    coma            shift and go to state 220
 
 
 state 132
@@ -5679,7 +5852,7 @@ state 136
     (126) SOPLOG -> SOPLOG . iwaliwal SOPLOG
     (127) SOPLOG -> SOPLOG . distintoque SOPLOG
 
-    interrogacionc  shift and go to state 219
+    interrogacionc  shift and go to state 221
     parentesisc     reduce using rule 25 (SOPERACIONES -> SOPLOG .)
     coma            reduce using rule 25 (SOPERACIONES -> SOPLOG .)
     and             shift and go to state 95
@@ -5963,8 +6136,8 @@ state 142
     (100) IMPRIMIR -> print parentesisa SCONTPRNTS . parentesisc
     (101) SCONTPRNTS -> SCONTPRNTS . coma SCONTPRNT
 
-    parentesisc     shift and go to state 220
-    coma            shift and go to state 218
+    parentesisc     shift and go to state 222
+    coma            shift and go to state 220
 
 
 state 143
@@ -5975,18 +6148,18 @@ state 143
     (62) PARAM -> . id
     (63) PARAM -> . id dos_dospuntos TIPOS
 
-    id              shift and go to state 221
+    id              shift and go to state 223
 
-    PARAMS                         shift and go to state 222
-    PARAM                          shift and go to state 223
+    PARAMS                         shift and go to state 224
+    PARAM                          shift and go to state 225
 
 state 144
 
     (64) LLAMADAFUNC -> id parentesisa PARAMSFUNCS . parentesisc
     (65) PARAMSFUNCS -> PARAMSFUNCS . coma PARAMSFUNC
 
-    parentesisc     shift and go to state 224
-    coma            shift and go to state 225
+    parentesisc     shift and go to state 226
+    coma            shift and go to state 227
 
 
 state 145
@@ -6009,7 +6182,7 @@ state 147
 
     (55) INDARS -> INDARS INDAR . corchetec
 
-    corchetec       shift and go to state 226
+    corchetec       shift and go to state 228
 
 
 state 148
@@ -6087,6 +6260,7 @@ state 151
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -6121,15 +6295,15 @@ state 151
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisc     reduce using rule 68 (PARAMSFUNC -> .)
     id              shift and go to state 85
@@ -6157,7 +6331,7 @@ state 151
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    PARAMSFUNC                     shift and go to state 227
+    PARAMSFUNC                     shift and go to state 229
     ALGO                           shift and go to state 146
     SOPERACIONES                   shift and go to state 81
     ARREGLO                        shift and go to state 82
@@ -6175,8 +6349,8 @@ state 152
     (49) ARREGLO -> corchetea ARRCONTS . corchetec
     (50) ARRCONTS -> ARRCONTS . coma ARRCONT
 
-    corchetec       shift and go to state 228
-    coma            shift and go to state 229
+    corchetec       shift and go to state 230
+    coma            shift and go to state 231
 
 
 state 153
@@ -6273,6 +6447,20 @@ state 159
 
 state 160
 
+    (151) SOPSTRING -> DECLNATIV .
+
+    asterisco       reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    elevado         reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    puntocoma       reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    parentesisc     reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    coma            reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    corchetec       reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    dos_dospuntos   reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    dospuntos       reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+
+
+state 161
+
     (145) SOPSTRING -> SOPSTRING elevado int .
 
     asterisco       reduce using rule 145 (SOPSTRING -> SOPSTRING elevado int .)
@@ -6285,7 +6473,7 @@ state 160
     dospuntos       reduce using rule 145 (SOPSTRING -> SOPSTRING elevado int .)
 
 
-state 161
+state 162
 
     (146) SOPSTRING -> SOPSTRING elevado id .
 
@@ -6299,7 +6487,7 @@ state 161
     dospuntos       reduce using rule 146 (SOPSTRING -> SOPSTRING elevado id .)
 
 
-state 162
+state 163
 
     (105) OPID -> OPID mas OPID .
     (105) OPID -> OPID . mas OPID
@@ -6374,7 +6562,7 @@ state 162
   ! menos           [ shift and go to state 90 ]
 
 
-state 163
+state 164
 
     (106) OPID -> OPID menos OPID .
     (105) OPID -> OPID . mas OPID
@@ -6449,7 +6637,7 @@ state 163
   ! menos           [ shift and go to state 90 ]
 
 
-state 164
+state 165
 
     (107) OPID -> OPID asterisco OPID .
     (105) OPID -> OPID . mas OPID
@@ -6524,7 +6712,7 @@ state 164
   ! dividido        [ shift and go to state 92 ]
 
 
-state 165
+state 166
 
     (108) OPID -> OPID dividido OPID .
     (105) OPID -> OPID . mas OPID
@@ -6599,7 +6787,7 @@ state 165
   ! dividido        [ shift and go to state 92 ]
 
 
-state 166
+state 167
 
     (109) OPID -> OPID modulo OPID .
     (105) OPID -> OPID . mas OPID
@@ -6674,7 +6862,7 @@ state 166
   ! elevado         [ shift and go to state 94 ]
 
 
-state 167
+state 168
 
     (110) OPID -> OPID elevado OPID .
     (105) OPID -> OPID . mas OPID
@@ -6749,7 +6937,7 @@ state 167
   ! elevado         [ shift and go to state 94 ]
 
 
-state 168
+state 169
 
     (120) SOPLOG -> SOPLOG and SOPLOG .
     (120) SOPLOG -> SOPLOG . and SOPLOG
@@ -6823,7 +7011,7 @@ state 168
   ! or              [ shift and go to state 96 ]
 
 
-state 169
+state 170
 
     (121) SOPLOG -> SOPLOG or SOPLOG .
     (120) SOPLOG -> SOPLOG . and SOPLOG
@@ -6897,7 +7085,7 @@ state 169
   ! or              [ shift and go to state 96 ]
 
 
-state 170
+state 171
 
     (122) SOPLOG -> SOPLOG mayorque SOPLOG .
     (120) SOPLOG -> SOPLOG . and SOPLOG
@@ -6971,7 +7159,7 @@ state 170
   ! distintoque     [ shift and go to state 102 ]
 
 
-state 171
+state 172
 
     (123) SOPLOG -> SOPLOG menorque SOPLOG .
     (120) SOPLOG -> SOPLOG . and SOPLOG
@@ -7045,7 +7233,7 @@ state 171
   ! distintoque     [ shift and go to state 102 ]
 
 
-state 172
+state 173
 
     (124) SOPLOG -> SOPLOG mayoriwal SOPLOG .
     (120) SOPLOG -> SOPLOG . and SOPLOG
@@ -7119,7 +7307,7 @@ state 172
   ! distintoque     [ shift and go to state 102 ]
 
 
-state 173
+state 174
 
     (125) SOPLOG -> SOPLOG menoriwal SOPLOG .
     (120) SOPLOG -> SOPLOG . and SOPLOG
@@ -7193,7 +7381,7 @@ state 173
   ! distintoque     [ shift and go to state 102 ]
 
 
-state 174
+state 175
 
     (126) SOPLOG -> SOPLOG iwaliwal SOPLOG .
     (120) SOPLOG -> SOPLOG . and SOPLOG
@@ -7267,7 +7455,7 @@ state 174
   ! distintoque     [ shift and go to state 102 ]
 
 
-state 175
+state 176
 
     (127) SOPLOG -> SOPLOG distintoque SOPLOG .
     (120) SOPLOG -> SOPLOG . and SOPLOG
@@ -7341,7 +7529,7 @@ state 175
   ! distintoque     [ shift and go to state 102 ]
 
 
-state 176
+state 177
 
     (91) FIF -> if SOPLOG INSTRUCCIONES . FELSEIF
     (92) FIF -> if SOPLOG INSTRUCCIONES . FELSE
@@ -7397,6 +7585,7 @@ state 176
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -7431,7 +7620,7 @@ state 176
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -7439,19 +7628,19 @@ state 176
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
     (46) STRUCTASIGN -> . id
 
-    end             shift and go to state 232
-    elseif          shift and go to state 234
-    else            shift and go to state 235
+    end             shift and go to state 234
+    elseif          shift and go to state 236
+    else            shift and go to state 237
     println         shift and go to state 12
     print           shift and go to state 14
     global          shift and go to state 18
@@ -7490,17 +7679,17 @@ state 176
     sqrt            shift and go to state 61
 
     SOPLOG                         shift and go to state 29
-    FELSEIF                        shift and go to state 230
-    FELSE                          shift and go to state 231
-    INSTRUCCION                    shift and go to state 233
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    FELSEIF                        shift and go to state 232
+    FELSE                          shift and go to state 233
+    INSTRUCCION                    shift and go to state 235
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -7516,70 +7705,70 @@ state 176
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 177
+state 178
 
     (13) INSTRUCCIONES -> INSTRUCCION . puntocoma
 
-    puntocoma       shift and go to state 236
+    puntocoma       shift and go to state 238
 
 
-state 178
+state 179
 
     (14) INSTRUCCION -> IMPRIMIR .
 
     puntocoma       reduce using rule 14 (INSTRUCCION -> IMPRIMIR .)
 
 
-state 179
+state 180
 
     (15) INSTRUCCION -> FUNCIONES .
 
     puntocoma       reduce using rule 15 (INSTRUCCION -> FUNCIONES .)
 
 
-state 180
+state 181
 
     (16) INSTRUCCION -> SCOPE .
 
     puntocoma       reduce using rule 16 (INSTRUCCION -> SCOPE .)
 
 
-state 181
+state 182
 
     (17) INSTRUCCION -> DECLFUNC .
 
     puntocoma       reduce using rule 17 (INSTRUCCION -> DECLFUNC .)
 
 
-state 182
+state 183
 
     (18) INSTRUCCION -> LLAMADAFUNC .
 
     puntocoma       reduce using rule 18 (INSTRUCCION -> LLAMADAFUNC .)
 
 
-state 183
+state 184
 
     (19) INSTRUCCION -> TRANSF .
 
     puntocoma       reduce using rule 19 (INSTRUCCION -> TRANSF .)
 
 
-state 184
+state 185
 
     (20) INSTRUCCION -> SOPERACIONES .
 
     puntocoma       reduce using rule 20 (INSTRUCCION -> SOPERACIONES .)
 
 
-state 185
+state 186
 
     (21) INSTRUCCION -> TYPESTRUCT .
 
     puntocoma       reduce using rule 21 (INSTRUCCION -> TYPESTRUCT .)
 
 
-state 186
+state 187
 
     (112) OPID -> parentesisa OPID . parentesisc
     (129) SOPLOG -> OPID .
@@ -7610,7 +7799,7 @@ state 186
   ! parentesisc     [ reduce using rule 129 (SOPLOG -> OPID .) ]
 
 
-state 187
+state 188
 
     (90) FWHILE -> while SOPLOG INSTRUCCIONES . end
     (12) INSTRUCCIONES -> INSTRUCCIONES . INSTRUCCION puntocoma
@@ -7660,6 +7849,7 @@ state 187
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -7694,7 +7884,7 @@ state 187
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -7702,17 +7892,17 @@ state 187
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
     (46) STRUCTASIGN -> . id
 
-    end             shift and go to state 237
+    end             shift and go to state 239
     println         shift and go to state 12
     print           shift and go to state 14
     global          shift and go to state 18
@@ -7751,15 +7941,15 @@ state 187
     sqrt            shift and go to state 61
 
     SOPLOG                         shift and go to state 29
-    INSTRUCCION                    shift and go to state 233
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCION                    shift and go to state 235
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -7775,7 +7965,7 @@ state 187
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 188
+state 189
 
     (87) FFOR -> for id in . RANGO INSTRUCCIONES end
     (88) RANGO -> . OPID dospuntos OPID
@@ -7795,13 +7985,13 @@ state 188
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
-    cadena          shift and go to state 240
+    cadena          shift and go to state 242
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
     log             shift and go to state 45
@@ -7815,11 +8005,11 @@ state 188
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    RANGO                          shift and go to state 238
-    OPID                           shift and go to state 239
+    RANGO                          shift and go to state 240
+    OPID                           shift and go to state 241
     NATMATH                        shift and go to state 44
 
-state 189
+state 190
 
     (75) ASIGNACION -> NOMBREALGO igual SOPSTRING .
     (144) SOPSTRING -> SOPSTRING . asterisco SOPSTRING
@@ -7836,23 +8026,23 @@ state 189
   ! puntocoma       [ reduce using rule 75 (ASIGNACION -> NOMBREALGO igual SOPSTRING .) ]
 
 
-state 190
+state 191
 
     (76) ASIGNACION -> NOMBREALGO igual ALGO .
     (77) ASIGNACION -> NOMBREALGO igual ALGO . dos_dospuntos TIPOS
 
     puntocoma       reduce using rule 76 (ASIGNACION -> NOMBREALGO igual ALGO .)
-    dos_dospuntos   shift and go to state 241
+    dos_dospuntos   shift and go to state 243
 
 
-state 191
+state 192
 
     (78) ASIGNACION -> NOMBREALGO igual nothing .
 
     puntocoma       reduce using rule 78 (ASIGNACION -> NOMBREALGO igual nothing .)
 
 
-state 192
+state 193
 
     (149) SOPSTRING -> id .
     (37) ALGO -> id .
@@ -7920,7 +8110,7 @@ state 192
     INDARS                         shift and go to state 77
     INDAR                          shift and go to state 78
 
-state 193
+state 194
 
     (150) SOPSTRING -> SOPNATIV .
     (23) SOPERACIONES -> SOPNATIV .
@@ -7936,14 +8126,30 @@ state 193
   ! dos_dospuntos   [ reduce using rule 150 (SOPSTRING -> SOPNATIV .) ]
 
 
-state 194
+state 195
+
+    (151) SOPSTRING -> DECLNATIV .
+    (26) SOPERACIONES -> DECLNATIV .
+
+  ! reduce/reduce conflict for dos_dospuntos resolved using rule 26 (SOPERACIONES -> DECLNATIV .)
+  ! reduce/reduce conflict for puntocoma resolved using rule 26 (SOPERACIONES -> DECLNATIV .)
+    asterisco       reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    elevado         reduce using rule 151 (SOPSTRING -> DECLNATIV .)
+    dos_dospuntos   reduce using rule 26 (SOPERACIONES -> DECLNATIV .)
+    puntocoma       reduce using rule 26 (SOPERACIONES -> DECLNATIV .)
+
+  ! puntocoma       [ reduce using rule 151 (SOPSTRING -> DECLNATIV .) ]
+  ! dos_dospuntos   [ reduce using rule 151 (SOPSTRING -> DECLNATIV .) ]
+
+
+state 196
 
     (135) SOPNATIV -> uppercase parentesisa SOPN . parentesisc
 
-    parentesisc     shift and go to state 242
+    parentesisc     shift and go to state 244
 
 
-state 195
+state 197
 
     (138) SOPN -> SOPSTRING .
     (144) SOPSTRING -> SOPSTRING . asterisco SOPSTRING
@@ -7955,21 +8161,21 @@ state 195
     elevado         shift and go to state 88
 
 
-state 196
+state 198
 
     (136) SOPNATIV -> lowercase parentesisa SOPN . parentesisc
 
-    parentesisc     shift and go to state 243
+    parentesisc     shift and go to state 245
 
 
-state 197
+state 199
 
     (137) SOPNATIV -> length parentesisa SOPN . parentesisc
 
-    parentesisc     shift and go to state 244
+    parentesisc     shift and go to state 246
 
 
-state 198
+state 200
 
     (112) OPID -> parentesisa OPID . parentesisc
     (105) OPID -> OPID . mas OPID
@@ -7988,7 +8194,7 @@ state 198
     elevado         shift and go to state 94
 
 
-state 199
+state 201
 
     (113) OPID -> NATMATH parentesisa OPID . parentesisc
     (105) OPID -> OPID . mas OPID
@@ -7998,7 +8204,7 @@ state 199
     (109) OPID -> OPID . modulo OPID
     (110) OPID -> OPID . elevado OPID
 
-    parentesisc     shift and go to state 245
+    parentesisc     shift and go to state 247
     mas             shift and go to state 89
     menos           shift and go to state 90
     asterisco       shift and go to state 91
@@ -8007,7 +8213,7 @@ state 199
     elevado         shift and go to state 94
 
 
-state 200
+state 202
 
     (114) OPID -> log parentesisa OPID . coma OPID parentesisc
     (105) OPID -> OPID . mas OPID
@@ -8017,7 +8223,7 @@ state 200
     (109) OPID -> OPID . modulo OPID
     (110) OPID -> OPID . elevado OPID
 
-    coma            shift and go to state 246
+    coma            shift and go to state 248
     mas             shift and go to state 89
     menos           shift and go to state 90
     asterisco       shift and go to state 91
@@ -8026,14 +8232,14 @@ state 200
     elevado         shift and go to state 94
 
 
-state 201
+state 203
 
     (139) DECLNATIV -> parse parentesisa TIPOS . coma ALGO parentesisc
 
-    coma            shift and go to state 247
+    coma            shift and go to state 249
 
 
-state 202
+state 204
 
     (27) TIPOS -> int64 .
 
@@ -8042,7 +8248,7 @@ state 202
     parentesisc     reduce using rule 27 (TIPOS -> int64 .)
 
 
-state 203
+state 205
 
     (28) TIPOS -> float64 .
 
@@ -8051,7 +8257,7 @@ state 203
     parentesisc     reduce using rule 28 (TIPOS -> float64 .)
 
 
-state 204
+state 206
 
     (29) TIPOS -> bool .
 
@@ -8060,7 +8266,7 @@ state 204
     parentesisc     reduce using rule 29 (TIPOS -> bool .)
 
 
-state 205
+state 207
 
     (30) TIPOS -> char .
 
@@ -8069,7 +8275,7 @@ state 205
     parentesisc     reduce using rule 30 (TIPOS -> char .)
 
 
-state 206
+state 208
 
     (31) TIPOS -> string .
 
@@ -8078,7 +8284,7 @@ state 206
     parentesisc     reduce using rule 31 (TIPOS -> string .)
 
 
-state 207
+state 209
 
     (32) TIPOS -> id .
 
@@ -8087,63 +8293,63 @@ state 207
     parentesisc     reduce using rule 32 (TIPOS -> id .)
 
 
-state 208
-
-    (140) DECLNATIV -> trunc parentesisa int64 . coma ALGO parentesisc
-
-    coma            shift and go to state 248
-
-
-state 209
-
-    (141) DECLNATIV -> float parentesisa ALGO . parentesisc
-
-    parentesisc     shift and go to state 249
-
-
 state 210
 
-    (142) DECLNATIV -> string parentesisa ALGO . parentesisc
+    (140) DECLNATIV -> trunc parentesisa ALGO . parentesisc
 
     parentesisc     shift and go to state 250
 
 
 state 211
 
-    (143) DECLNATIV -> typeof parentesisa ALGO . parentesisc
+    (141) DECLNATIV -> float parentesisa ALGO . parentesisc
 
     parentesisc     shift and go to state 251
 
 
 state 212
 
-    (43) ATRIBUTO -> id . dos_dospuntos TIPOS
-    (44) ATRIBUTO -> id .
+    (142) DECLNATIV -> string parentesisa ALGO . parentesisc
 
-    dos_dospuntos   shift and go to state 252
-    puntocoma       reduce using rule 44 (ATRIBUTO -> id .)
+    parentesisc     shift and go to state 252
 
 
 state 213
+
+    (143) DECLNATIV -> typeof parentesisa ALGO . parentesisc
+
+    parentesisc     shift and go to state 253
+
+
+state 214
+
+    (43) ATRIBUTO -> id . dos_dospuntos TIPOS
+    (44) ATRIBUTO -> id .
+
+    dos_dospuntos   shift and go to state 254
+    puntocoma       reduce using rule 44 (ATRIBUTO -> id .)
+
+
+state 215
 
     (40) STRUCT -> struct id ATRIBUTOS . end
     (41) ATRIBUTOS -> ATRIBUTOS . ATRIBUTO puntocoma
     (43) ATRIBUTO -> . id dos_dospuntos TIPOS
     (44) ATRIBUTO -> . id
 
-    end             shift and go to state 253
-    id              shift and go to state 212
+    end             shift and go to state 255
+    id              shift and go to state 214
 
-    ATRIBUTO                       shift and go to state 254
+    ATRIBUTO                       shift and go to state 256
 
-state 214
+state 216
 
     (42) ATRIBUTOS -> ATRIBUTO . puntocoma
 
-    puntocoma       shift and go to state 255
+    puntocoma       shift and go to state 257
 
 
-state 215
+state 217
 
     (47) STRUCTASIGNS -> STRUCTASIGNS punto STRUCTASIGN .
 
@@ -8152,7 +8358,7 @@ state 215
     puntocoma       reduce using rule 47 (STRUCTASIGNS -> STRUCTASIGNS punto STRUCTASIGN .)
 
 
-state 216
+state 218
 
     (46) STRUCTASIGN -> id .
 
@@ -8161,14 +8367,14 @@ state 216
     puntocoma       reduce using rule 46 (STRUCTASIGN -> id .)
 
 
-state 217
+state 219
 
     (99) IMPRIMIR -> println parentesisa SCONTPRNTS parentesisc .
 
     puntocoma       reduce using rule 99 (IMPRIMIR -> println parentesisa SCONTPRNTS parentesisc .)
 
 
-state 218
+state 220
 
     (101) SCONTPRNTS -> SCONTPRNTS coma . SCONTPRNT
     (103) SCONTPRNT -> . ALGO
@@ -8209,6 +8415,7 @@ state 218
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -8228,15 +8435,15 @@ state 218
     (118) OPID -> . cadena
     (119) OPID -> . caracter
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     id              shift and go to state 135
     corchetea       shift and go to state 86
@@ -8263,7 +8470,7 @@ state 218
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SCONTPRNT                      shift and go to state 256
+    SCONTPRNT                      shift and go to state 258
     ALGO                           shift and go to state 133
     FIFUNI                         shift and go to state 134
     SOPERACIONES                   shift and go to state 81
@@ -8277,7 +8484,7 @@ state 218
     DECLNATIV                      shift and go to state 30
     NATMATH                        shift and go to state 44
 
-state 219
+state 221
 
     (98) FIFUNI -> SOPLOG interrogacionc . ALGO dospuntos ALGO
     (33) ALGO -> . SOPERACIONES
@@ -8300,6 +8507,7 @@ state 219
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -8334,15 +8542,15 @@ state 219
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     id              shift and go to state 85
     corchetea       shift and go to state 86
@@ -8370,7 +8578,7 @@ state 219
     sqrt            shift and go to state 61
 
     SOPLOG                         shift and go to state 29
-    ALGO                           shift and go to state 257
+    ALGO                           shift and go to state 259
     SOPERACIONES                   shift and go to state 81
     ARREGLO                        shift and go to state 82
     LLAMADARR                      shift and go to state 83
@@ -8381,33 +8589,33 @@ state 219
     DECLNATIV                      shift and go to state 30
     NATMATH                        shift and go to state 44
 
-state 220
+state 222
 
     (100) IMPRIMIR -> print parentesisa SCONTPRNTS parentesisc .
 
     puntocoma       reduce using rule 100 (IMPRIMIR -> print parentesisa SCONTPRNTS parentesisc .)
 
 
-state 221
+state 223
 
     (62) PARAM -> id .
     (63) PARAM -> id . dos_dospuntos TIPOS
 
     parentesisc     reduce using rule 62 (PARAM -> id .)
     coma            reduce using rule 62 (PARAM -> id .)
-    dos_dospuntos   shift and go to state 258
+    dos_dospuntos   shift and go to state 260
 
 
-state 222
+state 224
 
     (59) DECLFUNC -> function id parentesisa PARAMS . parentesisc INSTRUCCIONES end
     (60) PARAMS -> PARAMS . coma PARAM
 
-    parentesisc     shift and go to state 259
-    coma            shift and go to state 260
+    parentesisc     shift and go to state 261
+    coma            shift and go to state 262
 
 
-state 223
+state 225
 
     (61) PARAMS -> PARAM .
 
@@ -8415,14 +8623,14 @@ state 223
     coma            reduce using rule 61 (PARAMS -> PARAM .)
 
 
-state 224
+state 226
 
     (64) LLAMADAFUNC -> id parentesisa PARAMSFUNCS parentesisc .
 
     puntocoma       reduce using rule 64 (LLAMADAFUNC -> id parentesisa PARAMSFUNCS parentesisc .)
 
 
-state 225
+state 227
 
     (65) PARAMSFUNCS -> PARAMSFUNCS coma . PARAMSFUNC
     (67) PARAMSFUNC -> . ALGO
@@ -8447,6 +8655,7 @@ state 225
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -8481,15 +8690,15 @@ state 225
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisc     reduce using rule 68 (PARAMSFUNC -> .)
     coma            reduce using rule 68 (PARAMSFUNC -> .)
@@ -8518,7 +8727,7 @@ state 225
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    PARAMSFUNC                     shift and go to state 261
+    PARAMSFUNC                     shift and go to state 263
     ALGO                           shift and go to state 146
     SOPERACIONES                   shift and go to state 81
     ARREGLO                        shift and go to state 82
@@ -8531,7 +8740,7 @@ state 225
     DECLNATIV                      shift and go to state 30
     NATMATH                        shift and go to state 44
 
-state 226
+state 228
 
     (55) INDARS -> INDARS INDAR corchetec .
 
@@ -8545,14 +8754,14 @@ state 226
     dos_dospuntos   reduce using rule 55 (INDARS -> INDARS INDAR corchetec .)
 
 
-state 227
+state 229
 
     (45) STRUCTINI -> id parentesisa PARAMSFUNC . parentesisc
 
-    parentesisc     shift and go to state 262
+    parentesisc     shift and go to state 264
 
 
-state 228
+state 230
 
     (49) ARREGLO -> corchetea ARRCONTS corchetec .
 
@@ -8564,7 +8773,7 @@ state 228
     dospuntos       reduce using rule 49 (ARREGLO -> corchetea ARRCONTS corchetec .)
 
 
-state 229
+state 231
 
     (50) ARRCONTS -> ARRCONTS coma . ARRCONT
     (52) ARRCONT -> . ALGO
@@ -8589,6 +8798,7 @@ state 229
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -8623,15 +8833,15 @@ state 229
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     corchetec       reduce using rule 53 (ARRCONT -> .)
     coma            reduce using rule 53 (ARRCONT -> .)
@@ -8660,7 +8870,7 @@ state 229
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    ARRCONT                        shift and go to state 263
+    ARRCONT                        shift and go to state 265
     ALGO                           shift and go to state 154
     SOPERACIONES                   shift and go to state 81
     ARREGLO                        shift and go to state 82
@@ -8673,35 +8883,35 @@ state 229
     DECLNATIV                      shift and go to state 30
     NATMATH                        shift and go to state 44
 
-state 230
+state 232
 
     (91) FIF -> if SOPLOG INSTRUCCIONES FELSEIF .
 
     puntocoma       reduce using rule 91 (FIF -> if SOPLOG INSTRUCCIONES FELSEIF .)
 
 
-state 231
+state 233
 
     (92) FIF -> if SOPLOG INSTRUCCIONES FELSE .
 
     puntocoma       reduce using rule 92 (FIF -> if SOPLOG INSTRUCCIONES FELSE .)
 
 
-state 232
+state 234
 
     (93) FIF -> if SOPLOG INSTRUCCIONES end .
 
     puntocoma       reduce using rule 93 (FIF -> if SOPLOG INSTRUCCIONES end .)
 
 
-state 233
+state 235
 
     (12) INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION . puntocoma
 
-    puntocoma       shift and go to state 264
+    puntocoma       shift and go to state 266
 
 
-state 234
+state 236
 
     (94) FELSEIF -> elseif . SOPLOG INSTRUCCIONES FELSEIF
     (95) FELSEIF -> elseif . SOPLOG INSTRUCCIONES FELSE
@@ -8736,11 +8946,11 @@ state 234
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     parentesisa     shift and go to state 105
     cadena          shift and go to state 107
@@ -8758,11 +8968,11 @@ state 234
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    SOPLOG                         shift and go to state 265
+    SOPLOG                         shift and go to state 267
     OPID                           shift and go to state 106
     NATMATH                        shift and go to state 44
 
-state 235
+state 237
 
     (97) FELSE -> else . INSTRUCCIONES end
     (12) INSTRUCCIONES -> . INSTRUCCIONES INSTRUCCION puntocoma
@@ -8813,6 +9023,7 @@ state 235
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -8847,7 +9058,7 @@ state 235
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -8855,11 +9066,11 @@ state 235
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
@@ -8902,16 +9113,16 @@ state 235
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    INSTRUCCIONES                  shift and go to state 266
-    INSTRUCCION                    shift and go to state 177
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCIONES                  shift and go to state 268
+    INSTRUCCION                    shift and go to state 178
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -8928,7 +9139,7 @@ state 235
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 236
+state 238
 
     (13) INSTRUCCIONES -> INSTRUCCION puntocoma .
 
@@ -8973,14 +9184,14 @@ state 236
     sqrt            reduce using rule 13 (INSTRUCCIONES -> INSTRUCCION puntocoma .)
 
 
-state 237
+state 239
 
     (90) FWHILE -> while SOPLOG INSTRUCCIONES end .
 
     puntocoma       reduce using rule 90 (FWHILE -> while SOPLOG INSTRUCCIONES end .)
 
 
-state 238
+state 240
 
     (87) FFOR -> for id in RANGO . INSTRUCCIONES end
     (12) INSTRUCCIONES -> . INSTRUCCIONES INSTRUCCION puntocoma
@@ -9031,6 +9242,7 @@ state 238
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -9065,7 +9277,7 @@ state 238
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -9073,11 +9285,11 @@ state 238
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
@@ -9120,16 +9332,16 @@ state 238
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    INSTRUCCIONES                  shift and go to state 267
-    INSTRUCCION                    shift and go to state 177
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCIONES                  shift and go to state 269
+    INSTRUCCION                    shift and go to state 178
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -9146,7 +9358,7 @@ state 238
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 239
+state 241
 
     (88) RANGO -> OPID . dospuntos OPID
     (105) OPID -> OPID . mas OPID
@@ -9156,7 +9368,7 @@ state 239
     (109) OPID -> OPID . modulo OPID
     (110) OPID -> OPID . elevado OPID
 
-    dospuntos       shift and go to state 268
+    dospuntos       shift and go to state 270
     mas             shift and go to state 89
     menos           shift and go to state 90
     asterisco       shift and go to state 91
@@ -9165,7 +9377,7 @@ state 239
     elevado         shift and go to state 94
 
 
-state 240
+state 242
 
     (89) RANGO -> cadena .
     (118) OPID -> cadena .
@@ -9217,7 +9429,7 @@ state 240
   ! menos           [ reduce using rule 118 (OPID -> cadena .) ]
 
 
-state 241
+state 243
 
     (77) ASIGNACION -> NOMBREALGO igual ALGO dos_dospuntos . TIPOS
     (27) TIPOS -> . int64
@@ -9227,16 +9439,16 @@ state 241
     (31) TIPOS -> . string
     (32) TIPOS -> . id
 
-    int64           shift and go to state 202
-    float64         shift and go to state 203
-    bool            shift and go to state 204
-    char            shift and go to state 205
-    string          shift and go to state 206
-    id              shift and go to state 207
+    int64           shift and go to state 204
+    float64         shift and go to state 205
+    bool            shift and go to state 206
+    char            shift and go to state 207
+    string          shift and go to state 208
+    id              shift and go to state 209
 
-    TIPOS                          shift and go to state 269
+    TIPOS                          shift and go to state 271
 
-state 242
+state 244
 
     (135) SOPNATIV -> uppercase parentesisa SOPN parentesisc .
 
@@ -9250,7 +9462,7 @@ state 242
     dospuntos       reduce using rule 135 (SOPNATIV -> uppercase parentesisa SOPN parentesisc .)
 
 
-state 243
+state 245
 
     (136) SOPNATIV -> lowercase parentesisa SOPN parentesisc .
 
@@ -9264,7 +9476,7 @@ state 243
     dospuntos       reduce using rule 136 (SOPNATIV -> lowercase parentesisa SOPN parentesisc .)
 
 
-state 244
+state 246
 
     (137) SOPNATIV -> length parentesisa SOPN parentesisc .
 
@@ -9278,7 +9490,7 @@ state 244
     dospuntos       reduce using rule 137 (SOPNATIV -> length parentesisa SOPN parentesisc .)
 
 
-state 245
+state 247
 
     (113) OPID -> NATMATH parentesisa OPID parentesisc .
 
@@ -9340,7 +9552,7 @@ state 245
     dospuntos       reduce using rule 113 (OPID -> NATMATH parentesisa OPID parentesisc .)
 
 
-state 246
+state 248
 
     (114) OPID -> log parentesisa OPID coma . OPID parentesisc
     (105) OPID -> . OPID mas OPID
@@ -9358,11 +9570,11 @@ state 246
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -9378,10 +9590,10 @@ state 246
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 270
+    OPID                           shift and go to state 272
     NATMATH                        shift and go to state 44
 
-state 247
+state 249
 
     (139) DECLNATIV -> parse parentesisa TIPOS coma . ALGO parentesisc
     (33) ALGO -> . SOPERACIONES
@@ -9404,6 +9616,7 @@ state 247
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -9438,15 +9651,15 @@ state 247
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     id              shift and go to state 85
     corchetea       shift and go to state 86
@@ -9473,7 +9686,7 @@ state 247
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    ALGO                           shift and go to state 271
+    ALGO                           shift and go to state 273
     SOPERACIONES                   shift and go to state 81
     ARREGLO                        shift and go to state 82
     LLAMADARR                      shift and go to state 83
@@ -9485,115 +9698,27 @@ state 247
     DECLNATIV                      shift and go to state 30
     NATMATH                        shift and go to state 44
 
-state 248
+state 250
 
-    (140) DECLNATIV -> trunc parentesisa int64 coma . ALGO parentesisc
-    (33) ALGO -> . SOPERACIONES
-    (34) ALGO -> . ARREGLO
-    (35) ALGO -> . LLAMADARR
-    (36) ALGO -> . STRUCTINI
-    (37) ALGO -> . id
-    (22) SOPERACIONES -> . SOPSTRING
-    (23) SOPERACIONES -> . SOPNATIV
-    (24) SOPERACIONES -> . OPID
-    (25) SOPERACIONES -> . SOPLOG
-    (26) SOPERACIONES -> . DECLNATIV
-    (49) ARREGLO -> . corchetea ARRCONTS corchetec
-    (54) LLAMADARR -> . id INDARS
-    (45) STRUCTINI -> . id parentesisa PARAMSFUNC parentesisc
-    (144) SOPSTRING -> . SOPSTRING asterisco SOPSTRING
-    (145) SOPSTRING -> . SOPSTRING elevado int
-    (146) SOPSTRING -> . SOPSTRING elevado id
-    (147) SOPSTRING -> . cadena
-    (148) SOPSTRING -> . caracter
-    (149) SOPSTRING -> . id
-    (150) SOPSTRING -> . SOPNATIV
-    (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
-    (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
-    (137) SOPNATIV -> . length parentesisa SOPN parentesisc
-    (105) OPID -> . OPID mas OPID
-    (106) OPID -> . OPID menos OPID
-    (107) OPID -> . OPID asterisco OPID
-    (108) OPID -> . OPID dividido OPID
-    (109) OPID -> . OPID modulo OPID
-    (110) OPID -> . OPID elevado OPID
-    (111) OPID -> . menos OPID
-    (112) OPID -> . parentesisa OPID parentesisc
-    (113) OPID -> . NATMATH parentesisa OPID parentesisc
-    (114) OPID -> . log parentesisa OPID coma OPID parentesisc
-    (115) OPID -> . int
-    (116) OPID -> . flotante
-    (117) OPID -> . id
-    (118) OPID -> . cadena
-    (119) OPID -> . caracter
-    (120) SOPLOG -> . SOPLOG and SOPLOG
-    (121) SOPLOG -> . SOPLOG or SOPLOG
-    (122) SOPLOG -> . SOPLOG mayorque SOPLOG
-    (123) SOPLOG -> . SOPLOG menorque SOPLOG
-    (124) SOPLOG -> . SOPLOG mayoriwal SOPLOG
-    (125) SOPLOG -> . SOPLOG menoriwal SOPLOG
-    (126) SOPLOG -> . SOPLOG iwaliwal SOPLOG
-    (127) SOPLOG -> . SOPLOG distintoque SOPLOG
-    (128) SOPLOG -> . parentesisa SOPLOG parentesisc
-    (129) SOPLOG -> . OPID
-    (130) SOPLOG -> . cadena
-    (131) SOPLOG -> . caracter
-    (132) SOPLOG -> . id
-    (133) SOPLOG -> . true
-    (134) SOPLOG -> . false
-    (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
-    (141) DECLNATIV -> . float parentesisa ALGO parentesisc
-    (142) DECLNATIV -> . string parentesisa ALGO parentesisc
-    (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (140) DECLNATIV -> trunc parentesisa ALGO parentesisc .
 
-    id              shift and go to state 85
-    corchetea       shift and go to state 86
-    cadena          shift and go to state 38
-    caracter        shift and go to state 39
-    uppercase       shift and go to state 40
-    lowercase       shift and go to state 41
-    length          shift and go to state 42
-    menos           shift and go to state 43
-    parentesisa     shift and go to state 13
-    log             shift and go to state 45
-    int             shift and go to state 37
-    flotante        shift and go to state 46
-    true            shift and go to state 47
-    false           shift and go to state 48
-    parse           shift and go to state 49
-    trunc           shift and go to state 50
-    float           shift and go to state 51
-    string          shift and go to state 52
-    typeof          shift and go to state 53
-    log10           shift and go to state 57
-    sin             shift and go to state 58
-    cos             shift and go to state 59
-    tan             shift and go to state 60
-    sqrt            shift and go to state 61
+    puntocoma       reduce using rule 140 (DECLNATIV -> trunc parentesisa ALGO parentesisc .)
+    asterisco       reduce using rule 140 (DECLNATIV -> trunc parentesisa ALGO parentesisc .)
+    elevado         reduce using rule 140 (DECLNATIV -> trunc parentesisa ALGO parentesisc .)
+    parentesisc     reduce using rule 140 (DECLNATIV -> trunc parentesisa ALGO parentesisc .)
+    coma            reduce using rule 140 (DECLNATIV -> trunc parentesisa ALGO parentesisc .)
+    corchetec       reduce using rule 140 (DECLNATIV -> trunc parentesisa ALGO parentesisc .)
+    dos_dospuntos   reduce using rule 140 (DECLNATIV -> trunc parentesisa ALGO parentesisc .)
+    dospuntos       reduce using rule 140 (DECLNATIV -> trunc parentesisa ALGO parentesisc .)
 
-    ALGO                           shift and go to state 272
-    SOPERACIONES                   shift and go to state 81
-    ARREGLO                        shift and go to state 82
-    LLAMADARR                      shift and go to state 83
-    STRUCTINI                      shift and go to state 84
-    SOPSTRING                      shift and go to state 26
-    SOPNATIV                       shift and go to state 27
-    OPID                           shift and go to state 28
-    SOPLOG                         shift and go to state 29
-    DECLNATIV                      shift and go to state 30
-    NATMATH                        shift and go to state 44
 
-state 249
+state 251
 
     (141) DECLNATIV -> float parentesisa ALGO parentesisc .
 
     puntocoma       reduce using rule 141 (DECLNATIV -> float parentesisa ALGO parentesisc .)
+    asterisco       reduce using rule 141 (DECLNATIV -> float parentesisa ALGO parentesisc .)
+    elevado         reduce using rule 141 (DECLNATIV -> float parentesisa ALGO parentesisc .)
     parentesisc     reduce using rule 141 (DECLNATIV -> float parentesisa ALGO parentesisc .)
     coma            reduce using rule 141 (DECLNATIV -> float parentesisa ALGO parentesisc .)
     corchetec       reduce using rule 141 (DECLNATIV -> float parentesisa ALGO parentesisc .)
@@ -9601,11 +9726,13 @@ state 249
     dospuntos       reduce using rule 141 (DECLNATIV -> float parentesisa ALGO parentesisc .)
 
 
-state 250
+state 252
 
     (142) DECLNATIV -> string parentesisa ALGO parentesisc .
 
     puntocoma       reduce using rule 142 (DECLNATIV -> string parentesisa ALGO parentesisc .)
+    asterisco       reduce using rule 142 (DECLNATIV -> string parentesisa ALGO parentesisc .)
+    elevado         reduce using rule 142 (DECLNATIV -> string parentesisa ALGO parentesisc .)
     parentesisc     reduce using rule 142 (DECLNATIV -> string parentesisa ALGO parentesisc .)
     coma            reduce using rule 142 (DECLNATIV -> string parentesisa ALGO parentesisc .)
     corchetec       reduce using rule 142 (DECLNATIV -> string parentesisa ALGO parentesisc .)
@@ -9613,11 +9740,13 @@ state 250
     dospuntos       reduce using rule 142 (DECLNATIV -> string parentesisa ALGO parentesisc .)
 
 
-state 251
+state 253
 
     (143) DECLNATIV -> typeof parentesisa ALGO parentesisc .
 
     puntocoma       reduce using rule 143 (DECLNATIV -> typeof parentesisa ALGO parentesisc .)
+    asterisco       reduce using rule 143 (DECLNATIV -> typeof parentesisa ALGO parentesisc .)
+    elevado         reduce using rule 143 (DECLNATIV -> typeof parentesisa ALGO parentesisc .)
     parentesisc     reduce using rule 143 (DECLNATIV -> typeof parentesisa ALGO parentesisc .)
     coma            reduce using rule 143 (DECLNATIV -> typeof parentesisa ALGO parentesisc .)
     corchetec       reduce using rule 143 (DECLNATIV -> typeof parentesisa ALGO parentesisc .)
@@ -9625,7 +9754,7 @@ state 251
     dospuntos       reduce using rule 143 (DECLNATIV -> typeof parentesisa ALGO parentesisc .)
 
 
-state 252
+state 254
 
     (43) ATRIBUTO -> id dos_dospuntos . TIPOS
     (27) TIPOS -> . int64
@@ -9635,30 +9764,30 @@ state 252
     (31) TIPOS -> . string
     (32) TIPOS -> . id
 
-    int64           shift and go to state 202
-    float64         shift and go to state 203
-    bool            shift and go to state 204
-    char            shift and go to state 205
-    string          shift and go to state 206
-    id              shift and go to state 207
+    int64           shift and go to state 204
+    float64         shift and go to state 205
+    bool            shift and go to state 206
+    char            shift and go to state 207
+    string          shift and go to state 208
+    id              shift and go to state 209
 
-    TIPOS                          shift and go to state 273
+    TIPOS                          shift and go to state 274
 
-state 253
+state 255
 
     (40) STRUCT -> struct id ATRIBUTOS end .
 
     puntocoma       reduce using rule 40 (STRUCT -> struct id ATRIBUTOS end .)
 
 
-state 254
+state 256
 
     (41) ATRIBUTOS -> ATRIBUTOS ATRIBUTO . puntocoma
 
-    puntocoma       shift and go to state 274
+    puntocoma       shift and go to state 275
 
 
-state 255
+state 257
 
     (42) ATRIBUTOS -> ATRIBUTO puntocoma .
 
@@ -9666,7 +9795,7 @@ state 255
     id              reduce using rule 42 (ATRIBUTOS -> ATRIBUTO puntocoma .)
 
 
-state 256
+state 258
 
     (101) SCONTPRNTS -> SCONTPRNTS coma SCONTPRNT .
 
@@ -9674,14 +9803,14 @@ state 256
     coma            reduce using rule 101 (SCONTPRNTS -> SCONTPRNTS coma SCONTPRNT .)
 
 
-state 257
+state 259
 
     (98) FIFUNI -> SOPLOG interrogacionc ALGO . dospuntos ALGO
 
-    dospuntos       shift and go to state 275
+    dospuntos       shift and go to state 276
 
 
-state 258
+state 260
 
     (63) PARAM -> id dos_dospuntos . TIPOS
     (27) TIPOS -> . int64
@@ -9691,16 +9820,16 @@ state 258
     (31) TIPOS -> . string
     (32) TIPOS -> . id
 
-    int64           shift and go to state 202
-    float64         shift and go to state 203
-    bool            shift and go to state 204
-    char            shift and go to state 205
-    string          shift and go to state 206
-    id              shift and go to state 207
+    int64           shift and go to state 204
+    float64         shift and go to state 205
+    bool            shift and go to state 206
+    char            shift and go to state 207
+    string          shift and go to state 208
+    id              shift and go to state 209
 
-    TIPOS                          shift and go to state 276
+    TIPOS                          shift and go to state 277
 
-state 259
+state 261
 
     (59) DECLFUNC -> function id parentesisa PARAMS parentesisc . INSTRUCCIONES end
     (12) INSTRUCCIONES -> . INSTRUCCIONES INSTRUCCION puntocoma
@@ -9751,6 +9880,7 @@ state 259
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -9785,7 +9915,7 @@ state 259
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -9793,11 +9923,11 @@ state 259
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
@@ -9840,16 +9970,16 @@ state 259
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    INSTRUCCIONES                  shift and go to state 277
-    INSTRUCCION                    shift and go to state 177
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCIONES                  shift and go to state 278
+    INSTRUCCION                    shift and go to state 178
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -9866,17 +9996,17 @@ state 259
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 260
+state 262
 
     (60) PARAMS -> PARAMS coma . PARAM
     (62) PARAM -> . id
     (63) PARAM -> . id dos_dospuntos TIPOS
 
-    id              shift and go to state 221
+    id              shift and go to state 223
 
-    PARAM                          shift and go to state 278
+    PARAM                          shift and go to state 279
 
-state 261
+state 263
 
     (65) PARAMSFUNCS -> PARAMSFUNCS coma PARAMSFUNC .
 
@@ -9884,7 +10014,7 @@ state 261
     coma            reduce using rule 65 (PARAMSFUNCS -> PARAMSFUNCS coma PARAMSFUNC .)
 
 
-state 262
+state 264
 
     (45) STRUCTINI -> id parentesisa PARAMSFUNC parentesisc .
 
@@ -9896,7 +10026,7 @@ state 262
     dospuntos       reduce using rule 45 (STRUCTINI -> id parentesisa PARAMSFUNC parentesisc .)
 
 
-state 263
+state 265
 
     (50) ARRCONTS -> ARRCONTS coma ARRCONT .
 
@@ -9904,7 +10034,7 @@ state 263
     coma            reduce using rule 50 (ARRCONTS -> ARRCONTS coma ARRCONT .)
 
 
-state 264
+state 266
 
     (12) INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION puntocoma .
 
@@ -9949,7 +10079,7 @@ state 264
     sqrt            reduce using rule 12 (INSTRUCCIONES -> INSTRUCCIONES INSTRUCCION puntocoma .)
 
 
-state 265
+state 267
 
     (94) FELSEIF -> elseif SOPLOG . INSTRUCCIONES FELSEIF
     (95) FELSEIF -> elseif SOPLOG . INSTRUCCIONES FELSE
@@ -10010,6 +10140,7 @@ state 265
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -10044,7 +10175,7 @@ state 265
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -10052,11 +10183,11 @@ state 265
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
@@ -10108,16 +10239,16 @@ state 265
     sqrt            shift and go to state 61
 
     SOPLOG                         shift and go to state 29
-    INSTRUCCIONES                  shift and go to state 279
-    INSTRUCCION                    shift and go to state 177
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCIONES                  shift and go to state 280
+    INSTRUCCION                    shift and go to state 178
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -10133,7 +10264,7 @@ state 265
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 266
+state 268
 
     (97) FELSE -> else INSTRUCCIONES . end
     (12) INSTRUCCIONES -> INSTRUCCIONES . INSTRUCCION puntocoma
@@ -10183,6 +10314,7 @@ state 266
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -10217,7 +10349,7 @@ state 266
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -10225,17 +10357,17 @@ state 266
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
     (46) STRUCTASIGN -> . id
 
-    end             shift and go to state 280
+    end             shift and go to state 281
     println         shift and go to state 12
     print           shift and go to state 14
     global          shift and go to state 18
@@ -10273,15 +10405,15 @@ state 266
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    INSTRUCCION                    shift and go to state 233
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCION                    shift and go to state 235
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -10298,7 +10430,7 @@ state 266
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 267
+state 269
 
     (87) FFOR -> for id in RANGO INSTRUCCIONES . end
     (12) INSTRUCCIONES -> INSTRUCCIONES . INSTRUCCION puntocoma
@@ -10348,6 +10480,7 @@ state 267
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -10382,7 +10515,7 @@ state 267
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -10390,17 +10523,17 @@ state 267
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
     (46) STRUCTASIGN -> . id
 
-    end             shift and go to state 281
+    end             shift and go to state 282
     println         shift and go to state 12
     print           shift and go to state 14
     global          shift and go to state 18
@@ -10438,15 +10571,15 @@ state 267
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    INSTRUCCION                    shift and go to state 233
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCION                    shift and go to state 235
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -10463,7 +10596,7 @@ state 267
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 268
+state 270
 
     (88) RANGO -> OPID dospuntos . OPID
     (105) OPID -> . OPID mas OPID
@@ -10481,11 +10614,11 @@ state 268
     (117) OPID -> . id
     (118) OPID -> . cadena
     (119) OPID -> . caracter
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     menos           shift and go to state 43
     parentesisa     shift and go to state 117
@@ -10501,17 +10634,17 @@ state 268
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    OPID                           shift and go to state 282
+    OPID                           shift and go to state 283
     NATMATH                        shift and go to state 44
 
-state 269
+state 271
 
     (77) ASIGNACION -> NOMBREALGO igual ALGO dos_dospuntos TIPOS .
 
     puntocoma       reduce using rule 77 (ASIGNACION -> NOMBREALGO igual ALGO dos_dospuntos TIPOS .)
 
 
-state 270
+state 272
 
     (114) OPID -> log parentesisa OPID coma OPID . parentesisc
     (105) OPID -> OPID . mas OPID
@@ -10521,7 +10654,7 @@ state 270
     (109) OPID -> OPID . modulo OPID
     (110) OPID -> OPID . elevado OPID
 
-    parentesisc     shift and go to state 283
+    parentesisc     shift and go to state 284
     mas             shift and go to state 89
     menos           shift and go to state 90
     asterisco       shift and go to state 91
@@ -10530,28 +10663,21 @@ state 270
     elevado         shift and go to state 94
 
 
-state 271
+state 273
 
     (139) DECLNATIV -> parse parentesisa TIPOS coma ALGO . parentesisc
-
-    parentesisc     shift and go to state 284
-
-
-state 272
-
-    (140) DECLNATIV -> trunc parentesisa int64 coma ALGO . parentesisc
 
     parentesisc     shift and go to state 285
 
 
-state 273
+state 274
 
     (43) ATRIBUTO -> id dos_dospuntos TIPOS .
 
     puntocoma       reduce using rule 43 (ATRIBUTO -> id dos_dospuntos TIPOS .)
 
 
-state 274
+state 275
 
     (41) ATRIBUTOS -> ATRIBUTOS ATRIBUTO puntocoma .
 
@@ -10559,7 +10685,7 @@ state 274
     id              reduce using rule 41 (ATRIBUTOS -> ATRIBUTOS ATRIBUTO puntocoma .)
 
 
-state 275
+state 276
 
     (98) FIFUNI -> SOPLOG interrogacionc ALGO dospuntos . ALGO
     (33) ALGO -> . SOPERACIONES
@@ -10582,6 +10708,7 @@ state 275
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -10616,15 +10743,15 @@ state 275
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
 
     id              shift and go to state 85
     corchetea       shift and go to state 86
@@ -10663,7 +10790,7 @@ state 275
     DECLNATIV                      shift and go to state 30
     NATMATH                        shift and go to state 44
 
-state 276
+state 277
 
     (63) PARAM -> id dos_dospuntos TIPOS .
 
@@ -10671,7 +10798,7 @@ state 276
     coma            reduce using rule 63 (PARAM -> id dos_dospuntos TIPOS .)
 
 
-state 277
+state 278
 
     (59) DECLFUNC -> function id parentesisa PARAMS parentesisc INSTRUCCIONES . end
     (12) INSTRUCCIONES -> INSTRUCCIONES . INSTRUCCION puntocoma
@@ -10721,6 +10848,7 @@ state 277
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -10755,7 +10883,7 @@ state 277
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -10763,11 +10891,11 @@ state 277
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
@@ -10811,15 +10939,15 @@ state 277
     tan             shift and go to state 60
     sqrt            shift and go to state 61
 
-    INSTRUCCION                    shift and go to state 233
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCION                    shift and go to state 235
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -10836,7 +10964,7 @@ state 277
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 278
+state 279
 
     (60) PARAMS -> PARAMS coma PARAM .
 
@@ -10844,7 +10972,7 @@ state 278
     coma            reduce using rule 60 (PARAMS -> PARAMS coma PARAM .)
 
 
-state 279
+state 280
 
     (94) FELSEIF -> elseif SOPLOG INSTRUCCIONES . FELSEIF
     (95) FELSEIF -> elseif SOPLOG INSTRUCCIONES . FELSE
@@ -10900,6 +11028,7 @@ state 279
     (148) SOPSTRING -> . caracter
     (149) SOPSTRING -> . id
     (150) SOPSTRING -> . SOPNATIV
+    (151) SOPSTRING -> . DECLNATIV
     (135) SOPNATIV -> . uppercase parentesisa SOPN parentesisc
     (136) SOPNATIV -> . lowercase parentesisa SOPN parentesisc
     (137) SOPNATIV -> . length parentesisa SOPN parentesisc
@@ -10934,7 +11063,7 @@ state 279
     (133) SOPLOG -> . true
     (134) SOPLOG -> . false
     (139) DECLNATIV -> . parse parentesisa TIPOS coma ALGO parentesisc
-    (140) DECLNATIV -> . trunc parentesisa int64 coma ALGO parentesisc
+    (140) DECLNATIV -> . trunc parentesisa ALGO parentesisc
     (141) DECLNATIV -> . float parentesisa ALGO parentesisc
     (142) DECLNATIV -> . string parentesisa ALGO parentesisc
     (143) DECLNATIV -> . typeof parentesisa ALGO parentesisc
@@ -10942,19 +11071,19 @@ state 279
     (72) NOMBREALGO -> . LLAMADARR
     (73) NOMBREALGO -> . STRUCTASIGNS
     (74) NOMBREALGO -> . id
-    (151) NATMATH -> . log10
-    (152) NATMATH -> . sin
-    (153) NATMATH -> . cos
-    (154) NATMATH -> . tan
-    (155) NATMATH -> . sqrt
+    (152) NATMATH -> . log10
+    (153) NATMATH -> . sin
+    (154) NATMATH -> . cos
+    (155) NATMATH -> . tan
+    (156) NATMATH -> . sqrt
     (54) LLAMADARR -> . id INDARS
     (47) STRUCTASIGNS -> . STRUCTASIGNS punto STRUCTASIGN
     (48) STRUCTASIGNS -> . STRUCTASIGN
     (46) STRUCTASIGN -> . id
 
     end             shift and go to state 290
-    elseif          shift and go to state 234
-    else            shift and go to state 235
+    elseif          shift and go to state 236
+    else            shift and go to state 237
     println         shift and go to state 12
     print           shift and go to state 14
     global          shift and go to state 18
@@ -10995,15 +11124,15 @@ state 279
     SOPLOG                         shift and go to state 29
     FELSEIF                        shift and go to state 288
     FELSE                          shift and go to state 289
-    INSTRUCCION                    shift and go to state 233
-    IMPRIMIR                       shift and go to state 178
-    FUNCIONES                      shift and go to state 179
-    SCOPE                          shift and go to state 180
-    DECLFUNC                       shift and go to state 181
-    LLAMADAFUNC                    shift and go to state 182
-    TRANSF                         shift and go to state 183
-    SOPERACIONES                   shift and go to state 184
-    TYPESTRUCT                     shift and go to state 185
+    INSTRUCCION                    shift and go to state 235
+    IMPRIMIR                       shift and go to state 179
+    FUNCIONES                      shift and go to state 180
+    SCOPE                          shift and go to state 181
+    DECLFUNC                       shift and go to state 182
+    LLAMADAFUNC                    shift and go to state 183
+    TRANSF                         shift and go to state 184
+    SOPERACIONES                   shift and go to state 185
+    TYPESTRUCT                     shift and go to state 186
     FIF                            shift and go to state 15
     FWHILE                         shift and go to state 16
     FFOR                           shift and go to state 17
@@ -11019,21 +11148,21 @@ state 279
     STRUCTASIGNS                   shift and go to state 56
     STRUCTASIGN                    shift and go to state 62
 
-state 280
+state 281
 
     (97) FELSE -> else INSTRUCCIONES end .
 
     puntocoma       reduce using rule 97 (FELSE -> else INSTRUCCIONES end .)
 
 
-state 281
+state 282
 
     (87) FFOR -> for id in RANGO INSTRUCCIONES end .
 
     puntocoma       reduce using rule 87 (FFOR -> for id in RANGO INSTRUCCIONES end .)
 
 
-state 282
+state 283
 
     (88) RANGO -> OPID dospuntos OPID .
     (105) OPID -> OPID . mas OPID
@@ -11089,7 +11218,7 @@ state 282
   ! menos           [ reduce using rule 88 (RANGO -> OPID dospuntos OPID .) ]
 
 
-state 283
+state 284
 
     (114) OPID -> log parentesisa OPID coma OPID parentesisc .
 
@@ -11151,28 +11280,18 @@ state 283
     dospuntos       reduce using rule 114 (OPID -> log parentesisa OPID coma OPID parentesisc .)
 
 
-state 284
+state 285
 
     (139) DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc .
 
     puntocoma       reduce using rule 139 (DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc .)
+    asterisco       reduce using rule 139 (DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc .)
+    elevado         reduce using rule 139 (DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc .)
     parentesisc     reduce using rule 139 (DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc .)
     coma            reduce using rule 139 (DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc .)
     corchetec       reduce using rule 139 (DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc .)
     dos_dospuntos   reduce using rule 139 (DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc .)
     dospuntos       reduce using rule 139 (DECLNATIV -> parse parentesisa TIPOS coma ALGO parentesisc .)
-
-
-state 285
-
-    (140) DECLNATIV -> trunc parentesisa int64 coma ALGO parentesisc .
-
-    puntocoma       reduce using rule 140 (DECLNATIV -> trunc parentesisa int64 coma ALGO parentesisc .)
-    parentesisc     reduce using rule 140 (DECLNATIV -> trunc parentesisa int64 coma ALGO parentesisc .)
-    coma            reduce using rule 140 (DECLNATIV -> trunc parentesisa int64 coma ALGO parentesisc .)
-    corchetec       reduce using rule 140 (DECLNATIV -> trunc parentesisa int64 coma ALGO parentesisc .)
-    dos_dospuntos   reduce using rule 140 (DECLNATIV -> trunc parentesisa int64 coma ALGO parentesisc .)
-    dospuntos       reduce using rule 140 (DECLNATIV -> trunc parentesisa int64 coma ALGO parentesisc .)
 
 
 state 286
@@ -11215,8 +11334,8 @@ WARNING: Conflicts:
 WARNING: 
 WARNING: shift/reduce conflict for parentesisc in state 66 resolved as shift
 WARNING: shift/reduce conflict for menos in state 106 resolved as shift
-WARNING: shift/reduce conflict for parentesisc in state 186 resolved as shift
-WARNING: shift/reduce conflict for menos in state 282 resolved as shift
+WARNING: shift/reduce conflict for parentesisc in state 187 resolved as shift
+WARNING: shift/reduce conflict for menos in state 283 resolved as shift
 WARNING: reduce/reduce conflict in state 22 resolved using rule (OPID -> id)
 WARNING: rejected rule (SOPSTRING -> id) in state 22
 WARNING: reduce/reduce conflict in state 22 resolved using rule (OPID -> id)
@@ -11229,6 +11348,8 @@ WARNING: reduce/reduce conflict in state 27 resolved using rule (SOPERACIONES ->
 WARNING: rejected rule (SOPSTRING -> SOPNATIV) in state 27
 WARNING: reduce/reduce conflict in state 28 resolved using rule (SOPERACIONES -> OPID)
 WARNING: rejected rule (SOPLOG -> OPID) in state 28
+WARNING: reduce/reduce conflict in state 30 resolved using rule (SOPERACIONES -> DECLNATIV)
+WARNING: rejected rule (SOPSTRING -> DECLNATIV) in state 30
 WARNING: reduce/reduce conflict in state 38 resolved using rule (OPID -> cadena)
 WARNING: rejected rule (SOPSTRING -> cadena) in state 38
 WARNING: reduce/reduce conflict in state 38 resolved using rule (OPID -> cadena)
@@ -11287,22 +11408,24 @@ WARNING: reduce/reduce conflict in state 139 resolved using rule (OPID -> caract
 WARNING: rejected rule (SOPLOG -> caracter) in state 139
 WARNING: reduce/reduce conflict in state 149 resolved using rule (INDAR -> corchetea id)
 WARNING: rejected rule (OPID -> id) in state 149
-WARNING: reduce/reduce conflict in state 189 resolved using rule (SOPERACIONES -> SOPSTRING)
-WARNING: rejected rule (ASIGNACION -> NOMBREALGO igual SOPSTRING) in state 189
-WARNING: reduce/reduce conflict in state 192 resolved using rule (ALGO -> id)
-WARNING: rejected rule (SOPSTRING -> id) in state 192
-WARNING: reduce/reduce conflict in state 192 resolved using rule (OPID -> id)
-WARNING: rejected rule (SOPSTRING -> id) in state 192
-WARNING: reduce/reduce conflict in state 192 resolved using rule (ALGO -> id)
-WARNING: rejected rule (OPID -> id) in state 192
-WARNING: reduce/reduce conflict in state 192 resolved using rule (OPID -> id)
-WARNING: rejected rule (SOPLOG -> id) in state 192
-WARNING: reduce/reduce conflict in state 192 resolved using rule (ALGO -> id)
-WARNING: rejected rule (SOPLOG -> id) in state 192
-WARNING: reduce/reduce conflict in state 193 resolved using rule (SOPERACIONES -> SOPNATIV)
-WARNING: rejected rule (SOPSTRING -> SOPNATIV) in state 193
-WARNING: reduce/reduce conflict in state 240 resolved using rule (RANGO -> cadena)
-WARNING: rejected rule (OPID -> cadena) in state 240
+WARNING: reduce/reduce conflict in state 190 resolved using rule (SOPERACIONES -> SOPSTRING)
+WARNING: rejected rule (ASIGNACION -> NOMBREALGO igual SOPSTRING) in state 190
+WARNING: reduce/reduce conflict in state 193 resolved using rule (ALGO -> id)
+WARNING: rejected rule (SOPSTRING -> id) in state 193
+WARNING: reduce/reduce conflict in state 193 resolved using rule (OPID -> id)
+WARNING: rejected rule (SOPSTRING -> id) in state 193
+WARNING: reduce/reduce conflict in state 193 resolved using rule (ALGO -> id)
+WARNING: rejected rule (OPID -> id) in state 193
+WARNING: reduce/reduce conflict in state 193 resolved using rule (OPID -> id)
+WARNING: rejected rule (SOPLOG -> id) in state 193
+WARNING: reduce/reduce conflict in state 193 resolved using rule (ALGO -> id)
+WARNING: rejected rule (SOPLOG -> id) in state 193
+WARNING: reduce/reduce conflict in state 194 resolved using rule (SOPERACIONES -> SOPNATIV)
+WARNING: rejected rule (SOPSTRING -> SOPNATIV) in state 194
+WARNING: reduce/reduce conflict in state 195 resolved using rule (SOPERACIONES -> DECLNATIV)
+WARNING: rejected rule (SOPSTRING -> DECLNATIV) in state 195
+WARNING: reduce/reduce conflict in state 242 resolved using rule (RANGO -> cadena)
+WARNING: rejected rule (OPID -> cadena) in state 242
 WARNING: Rule (SOPLOG -> id) is never reduced
 WARNING: Rule (NOMBREALGO -> id) is never reduced
 WARNING: Rule (SOPLOG -> cadena) is never reduced
