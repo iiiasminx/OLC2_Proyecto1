@@ -3,6 +3,7 @@ import json
 
 from gramatica import fighting
 from sintactico import fighting2
+from interprete import fightingfinal
 from cst import NodoSimbolo, NodoError, Exporte #Falta el AST cuando entienda que pex xdxd
 
 app = Flask(__name__, static_url_path='')
@@ -31,7 +32,7 @@ def submit():
         fighting(entrada) #lexico
 
         #todo lo que viene del analizador
-        importe =  fighting2(entrada) 
+        importe =  fightingfinal(entrada) 
 
         # codigo interpretado
         mesg = importe.interpretacion

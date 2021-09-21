@@ -4,11 +4,12 @@ from datetime import datetime
 #-----------------------------------------------------------------------------------
 
 class Exporte:
-    def __init__(self, interpretacion, tabla_simbolos, grafo, tabla_errores):
+    def __init__(self, interpretacion, tabla_simbolos, grafo, tabla_errores, arbol):
         self.interpretacion = interpretacion
         self.tabla_simbolos = tabla_simbolos
         self.grafo = grafo
         self.tabla_errores = tabla_errores
+        self.arbol = arbol
 
 # ------------------------------------- TABLA ERRORES -----------------------------
 #-----------------------------------------------------------------------------------
@@ -88,8 +89,8 @@ class GrafoCST:
 #-----------------------------------------------------------------------------------
 class NodoSimbolo:
     def __init__(self, id, nombre, tipo, ambito, fila, columna):
-        self.id = id            # 1-> a= 2;
-        self.nombre = nombre    # a
+        self.id = id    # a
+        self.nombre = nombre
         self.tipo = tipo        # int (?)
         self.ambito = ambito    #global
         self.fila = fila        #5
@@ -98,22 +99,22 @@ class NodoSimbolo:
 
 class TablaSimbolos:
 
-    def __init__(self, simbolos = {}) : #el init recibe un array de símbolos
+    def __init__(self, simbolos = {}) : #el init recibe un obejto de símbolos (?)
         self.simbolos = simbolos
 
-    def añadir(self, simbolo) :
+    def agregar(self, simbolo) :
         self.simbolos[simbolo.id] = simbolo
 
-    def obtener(self, id, contaerrores, lineno, lexpos) :
-        if not id in self.simbolos :
+    def obtener(self, nombre, contaerrores, lineno, lexpos) : #aca ver si es id o nombre
+        if not nombre in self.simbolos :
             desc = 'Variable no definida'
             error1 = NodoError(contaerrores, desc, lineno, lexpos)
             return error1
 
-        return self.simbolos[id]
+        return self.simbolos[nombre]
 
     def actualizar(self, simbolo, contaerrores, lineno, lexpos) :
-        if not simbolo.id in self.simbolos :
+        if not simbolo.nombre in self.simbolos :
             desc = 'Variable no definida'
             error1 = NodoError(contaerrores, desc, lineno, lexpos)
             return error1

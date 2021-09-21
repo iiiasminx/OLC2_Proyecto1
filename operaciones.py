@@ -1,6 +1,6 @@
 from enum import Enum
 
-class OPERACION_ARITMETICA(Enum) :
+class ARITMETICA(Enum) :
     MAS = 1
     MENOS = 2
     ASTERISCO = 3
@@ -8,7 +8,14 @@ class OPERACION_ARITMETICA(Enum) :
     MODULO = 5
     ELEVADO = 6
 
-class OPERACION_LOGICA(Enum) :
+class MATH(Enum):
+    LOG10 = 1
+    SIN = 2
+    COS = 3
+    TAN = 4
+    SQRT = 5
+
+class LOGICA(Enum) :
     AND = 1
     OR = 2
     MAYORQUE = 3
@@ -42,7 +49,7 @@ class OPNativa(Expnum) : #log10, sin, cos, tan, sqrt
         self.term = term
         self.tipo = tipo
 
-class OPNativaLog(Expnum) : #log10, sin, cos, tan, sqrt
+class OPNativaLog(Expnum) : 
 
     def __init__(self, term1, term2) :
         self.term1 = term1
@@ -110,8 +117,6 @@ class OPBool(ExpBool) : #si viene un id, de qué hereda? :c
         self.id = id
 
 
-# Otros ---------------------------------------------------------------------------
-# ---------------------------------------------------------------------------------
 
 
 class OPLogica() :
@@ -120,10 +125,18 @@ class OPLogica() :
         self.term2 = term2
         self.operador = operador
 
+
+# Otros ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------
+
+
 class OPID(Expnum) : #si viene un id, de qué hereda? :c
 
     def __init__(self, id = "") :
         self.id = id
+
+
+#OTROSSSS
 
 class OPNothing() : #no viene nada
 
@@ -160,3 +173,14 @@ class Arrcont():
 
 # Structs -------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------
+
+class OPAtributpTipado(Expnum) : 
+
+    def __init__(self, id, tipo) :
+        self.id = id
+        self.tipo = tipo
+
+class OPAtributo(Expnum) :
+
+    def __init__(self, id = "") :
+        self.id = id

@@ -6,19 +6,23 @@ class Instruccion:
 
 
 class Impresion(Instruccion): #esto puede ser un arreglo, o cualquier cosa la vdd aiuda
+    myid = 1
     def __init__(self,  texto) :
         self.texto = texto
 
 class Impresionln(Instruccion): #esto puede ser un arreglo, o cualquier cosa la vdd aiuda
+    myid = 2
     def __init__(self,  texto) :
         self.texto = texto
 
 class Declaracion(Instruccion):
+    myid = 3
     def __init__(self,  nombre, scope =0) :
         self.nombre = nombre
         self.scope = scope
 
 class Asignacion(Instruccion):
+    myid = 4
     def __init__(self,  nombre, valor) :
         self.nombre = nombre
         self.valor = valor
@@ -138,11 +142,10 @@ class DeclStruct(Instruccion):
         self.caracteristicas = caracteristicas
         self.tipo = tipo
 
-class ConstruccionStruct(Instruccion):
-    def __init__(self,  nombre, tipoStruct, caracteristicas) :
+class ConstruccionStruct(Instruccion): # esto es en p = Carro(1,2)
+    def __init__(self,  nombre, caracteristicas) :
         self.nombre = nombre
         self.caracteristicas = caracteristicas
-        self.tipoStruct = tipoStruct
 
 class AsignacionAtributosStruct(Instruccion):
     def __init__(self,  struct, atributo, valor) :
