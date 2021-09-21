@@ -729,7 +729,7 @@ def p_sopnativ(t):
     grafo.generarHijos(t[1], t[2], 'Termino', t[4])
     if t[1] == 'uppercase' : t[0] = OPUppercase(t[3])
     elif t[1] == 'lowercase' : t[0] = OPLowercase(t[3])
-    else : t[0] == OPLength(t[3])
+    else : t[0] = OPLength(t[3])
 
 
 def p_sopnativterm(t):
@@ -811,7 +811,8 @@ def p_sopstringterm3(t):
 
 def p_sopstringterm2(t):
     '''SOPSTRING : SOPNATIV'''    
-    grafo.generarPadre(1)
+    #grafo.generarPadre(1)
+    #grafo.generarHijos('OPNativ')
     t[0] = t[1]
 
 #  ----------------------------OPERACIONES NUMÉRICAS--------------------------------------------------

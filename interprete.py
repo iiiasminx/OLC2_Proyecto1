@@ -4,25 +4,36 @@ import cst as cst
 from operaciones import *
 from semantico  import *
 from sintactico import * 
+import math
 
 lista_simbolos = [] # acá van todos los valores que se hayan declarado
 arbol =[]
 ts_global = cst.TablaSimbolos()
 contaerrores = 0
 listasemanticos = []
+textoimpresion = ""
 
 def fightingfinal(texto):
     exportef = fighting2(texto)
     global arbol 
     arbol = exportef.arbol
+    global lista_simbolos
+    lista_simbolos = []
+    global listasemanticos
+    listasemanticos = []
+    global contaerrores
+    contaerrores = 0
+    global textoimpresion
+    textoimpresion = "Lo que imprimo va acá :3 ---------------------\n"
+    global ts_global
+    ts_global = cst.TablaSimbolos()
     procesarInstrucciones(arbol, ts_global)
 
     #print(ts_global.simbolos)
-    global lista_simbolos
+    exportef.interpretacion = textoimpresion
     exportef.tabla_simbolos = lista_simbolos
-
-    global listasemanticos
     exportef.listasemanticos = listasemanticos
+
     return exportef
 
 def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
@@ -84,39 +95,149 @@ def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
         #print('\n', instruccion)
 
 # ------------------------------------------------------------------------- 
+# Inicio Auxiliares -------------------------------------------------------
+# ------------------------------------------------------------------------- 
+
+def siExiste(nombre, tablaSimbolos: cst.TablaSimbolos):
+    aux = tablaSimbolos.obtener(nombre)
+    if isinstance(aux, cst.NodoErrorSemantico):
+        return False
+    else: return aux
+
+def siExisteHardcore(nombre, tablaSimbolos: cst.TablaSimbolos):
+    aux = tablaSimbolos.obtener(nombre)
+    if isinstance(aux, cst.NodoErrorSemantico):
+        desc = "Error semántico - no se encuentra la variable: " + str(nombre)
+        global contaerrores
+        nuevo = cst.NodoErrorSemantico(desc)
+        nuevo.contador = contaerrores
+        contaerrores += 1
+        global listasemanticos
+        listasemanticos.append(nuevo)
+        return False
+    else: return aux
+
+def añadiraTabla(simbolo: cst.NodoSimbolo):
+    global lista_simbolos
+    lista_simbolos.append(simbolo)
+
+def getTipo(tipo: OPType):
+    if isinstance(tipo.id, OPID):
+        return tipo.id.id
+    else :
+        return tipo.id
+    
+def tipoVariable(var):
+    x = str(type(var))
+    if 'str' in x:
+        return 'String'
+    elif 'list' in x:
+        return 'Array'
+    elif 'int' in x:
+        return 'Int64'
+    elif 'float' in x:
+        return 'Float64'
+    elif 'dict' in x:
+        return 'Struct'
+    elif 'bool' in x:
+        return 'Bool'
+    elif 'None' in x:
+        return 'None'
+
+
+# ------------------------------------------------------------------------- 
 # Inicio Operaciones ------------------------------------------------------
 # ------------------------------------------------------------------------- 
 
 def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
     if isinstance(Exp, OPBinaria):
+        exp1 = resolverCadena(Exp.term1, tablaSimbolos)
+        if isinstance(Exp.term2, OPNum):
+            exp2 = resolverNumerica(Exp.term2, tablaSimbolos)
+        else: exp2 = resolverCadena(Exp.term2, tablaSimbolos) 
+
+        print(Exp.term2)
+        print(tipoVariable(exp2), ' ', exp2)
+
+        if exp1 == 'Failed' or exp2 == 'Failed':
+            return None
+
         if Exp.operador == ARITMETICA.ASTERISCO : 
-            return Exp.term1.id + Exp.term2.id
-        if Exp.operador == ARITMETICA.ELEVADO : 
-            copia = Exp.term1.id
+            return exp1 + str(exp2)
+        if Exp.operador == ARITMETICA.ELEVADO and tipoVariable(exp2) == 'Int64' and exp2 != None: 
+            
+            copia = str(exp1)
             i = 1
-            while i < Exp.term2.val:
-                copia += Exp.term1.id
+            while i < exp2:
+                copia += str(exp1)
                 i += 1
             return copia
     elif isinstance(Exp, OPCadena):
-        pass
+        return Exp.id
     elif isinstance(Exp, OPLength):
-        pass
+        cad = resolverCadena(Exp.term1, tablaSimbolos)
+        if cad == 'Failed':
+            return None
+        
+        return len(str(cad))
     elif isinstance(Exp, OPLowercase):
-        pass
+        cad = resolverCadena(Exp.term1, tablaSimbolos)
+        if cad == 'Failed':
+            return None
+        
+        return str(cad).lower()
     elif isinstance(Exp, OPUppercase):
-        pass
+        cad = resolverCadena(Exp.term1, tablaSimbolos)
+        if cad == 'Failed':
+            return None
+        
+        return str(cad).upper()
     elif isinstance(Exp, OPMergeString):
-        return Exp.term1.id + Exp.term2.id
+        exp1 = resolverCadena(Exp.term1, tablaSimbolos)
+        if isinstance(Exp.term2, OPNum):
+            exp2 = resolverNumerica(Exp.term2, tablaSimbolos)
+        else: exp2 = resolverCadena(Exp.term2, tablaSimbolos) 
+
+        print(Exp.term2)
+        print(tipoVariable(exp2), ' ', exp2)
+
+        if exp1 == 'Failed' or exp2 == 'Failed':
+            return None
+
+        return exp1 + str(exp2)
     elif isinstance(Exp, OPElevarString):
-        copia = Exp.term1.id
-        i = 1
-        while i < Exp.term2.val:
-            copia += Exp.term1.id
-            i += 1
-        return copia
+        try: 
+            exp1 = resolverCadena(Exp.term1, tablaSimbolos)
+            if isinstance(Exp.term2, OPNum):
+                exp2 = resolverNumerica(Exp.term2, tablaSimbolos)
+            else: exp2 = resolverCadena(Exp.term2, tablaSimbolos) 
+
+            print(Exp.term2)
+            print(tipoVariable(exp2), ' ', exp2)
+
+            if exp1 == 'Failed' or exp2 == 'Failed':
+                return None
+            if tipoVariable(exp2) == 'Int64' and exp2 != None: 
+            
+                copia = str(exp1)
+                i = 1
+                while i < exp2:
+                    copia += str(exp1)
+                    i += 1
+                return copia        
+        except: return 'Failed'
     elif isinstance(Exp, OPID):
-        pass
+        x = siExisteHardcore(Exp.id, tablaSimbolos)
+        if x:
+
+            return x.valor
+        else: 
+            print('FALLA EN ID')
+            return'Failed'
+    else:
+        print('viendo si se va a las lógicas')
+        return resolverBooleana(Exp, tablaSimbolos)
+
 
 # numericas
 def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
@@ -129,12 +250,21 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             print('retornando opcadena: ', x)
             return x
 
-        if not isinstance(Exp.term1, OPNum) or not isinstance(Exp.term2, OPNum): 
-            print('Binaria sin numeros :C')
-            return 0
+       # if not isinstance(Exp.term1, OPNum) and not isinstance(Exp.term2, OPNum): 
+       #     if not isinstance(Exp.term1, OPBinaria) and not isinstance(Exp.term2, OPBinaria):
+       #         print('metiendome al if2')
+       #         return resolverCadena(Exp, tablaSimbolos)
 
         exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
         exp2 = resolverNumerica(Exp.term2, tablaSimbolos) 
+
+        if exp1 == 'Failed' or exp2 == 'Failed':
+            return None
+
+        if tipoVariable(exp1) != 'Int64' and tipoVariable(exp2) != 'Int64':
+            if tipoVariable(exp1) != 'Float64' and tipoVariable(exp2) != 'Float64':
+                print('metiendome al if3')
+                return resolverCadena(Exp, tablaSimbolos)
 
         if Exp.operador == ARITMETICA.MAS : return exp1 + exp2
         if Exp.operador == ARITMETICA.MENOS : return exp1 - exp2
@@ -142,40 +272,82 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
         if Exp.operador == ARITMETICA.DIVIDIDO : return exp1 / exp2
         if Exp.operador == ARITMETICA.MODULO : return exp1 % exp2
         if Exp.operador == ARITMETICA.ELEVADO : return exp1 ** exp2
-        else:  return 0
+        else:  return None
     elif isinstance(Exp, OPNeg):
-        pass
+        exp1 = resolverNumerica(Exp.term, tablaSimbolos)
+        if exp1 == 'Failed':
+            return None
+
+        return - exp1
     elif isinstance(Exp, OPNativa):#log10, sin, cos, tan, sqrt
-        pass
+        exp1 = resolverNumerica(Exp.term, tablaSimbolos)
+        if exp1 == 'Failed':
+            return None
+
+        if Exp.tipo == MATH.LOG10 : return math.log10(exp1)
+        if Exp.tipo == MATH.SIN : return math.sin(exp1)
+        if Exp.tipo == MATH.COS : return math.cos(exp1)
+        if Exp.tipo == MATH.TAN : return math.tan(exp1)
+        if Exp.tipo == MATH.SQRT : return math.sqrt(exp1)
     elif isinstance(Exp, OPNativaLog):
-        pass
+        exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
+        exp2 = resolverNumerica(Exp.term2, tablaSimbolos)
+        if exp1 == 'Failed' or exp2 == 'Failed':
+            return None
+
+        return math.log(exp2, exp1)
     elif isinstance(Exp, OPNum):
-        pass
+        return Exp.val
     elif isinstance(Exp, OPID):
-        return 
+        x = siExisteHardcore(Exp.id, tablaSimbolos)
+        if x:
+            return x.valor
+        else: 
+            print('FALLA EN ID')
+            return'Failed'
+    else: 
+        print('viendo si se va a las cadenas')
+        return resolverCadena(Exp, tablaSimbolos)
+
 
 def resolverBooleana(Exp, tablaSimbolos: cst.TablaSimbolos):
     if isinstance(Exp, OPLogica): 
-        pass
+        print('RESOLVIENDO LOGICA')
+        print(Exp.term1, ' ', Exp.term2)
+
+        exp1 = resolverBooleana(Exp.term1, tablaSimbolos)
+        exp2 = resolverBooleana(Exp.term2, tablaSimbolos) 
+
+        if exp1 == 'Failed' or exp2 == 'Failed':
+            return None
+
+        if Exp.operador == LOGICA.AND : return exp1 and exp2
+        if Exp.operador == LOGICA.OR : return exp1 or exp2
+        if Exp.operador == LOGICA.MAYORQUE : return exp1 > exp2
+        if Exp.operador == LOGICA.MENORQUE : return exp1 < exp2
+        if Exp.operador == LOGICA.MAYORIWAL : return exp1 >= exp2
+        if Exp.operador == LOGICA.MENORIWAL : return exp1 <= exp2
+        if Exp.operador == LOGICA.IWAL : return exp1 == exp2
+        if Exp.operador == LOGICA.DISTINTO : return exp1 != exp2
+        else:  return None
     elif isinstance(Exp, OPBool):
-        pass
+        if Exp.id == 'false':
+            return False
+        return True
+    elif isinstance(Exp, OPNum):
+        return Exp.val
+    elif isinstance(Exp, OPCadena):
+        return Exp.id
     elif isinstance(Exp, OPID):
-        pass
-
-
-# ------------------------------------------------------------------------- 
-# Inicio Auxiliares -------------------------------------------------------
-# ------------------------------------------------------------------------- 
-
-def siExiste(nombre, tablaSimbolos: cst.TablaSimbolos):
-    aux = tablaSimbolos.obtener(nombre)
-    if isinstance(aux, cst.NodoErrorSemantico):
-        return False
-    else: return True
-
-def añadiraTabla(simbolo: cst.NodoSimbolo):
-    global lista_simbolos
-    lista_simbolos.append(simbolo)
+        x = siExisteHardcore(Exp.id, tablaSimbolos)
+        if x:
+            return x.valor
+        else: 
+            print('FALLA EN ID')
+            return'Failed'
+    else: 
+        print('viendo si se va a los numeros')
+        return resolverNumerica(Exp, tablaSimbolos)
 
 
 # ------------------------------------------------------------------------- 
@@ -186,21 +358,30 @@ def añadiraTabla(simbolo: cst.NodoSimbolo):
 # -------------------------------------------------------------------------
 def intImpresion(instr, tablaSimbolos: cst.TablaSimbolos):
     print('impresion')
+    aux = ""
+
+    for instruccion in instr.texto:
+        aux += str(resolverNumerica(instruccion, tablaSimbolos))
+
+    global textoimpresion
+    textoimpresion += aux
 
 def intImpresionLN(instr, tablaSimbolos : cst.TablaSimbolos):
     print('impresionLN')
+    aux = ""
+
+    for instruccion in instr.texto:
+        aux += str(resolverNumerica(instruccion, tablaSimbolos))
+
+    aux += "\n"
+    global textoimpresion
+    textoimpresion += aux
 
 #variables o cosos del struct ---------------------------------------------
 # -------------------------------------------------------------------------
 def intDeclaracion(instr, tablaSimbolos : cst.TablaSimbolos): #ver si necesito más de estas
     print('intDeclaracion')
 
-def intAsignacion(instr, tablaSimbolos : cst.TablaSimbolos):
-
-    print('intAsignacion')
-
-def intAsignacionTipada(instr, tablaSimbolos : cst.TablaSimbolos):
-    print('intAsignacionTipada')
 
 def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio este por otro como lo hice en el sintactico
     print('Asignando')
@@ -210,27 +391,37 @@ def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio es
     if isinstance(instr.asignacion.nombre[0], OPID):
         
         print(instr.asignacion.valor)
+        valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
+        aux = siExiste(instr.asignacion.nombre[0].id, tablaSimbolos)
         if isinstance(instr.asignacion, Asignacion) : 
-            valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
-            tipo = type(valor)
-            aux = siExiste(instr.asignacion.nombre[0].id, tablaSimbolos)
+            tipo = tipoVariable(valor)
             if aux:
+                print('actualizando')
                 # actualizo el valor
-                print('siexiste')
+                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, tipo, ambito, valor)
+                simbolo.nota = 'Actualización'
+                tablaSimbolos.actualizar(simbolo)
+                añadiraTabla(simbolo)
             else:
+                print('nuevo')
                 # creo una nueva variable
-                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, tipo, ambito)
+                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, tipo, ambito, valor)
                 tablaSimbolos.agregar(simbolo)
                 añadiraTabla(simbolo)
-        elif isinstance(instr.asignacion, AsignacionTipada):
-            valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
-            aux = siExiste(instr.asignacion.nombre[0].id, tablaSimbolos)
+        elif isinstance(instr.asignacion, AsignacionTipada): 
             if aux:
+                print('actualizando')
                 # actualizo el valor
-                print('siexiste')
+                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, getTipo(instr.asignacion.tipo), ambito, valor)
+                simbolo.nota = 'Actualización'
+                tablaSimbolos.actualizar(simbolo)
+                añadiraTabla(simbolo)
             else:
+                print('nuevo')
                 # creo una nueva variable
-                print('noexiste')
+                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, getTipo(instr.asignacion.tipo), ambito, valor)
+                tablaSimbolos.agregar(simbolo)
+                añadiraTabla(simbolo)
         
 
 # Funciones ---------------------------------------------------------------

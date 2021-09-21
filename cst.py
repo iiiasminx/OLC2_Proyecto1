@@ -99,19 +99,21 @@ class GrafoCST:
 # ------------------------------ TABLA DE SÍMBOLOS ---------------------------------
 #-----------------------------------------------------------------------------------
 class NodoSimbolo:
+    nota = ''
     fila = 'nc'
     columna = 'nc'
-    def __init__(self, nombre, tipo, ambito):
+    def __init__(self, nombre, tipo, ambito, valor):
         self.nombre = nombre
         self.tipo = tipo        # int (?)
         self.ambito = ambito    #global
+        self.valor = valor
 
 
 class TablaSimbolos:
 
     simbolos = {
 
-        "prueba": 15
+        "prueba": NodoSimbolo('prueba', 'prueba', 'global', 'prueba')
     }
     def __init__(self) : #el init recibe un obejto de símbolos (?)
         pass        # se lo cambié a un array xd
@@ -121,16 +123,16 @@ class TablaSimbolos:
 
     def obtener(self, nombre) : #aca miro si existe o no el coso
         if not nombre in self.simbolos :
-            desc = 'Variable no definida: ' + str(nombre)
+            desc = "Error semántico - no se encuentra la variable: " + str(nombre)
             error1 = NodoErrorSemantico(desc)
             return error1
         return self.simbolos[nombre]
 
     def actualizar(self, simbolo) :
         if not simbolo.nombre in self.simbolos :
-            desc = 'Variable no definida: ' + str(simbolo.nombre)
+            desc = 'Error semántico - no se encuentra la variable: ' + str(simbolo.nombre)
             error1 = NodoErrorSemantico(desc)
             return error1
         else :
-            self.simbolos[simbolo.id] = simbolo
+            self.simbolos[simbolo.nombre] = simbolo
    
