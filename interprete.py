@@ -8,6 +8,8 @@ from sintactico import *
 lista_simbolos = [] # acá van todos los valores que se hayan declarado
 arbol =[]
 ts_global = cst.TablaSimbolos()
+contaerrores = 0
+listasemanticos = []
 
 def fightingfinal(texto):
     exportef = fighting2(texto)
@@ -15,6 +17,12 @@ def fightingfinal(texto):
     arbol = exportef.arbol
     procesarInstrucciones(arbol, ts_global)
 
+    #print(ts_global.simbolos)
+    global lista_simbolos
+    exportef.tabla_simbolos = lista_simbolos
+
+    global listasemanticos
+    exportef.listasemanticos = listasemanticos
     return exportef
 
 def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
@@ -63,17 +71,78 @@ def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
         elif isinstance(instruccion, ConstruccionStruct): intConstruccionStruct(instruccion, tablaSimbolos)
         elif isinstance(instruccion, AsignacionAtributosStruct): intAsignacionAtributosStruct(instruccion, tablaSimbolos)
         elif isinstance(instruccion, AccesoAtributo): intAccesoAtributo(instruccion, tablaSimbolos)
+        else :
+            desc = "Error semántico con la instruccion: " + str(contador)
+            global contaerrores
+            nuevo = cst.NodoErrorSemantico(desc)
+            nuevo.contador = contaerrores
+            contaerrores += 1
+            global listasemanticos
+            listasemanticos.append(nuevo)
+
         
-        print('\n', instruccion)
+        #print('\n', instruccion)
 
 # ------------------------------------------------------------------------- 
 # Inicio Operaciones ------------------------------------------------------
 # ------------------------------------------------------------------------- 
 
+def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
+    if isinstance(Exp, OPBinaria):
+        if Exp.operador == ARITMETICA.ASTERISCO : 
+            return Exp.term1.id + Exp.term2.id
+        if Exp.operador == ARITMETICA.ELEVADO : 
+            copia = Exp.term1.id
+            i = 1
+            while i < Exp.term2.val:
+                copia += Exp.term1.id
+                i += 1
+            return copia
+    elif isinstance(Exp, OPCadena):
+        pass
+    elif isinstance(Exp, OPLength):
+        pass
+    elif isinstance(Exp, OPLowercase):
+        pass
+    elif isinstance(Exp, OPUppercase):
+        pass
+    elif isinstance(Exp, OPMergeString):
+        return Exp.term1.id + Exp.term2.id
+    elif isinstance(Exp, OPElevarString):
+        copia = Exp.term1.id
+        i = 1
+        while i < Exp.term2.val:
+            copia += Exp.term1.id
+            i += 1
+        return copia
+    elif isinstance(Exp, OPID):
+        pass
+
 # numericas
 def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
     if isinstance(Exp, OPBinaria): 
-        pass
+        
+        print('RESOLVIENDO BINARIA')
+        print(Exp.term1, ' ', Exp.term2)
+        if isinstance(Exp.term1, OPCadena) or isinstance(Exp.term2, OPCadena):
+            x = resolverCadena(Exp, tablaSimbolos)
+            print('retornando opcadena: ', x)
+            return x
+
+        if not isinstance(Exp.term1, OPNum) or not isinstance(Exp.term2, OPNum): 
+            print('Binaria sin numeros :C')
+            return 0
+
+        exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
+        exp2 = resolverNumerica(Exp.term2, tablaSimbolos) 
+
+        if Exp.operador == ARITMETICA.MAS : return exp1 + exp2
+        if Exp.operador == ARITMETICA.MENOS : return exp1 - exp2
+        if Exp.operador == ARITMETICA.ASTERISCO : return exp1 * exp2
+        if Exp.operador == ARITMETICA.DIVIDIDO : return exp1 / exp2
+        if Exp.operador == ARITMETICA.MODULO : return exp1 % exp2
+        if Exp.operador == ARITMETICA.ELEVADO : return exp1 ** exp2
+        else:  return 0
     elif isinstance(Exp, OPNeg):
         pass
     elif isinstance(Exp, OPNativa):#log10, sin, cos, tan, sqrt
@@ -83,7 +152,7 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
     elif isinstance(Exp, OPNum):
         pass
     elif isinstance(Exp, OPID):
-        return tablaSimbolos
+        return 
 
 def resolverBooleana(Exp, tablaSimbolos: cst.TablaSimbolos):
     if isinstance(Exp, OPLogica): 
@@ -93,30 +162,25 @@ def resolverBooleana(Exp, tablaSimbolos: cst.TablaSimbolos):
     elif isinstance(Exp, OPID):
         pass
 
-def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
-    if isinstance(Exp, OPCadena): 
-        pass
-    elif isinstance(Exp, OPLength):
-        pass
-    elif isinstance(Exp, OPLowercase):
-        pass
-    elif isinstance(Exp, OPUppercase):
-        pass
-    elif isinstance(Exp, OPElevarString):
-        pass
-    elif isinstance(Exp, OPMergeString):
-        pass
-    elif isinstance(Exp, OPID):
-        pass
 
+# ------------------------------------------------------------------------- 
+# Inicio Auxiliares -------------------------------------------------------
+# ------------------------------------------------------------------------- 
 
+def siExiste(nombre, tablaSimbolos: cst.TablaSimbolos):
+    aux = tablaSimbolos.obtener(nombre)
+    if isinstance(aux, cst.NodoErrorSemantico):
+        return False
+    else: return True
 
-
+def añadiraTabla(simbolo: cst.NodoSimbolo):
+    global lista_simbolos
+    lista_simbolos.append(simbolo)
 
 
 # ------------------------------------------------------------------------- 
-# Fin Operaciones ---------------------------------------------------------
-# -------------------------------------------------------------------------       
+# Inicio Interprete -------------------------------------------------------
+# ------------------------------------------------------------------------- 
 
 # Impresion ---------------------------------------------------------------
 # -------------------------------------------------------------------------
@@ -138,9 +202,36 @@ def intAsignacion(instr, tablaSimbolos : cst.TablaSimbolos):
 def intAsignacionTipada(instr, tablaSimbolos : cst.TablaSimbolos):
     print('intAsignacionTipada')
 
-def intScope(instr, tablaSimbolos : cst.TablaSimbolos): #ver si cambio este por otro como lo hice en el sintactico
-    print('intScope')
-    # acá sepáro asignacion de asignacion tipada y eso
+def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio este por otro como lo hice en el sintactico
+    print('Asignando')
+    ambito = instr.scope
+
+    # si lo que esta a la izq del parentesis es un id
+    if isinstance(instr.asignacion.nombre[0], OPID):
+        
+        print(instr.asignacion.valor)
+        if isinstance(instr.asignacion, Asignacion) : 
+            valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
+            tipo = type(valor)
+            aux = siExiste(instr.asignacion.nombre[0].id, tablaSimbolos)
+            if aux:
+                # actualizo el valor
+                print('siexiste')
+            else:
+                # creo una nueva variable
+                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, tipo, ambito)
+                tablaSimbolos.agregar(simbolo)
+                añadiraTabla(simbolo)
+        elif isinstance(instr.asignacion, AsignacionTipada):
+            valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
+            aux = siExiste(instr.asignacion.nombre[0].id, tablaSimbolos)
+            if aux:
+                # actualizo el valor
+                print('siexiste')
+            else:
+                # creo una nueva variable
+                print('noexiste')
+        
 
 # Funciones ---------------------------------------------------------------
 # -------------------------------------------------------------------------

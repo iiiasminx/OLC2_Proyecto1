@@ -4,6 +4,7 @@ from datetime import datetime
 #-----------------------------------------------------------------------------------
 
 class Exporte:
+    listasemanticos = []
     def __init__(self, interpretacion, tabla_simbolos, grafo, tabla_errores, arbol):
         self.interpretacion = interpretacion
         self.tabla_simbolos = tabla_simbolos
@@ -19,9 +20,19 @@ class NodoError:
     fecha = now.strftime("%d/%m/%Y %H:%M:%S")
     def __init__(self, contador, descripcion, fila, columna):
         self.contador = contador
-        self.descripcion = descripcion
         self.fila = fila
         self.columna = columna
+        self.descripcion = descripcion
+
+class NodoErrorSemantico:
+
+    now = datetime.now()
+    fecha = now.strftime("%d/%m/%Y %H:%M:%S")
+    fila = 'nc'
+    columna = 'nc'
+    contador = 0
+    def __init__(self, descripcion):
+        self.descripcion = descripcion
 
 # ------------------------------------- AST ------------------------------------
 #-----------------------------------------------------------------------------------
@@ -88,35 +99,37 @@ class GrafoCST:
 # ------------------------------ TABLA DE SÍMBOLOS ---------------------------------
 #-----------------------------------------------------------------------------------
 class NodoSimbolo:
-    def __init__(self, id, nombre, tipo, ambito, fila, columna):
-        self.id = id    # a
+    fila = 'nc'
+    columna = 'nc'
+    def __init__(self, nombre, tipo, ambito):
         self.nombre = nombre
         self.tipo = tipo        # int (?)
         self.ambito = ambito    #global
-        self.fila = fila        #5
-        self.columna = columna  #21
 
 
 class TablaSimbolos:
 
-    def __init__(self, simbolos = {}) : #el init recibe un obejto de símbolos (?)
-        self.simbolos = simbolos
+    simbolos = {
 
-    def agregar(self, simbolo) :
-        self.simbolos[simbolo.id] = simbolo
+        "prueba": 15
+    }
+    def __init__(self) : #el init recibe un obejto de símbolos (?)
+        pass        # se lo cambié a un array xd
 
-    def obtener(self, nombre, contaerrores, lineno, lexpos) : #aca ver si es id o nombre
+    def agregar(self, simbolo: NodoSimbolo) :
+        self.simbolos[simbolo.nombre] = simbolo
+
+    def obtener(self, nombre) : #aca miro si existe o no el coso
         if not nombre in self.simbolos :
-            desc = 'Variable no definida'
-            error1 = NodoError(contaerrores, desc, lineno, lexpos)
+            desc = 'Variable no definida: ' + str(nombre)
+            error1 = NodoErrorSemantico(desc)
             return error1
-
         return self.simbolos[nombre]
 
-    def actualizar(self, simbolo, contaerrores, lineno, lexpos) :
+    def actualizar(self, simbolo) :
         if not simbolo.nombre in self.simbolos :
-            desc = 'Variable no definida'
-            error1 = NodoError(contaerrores, desc, lineno, lexpos)
+            desc = 'Variable no definida: ' + str(simbolo.nombre)
+            error1 = NodoErrorSemantico(desc)
             return error1
         else :
             self.simbolos[simbolo.id] = simbolo

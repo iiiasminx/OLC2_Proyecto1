@@ -672,14 +672,14 @@ def p_soplog(t):
     grafo.generarPadre(3)
     grafo.generarPadre(1)
     grafo.generarHijos('Operacion', t[2], 'Operacion')
-    if t[2] == '&&'  : OPLogica(t[1], LOGICA.AND, t[3])
-    elif t[2] == '||': OPLogica(t[1], LOGICA.OR, t[3])
-    elif t[2] == '>': OPLogica(t[1], LOGICA.MAYORQUE, t[3])
-    elif t[2] == '<': OPLogica(t[1], LOGICA.MENORQUE, t[3])
-    elif t[2] == '>=': OPLogica(t[1], LOGICA.MAYORIWAL, t[3])
-    elif t[2] == '<=': OPLogica(t[1], LOGICA.MENORIWAL, t[3])
-    elif t[2] == '==': OPLogica(t[1], LOGICA.IWAL, t[3])
-    elif t[2] == '!=': OPLogica(t[1], LOGICA.DISTINTO, t[3])
+    if t[2] == '&&'  : t[0] = OPLogica(t[1], LOGICA.AND, t[3])
+    elif t[2] == '||': t[0] = OPLogica(t[1], LOGICA.OR, t[3])
+    elif t[2] == '>': t[0] = OPLogica(t[1], LOGICA.MAYORQUE, t[3])
+    elif t[2] == '<': t[0] = OPLogica(t[1], LOGICA.MENORQUE, t[3])
+    elif t[2] == '>=': t[0] = OPLogica(t[1], LOGICA.MAYORIWAL, t[3])
+    elif t[2] == '<=': t[0] = OPLogica(t[1], LOGICA.MENORIWAL, t[3])
+    elif t[2] == '==': t[0] = OPLogica(t[1], LOGICA.IWAL, t[3])
+    elif t[2] == '!=': t[0] = OPLogica(t[1], LOGICA.DISTINTO, t[3])
     
 
 def p_soplogPar(t):

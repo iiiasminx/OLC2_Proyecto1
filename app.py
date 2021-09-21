@@ -29,7 +29,7 @@ def submit():
     if request.method == 'POST':
         entrada = request.form['entrada']
         print('Este es ->' + entrada)
-        fighting(entrada) #lexico
+        erroreslex = fighting(entrada) #lexico
 
         #todo lo que viene del analizador
         importe =  fightingfinal(entrada) 
@@ -42,8 +42,10 @@ def submit():
         json_string2 = json.dumps([ob.__dict__ for ob in listaErrores])
         #grafo en dot
         grafo = importe.grafo
+        semanticos = importe.listasemanticos
+        simbolos = importe.tabla_simbolos
 
-        return render_template('index.html', mesg=mesg, entrada=entrada, listaErrores=listaErrores, grafo = grafo)
+        return render_template('index.html', simbolos= simbolos, semanticos=semanticos, mesg=mesg, entrada=entrada, erroreslex = erroreslex, listaErrores=listaErrores, grafo = grafo)
 
 @app.route('/submit', methods=['GET'])
 def submit2():

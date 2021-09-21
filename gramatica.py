@@ -7,6 +7,10 @@ import re
 import codecs
 import os
 import sys
+from cst import NodoError
+
+contaerrores = 0
+listaErrores = []
 
 reservadas = {
     # reservadas
@@ -202,7 +206,11 @@ def t_cadena(t):
     return t 
 
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    desc = 'Error léxico con \"' + t.value[0] + '\"'
+    global contaerrores
+    contaerrores = contaerrores+1
+    error1 = NodoError(contaerrores, desc, t.lineno, t.lexpos)
+    listaErrores.append(error1)
     t.lexer.skip(1)
 
 
@@ -211,14 +219,21 @@ def t_error(t):
 #-------------------------------------------- EXPORTANDO ----------------------------------------------
 # -----------------------------------------------------------------------------------------------------
 def fighting(texto):
+    global listaErrores
+    listaErrores = []
+    global contaerrores 
+    contaerrores = 0
+
     print('Importado con éxito!')
     lexer = lex.lex()
     lexer.input(texto)
-    while True:
-        tok = lexer.token()
-        if not tok : break
-        print(tok)
-    return 'c\'est finit ' + texto + ':D'
+
+    #while True:
+    #    tok = lexer.token()
+    #    if not tok : break
+    #    print(tok)
+    
+    return listaErrores
 
 
 #EXTRAS

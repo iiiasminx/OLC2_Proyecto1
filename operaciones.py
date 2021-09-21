@@ -130,7 +130,7 @@ class OPLogica() :
 # ---------------------------------------------------------------------------------
 
 
-class OPID(Expnum) : #si viene un id, de qué hereda? :c
+class OPID(Expnum) : #id
 
     def __init__(self, id = "") :
         self.id = id
@@ -143,7 +143,7 @@ class OPNothing() : #no viene nada
     def __init__(self, id = "") :
         self.id = id
 
-class OPType() : #no viene nada
+class OPType() : #id
 
     def __init__(self, id ) :
         self.id = id
