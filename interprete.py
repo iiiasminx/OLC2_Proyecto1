@@ -157,6 +157,15 @@ def errordeTipos(nombre_instruccion):
     contaerrores += 1
     global listasemanticos
     listasemanticos.append(nuevo)
+
+def errorEquis(nombre_instruccion, razon):
+    desc = "Error semántico con la instruccion: "+ nombre_instruccion +". "+ razon
+    global contaerrores
+    nuevo = cst.NodoErrorSemantico(desc)
+    nuevo.contador = contaerrores
+    contaerrores += 1
+    global listasemanticos
+    listasemanticos.append(nuevo)
 # ------------------------------------------------------------------------- 
 # Inicio Operaciones ------------------------------------------------------
 # ------------------------------------------------------------------------- 
@@ -377,6 +386,20 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             return'Failed'
     elif isinstance(Exp, OPType):
         return getTipo(Exp)
+    elif isinstance(Exp, list):
+        #print('Acá hay un arreglol')
+        aux = []
+        for term in Exp:
+            if isinstance(term, OPNothing):
+                return aux
+
+            if isinstance(term, OPID):
+                aux.append(term.id)
+                continue
+        
+            x = resolverNumerica(term, tablaSimbolos)
+            aux.append(x)
+        return aux
     else: 
         print('viendo si se va a las cadenas')
         global contabucle
@@ -457,18 +480,62 @@ def intImpresionLN(instr, tablaSimbolos : cst.TablaSimbolos):
     global textoimpresion
     textoimpresion += aux
 
-#variables o cosos del struct ---------------------------------------------
+#variables ----------------------------------------------------------------
 # -------------------------------------------------------------------------
 def intDeclaracion(instr, tablaSimbolos : cst.TablaSimbolos): #ver si necesito más de estas
     print('intDeclaracion')
-
-
 def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio este por otro como lo hice en el sintactico
     print('Asignando')
     ambito = instr.scope
 
+    #si lo que está a la izq es un array 
+    if isinstance(instr.asignacion.nombre, LlamadaArr):
+        print('ESUNARRAY')
+        print(instr.asignacion.nombre.nombre, ' , ', instr.asignacion.nombre.inds)
+        valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
+
+        arr_indices = []
+        contadimensiones = 0
+        for indice in instr.asignacion.nombre.inds:
+            x = resolverNumerica(indice, tablaSimbolos)
+            print (tipoVariable(x), ' , ', x)
+
+            if tipoVariable(x) != 'Int64':
+                errordeTipos('Asignacion de Array')
+                return None
+
+            arr_indices.append(x)
+            contadimensiones += 1
+
+        arr = siExisteHardcore(instr.asignacion.nombre.nombre, tablaSimbolos)
+        if arr == False or not arr:
+            return None
+        
+        placeholder = ""
+        try:
+            if contadimensiones == 0: return errordeTipos('Asignación a arreglo')
+            elif contadimensiones == 1: 
+                placeholder = arr.valor[arr_indices[0]]
+                arr.valor[arr_indices[0]] = valor
+            elif contadimensiones == 2:
+                placeholder = arr.valor[arr_indices[0]][arr_indices[1]]
+                arr.valor[arr_indices[0]][arr_indices[1]] = valor
+            elif contadimensiones == 3: 
+                placeholder = arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]]
+                arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]] = valor
+        except Exception as e:
+            print(e)
+            return errorEquis('Asignación a arreglo', str(e))
+
+        print('valor de arr izq: ', placeholder)
+        if placeholder == "":
+            return
+        arr.nota = 'Actualización Array'
+        tablaSimbolos.actualizar(arr)
+        añadiraTabla(arr)
+
     # si lo que esta a la izq del parentesis es un id
-    if isinstance(instr.asignacion.nombre[0], OPID):
+    elif isinstance(instr.asignacion.nombre[0], OPID):
         
         print(instr.asignacion.valor)
         valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
@@ -515,19 +582,6 @@ def intDefFuncParams(instr, tablaSimbolos : cst.TablaSimbolos):
 def intFuncParams(instr, tablaSimbolos : cst.TablaSimbolos):
     pass
 def intLlamadaFuncion(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-
-# Funciones nativas -------------------------------------------------------
-# -------------------------------------------------------------------------
-def intFParse(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intFTrunc(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intFFloat(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intFString(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intFtypeof(instr, tablaSimbolos : cst.TablaSimbolos):
     pass
 
 

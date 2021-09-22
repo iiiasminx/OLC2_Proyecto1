@@ -166,8 +166,8 @@ class OPIndArrs():
 
 #lado derecho del iwal
 class Arrcont():
-    def __init__(self, *id) :
-        self.id = id
+    def __init__(self, array) :
+        self.array = array
 
 # Structs -------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------

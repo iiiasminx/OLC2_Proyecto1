@@ -243,7 +243,8 @@ def p_arrcont(t):
 
 def p_arrcont2(t):
     '''ARRCONTS :  ARRCONT '''
-    t[0] = [Arrcont(t[1])]
+    #t[0] = [Arrcont(t[1])]
+    t[0] = [t[1]]
 
 def p_arrcont4(t):
     '''ARRCONT :  ALGO '''
@@ -265,8 +266,8 @@ def p_indarcvzx(t):
     grafo.generarPadre(2)
     grafo.generarPadre(1)
     grafo.generarHijos('Indices', 'Indice', t[3])
-    t[1].append(t[3]) #yo creo que esto me da los indices al revés :'v
-    t[0] = t[1]
+    t[1].append(t[2]) #yo creo que esto me da los indices al revés :'v
+    t[0] = t[1]     # de hecho si me los da bien!  :D
 
 
 def p_indars2(t):
@@ -278,14 +279,14 @@ def p_indars2(t):
 def p_indar2(t):
     '''INDAR : corchetea id'''    
     grafo.generarHijos(t[1], t[2])
-    t[0] = OPIndArr(OPID(t[2]))
+    t[0] = OPID(t[2])
 
 def p_indar(t):
     '''INDAR :  corchetea OPID '''
     
     grafo.generarPadre(2)
     grafo.generarHijos(t[1], 'Operación')
-    t[0] = OPIndArr(t[2])
+    t[0] = t[2]
 
 #  ------------------------------------FUNCIONES------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
