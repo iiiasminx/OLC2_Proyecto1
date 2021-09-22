@@ -56,8 +56,5 @@ $(document).ready(function () {
     var txtgrafo = grafo.textContent;
     editordott.getDoc().setValue(txtgrafo);
 
-    d3.select("#graph").graphviz()
-    .renderDot('digraph  {a -> b}');
-
   }
 });

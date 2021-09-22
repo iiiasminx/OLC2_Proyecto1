@@ -111,6 +111,10 @@ class OPCadena(ExpCadena) :
 class ExpBool:
     pass
 
+class OPPASS:
+    def __init__(self, id = "") :
+        self.id = id
+
 class OPBool(ExpBool) : #si viene un id, de qué hereda? :c
 
     def __init__(self, id = True) :
@@ -182,3 +186,9 @@ class OPAtributo(Expnum) :
 
     def __init__(self, id = "") :
         self.id = id
+
+
+class OPTransferencia: #1 = break, #2 = continue, #3, return
+    def __init__(self, tipo, obj = "") :
+        self.tipo = tipo
+        self.obj = obj

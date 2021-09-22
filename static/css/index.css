@@ -2,6 +2,11 @@
     box-sizing: border-box;
   }
 
+  .scrollit {
+    overflow:scroll;
+    height:400px;
+}
+
   .graph {
     margin: auto;
     width: 70%;

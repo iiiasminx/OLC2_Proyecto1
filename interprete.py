@@ -14,6 +14,7 @@ listasemanticos = []
 textoimpresion = ""
 contabucle = 0
 pilaentornos = []
+extra = ""
 
 
 def fightingfinal(texto):
@@ -40,17 +41,23 @@ def fightingfinal(texto):
     exportef.interpretacion = textoimpresion
     exportef.tabla_simbolos = lista_simbolos
     exportef.listasemanticos = listasemanticos
+    listasegundos = ts_global.simbolos.values()
+    exportef.listasegundos = listasegundos
 
     return exportef
 
 def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
     contador = 1
     print('\n')
+    global extra
+    extra = ""
     for instruccion in ast:
         print(contador)
         contador += 1
         global contabucle
         contabucle = 0
+
+        if extra != "" : return
         if isinstance(instruccion, Impresion): intImpresion(instruccion, tablaSimbolos)
         elif isinstance(instruccion, Impresionln): intImpresionLN(instruccion, tablaSimbolos)
 
@@ -72,19 +79,26 @@ def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
         elif isinstance(instruccion, FELSE): intFELSE(instruccion, tablaSimbolos)
         elif isinstance(instruccion, FWhile): intFWhile(instruccion, tablaSimbolos)
         elif isinstance(instruccion, FFor): intFFor(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, FForRangoNum): intFForRangoNum(instruccion, tablaSimbolos)
 
-        elif isinstance(instruccion, SBreak): intSBreak(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, SContinue): intSContinue(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, SReturn): intSReturn(instruccion, tablaSimbolos)
-
-
+        elif isinstance(instruccion, SBreak): 
+            print('BREAK DETECTADP')
+            extra =  OPTransferencia(1)
+            break
+        elif isinstance(instruccion, SContinue): 
+            print('CONTINUE DETECTADP')
+            extra =  OPTransferencia(2)
+            break
+        elif isinstance(instruccion, SReturn): 
+            print('Return DETECTADP')
+            extra =  OPTransferencia(3, instruccion.contenido)
+            break
         elif isinstance(instruccion, DeclStruct): intDeclStruct(instruccion, tablaSimbolos)
         elif isinstance(instruccion, ConstruccionStruct): intConstruccionStruct(instruccion, tablaSimbolos)
         elif isinstance(instruccion, AsignacionAtributosStruct): intAsignacionAtributosStruct(instruccion, tablaSimbolos)
         elif isinstance(instruccion, AccesoAtributo): intAccesoAtributo(instruccion, tablaSimbolos)
+        elif isinstance(instruccion, OPPASS): placeholder = 0
         else :
-            desc = "Error semántico con la instruccion: " + str(contador)
+            desc = "Error semántico con la instruccion número: " + str(contador) + " de " + str(pilaentornos[-1])
             global contaerrores
             nuevo = cst.NodoErrorSemantico(desc)
             nuevo.contador = contaerrores
@@ -193,7 +207,7 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
     elif isinstance(Exp, OPCadena):
         return Exp.id
     elif isinstance(Exp, OPLength):
-        cad = resolverCadena(Exp.term1, tablaSimbolos)
+        cad = resolverNumerica(Exp.term1, tablaSimbolos)
         if cad == None:
             return None
         
@@ -411,7 +425,7 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             return x.valor
         else: 
             print('FALLA EN ID')
-            return'Failed'
+            return None
     elif isinstance(Exp, OPType):
         return getTipo(Exp)
     elif isinstance(Exp, OPNothing):
@@ -463,6 +477,23 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
         except Exception as e:
             print(e)
             return errorEquis('Asignación a arreglo', str(e))
+    elif isinstance(Exp, FForRangoNum):
+        exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
+        exp2 = resolverNumerica(Exp.term2, tablaSimbolos) 
+
+        if exp1 == None or exp2 == None:
+            return None
+
+        if tipoVariable(exp1) != 'Int64' and tipoVariable(exp2) != 'Int64':
+            return None
+
+        aux = []
+        while exp1 <= exp2:
+            aux.append(exp1)
+            exp1 += 1
+
+        return aux
+        
     else: 
         print('viendo si se va a las cadenas')
         global contabucle
@@ -510,7 +541,7 @@ def resolverBooleana(Exp, tablaSimbolos: cst.TablaSimbolos):
             return x.valor
         else: 
             print('FALLA EN ID')
-            return'Failed'
+            return None
     elif isinstance(Exp, LlamadaArr):
         print("llamando arreglo")
         arr_indices = []
@@ -579,11 +610,32 @@ def intImpresionLN(instr, tablaSimbolos : cst.TablaSimbolos):
 
 #variables ----------------------------------------------------------------
 # -------------------------------------------------------------------------
-def intDeclaracion(instr, tablaSimbolos : cst.TablaSimbolos): #ver si necesito más de estas
+def intDeclaracion(instr:Asignacion, tablaSimbolos : cst.TablaSimbolos): #ver si necesito más de estas
     print('intDeclaracion')
+    print(instr.valor)
+
+    valor = resolverNumerica(instr.valor, tablaSimbolos)
+    aux = siExiste(instr.nombre[0].id, tablaSimbolos)
+    tipo = tipoVariable(valor)
+    ambito = pilaentornos[-1]
+
+    if aux:
+        print('actualizando')
+        # actualizo el valor
+        simbolo = cst.NodoSimbolo(instr.nombre[0].id, tipo, ambito, valor)
+        simbolo.nota = 'Actualización'
+        tablaSimbolos.actualizar(simbolo)
+        añadiraTabla(simbolo)
+    else:
+        print('nuevo')
+        # creo una nueva variable
+        simbolo = cst.NodoSimbolo(instr.nombre[0].id, tipo, ambito, valor)
+        tablaSimbolos.agregar(simbolo)
+        añadiraTabla(simbolo)
+
 def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio este por otro como lo hice en el sintactico
     print('Asignando')
-    
+
     global pilaentornos
     ambito = pilaentornos[-1]
     if instr.scope == 'global':
@@ -697,13 +749,22 @@ def intFIF(instr, tablaSimbolos : cst.TablaSimbolos):
     global pilaentornos
     pilaentornos.append('if')
     print('oplog', instr.oplog)
-    print('instrucciones : ', instr.instruccionesv)
+    print('instruccionesv : ', instr.instruccionesv)
+    print('instruccionesf : ', instr.instruccionesf)
 
     global ts_global
     ts_local = ts_global
 
     if resolverBooleana(instr.oplog, tablaSimbolos):       
         procesarInstrucciones(instr.instruccionesv, ts_local)
+        if extra != "":
+           print('SENTENCIA RECIBIDAIF')
+           return
+    else:
+        procesarInstrucciones([instr.instruccionesf], ts_local)
+        if extra != "":
+           print('SENTENCIA RECIBIDAIF')
+           return
 
     pilaentornos.pop()
 def intFElseIF(instr, tablaSimbolos : cst.TablaSimbolos):
@@ -713,12 +774,15 @@ def intFElseIF(instr, tablaSimbolos : cst.TablaSimbolos):
     pilaentornos.append('elif')
     print('oplog', instr.oplog)
     print('instrucciones : ', instr.instruccionesv)
+    print('instruccionesf : ', instr.instruccionesf)
 
     global ts_global
     ts_local = ts_global
 
     if resolverBooleana(instr.oplog, tablaSimbolos):       
         procesarInstrucciones(instr.instruccionesv, ts_local)
+    else:
+        procesarInstrucciones([instr.instruccionesf], ts_local)
 
 
     pilaentornos.pop()
@@ -744,23 +808,73 @@ def intFWhile(instr : FWhile, tablaSimbolos : cst.TablaSimbolos):
     global ts_global
     ts_local = ts_global
 
-    while resolverBooleana(instr.oplog, tablaSimbolos):       
-        procesarInstrucciones(instr.instrucciones, ts_local)
+    reotrnable =  ""
+    while resolverBooleana(instr.oplog, tablaSimbolos):  
+
+       procesarInstrucciones(instr.instrucciones, ts_local)  
+       global extra
+       if extra != "":
+           print('SENTENCIA RECIBIDA')
+           if extra.tipo == 1: break
+           if extra.tipo == 2: continue
+           if extra.tipo == 3: 
+               reotrnable = extra.obj
+               break    
 
     pilaentornos.pop()
+    return reotrnable
+def intFFor(instr: FFor, tablaSimbolos : cst.TablaSimbolos):
 
-def intFFor(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intFForRangoNum(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
+    print('for')
 
-# Sentencias de transicion
-def intSBreak(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intSContinue(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intSReturn(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
+    global pilaentornos
+    pilaentornos.append('for')
+
+    print('Instrucciones', instr.instrucciones)
+    print('id =', instr.var)
+    rangoraw = resolverNumerica(instr.rango, tablaSimbolos)
+    print('rangoraw ', rangoraw)
+
+    if tipoVariable(rangoraw) != 'String' and tipoVariable(rangoraw) != 'Array':
+        errordeTipos('Rango de For')
+        return None
+
+    global ts_global
+    ts_aux = ts_global
+    reotrnable = ""
+    global extra
+    
+    
+    #si el rango es una cadena 
+    if tipoVariable(rangoraw) == 'String':
+        intDeclaracion(Asignacion([OPID(instr.var)], OPCadena(rangoraw[0])), ts_aux)
+        
+        for i in rangoraw:
+            intDeclaracion(Asignacion([OPID(instr.var)], OPCadena(i)), ts_aux)
+
+            procesarInstrucciones(instr.instrucciones, ts_aux)              
+            if extra != "":
+                print('SENTENCIA RECIBIDA')
+                if extra.tipo == 1: break
+                if extra.tipo == 2: continue
+                if extra.tipo == 3: 
+                    reotrnable = extra.obj
+                    break 
+    # si e rango es un arreglo
+    else:
+        intDeclaracion(Asignacion([OPID(instr.var)], OPNum(rangoraw[0])), ts_aux)
+        
+        for i in rangoraw:
+            intDeclaracion(Asignacion([OPID(instr.var)], OPCadena(i)), ts_aux)
+
+            procesarInstrucciones(instr.instrucciones, ts_aux)
+            if extra != "":
+                print('SENTENCIA RECIBIDA')
+                if extra.tipo == 1: break
+                if extra.tipo == 2: continue
+                if extra.tipo == 3: 
+                    reotrnable = extra.obj
+                    break
 
 # Struct ------------------------------------------------------------------
 # -------------------------------------------------------------------------

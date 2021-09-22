@@ -43,9 +43,10 @@ def submit():
         #grafo en dot
         grafo = importe.grafo
         semanticos = importe.listasemanticos
-        simbolos = importe.tabla_simbolos
+        simbolos2 = importe.tabla_simbolos
+        simbolos = importe.listasegundos
 
-        return render_template('index.html', simbolos= simbolos, semanticos=semanticos, mesg=mesg, entrada=entrada, erroreslex = erroreslex, listaErrores=listaErrores, grafo = grafo)
+        return render_template('index.html', simbolos2=simbolos2, simbolos= simbolos, semanticos=semanticos, mesg=mesg, entrada=entrada, erroreslex = erroreslex, listaErrores=listaErrores, grafo = grafo)
 
 @app.route('/submit', methods=['GET'])
 def submit2():

@@ -474,7 +474,7 @@ def p_ffor(t):
     grafo.generarPadre(5)
     grafo.generarPadre(4)
     grafo.generarHijos(t[1], t[2], t[3], 'Rango', 'Instrucciones', t[6])
-    t[0] == FFor(t[4], t[5])
+    t[0] = FFor(t[2], t[4], t[5])
 
 def p_rangofor(t):
     '''RANGO : OPID dospuntos OPID'''
@@ -488,6 +488,10 @@ def p_rangofor2(t):
     '''RANGO : cadena'''
     grafo.generarHijos(t[1])
     t[0] = OPCadena(t[1])
+
+def p_rangofor3(t):
+    '''RANGO : ARREGLO'''
+    t[0] = t[1]
     
 #  ------------------------------------WHILE ---------------------------------------------------------
 
@@ -507,7 +511,7 @@ def p_fif(t):
     grafo.generarPadre(3)
     grafo.generarPadre(2)
     grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', 'Condicional')
-    t[0] = FIF(t[2], t[3])
+    t[0] = FIF(t[2], t[3], t[4])
 
 
 def p_fif2(t):
@@ -515,7 +519,7 @@ def p_fif2(t):
     grafo.generarPadre(3)
     grafo.generarPadre(2)
     grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4])
-    t[0] = FIF(t[2], t[3])
+    t[0] = FIF(t[2], t[3], [OPPASS()])
    
 
 def p_felseif(t):
@@ -525,14 +529,14 @@ def p_felseif(t):
     grafo.generarPadre(3)
     grafo.generarPadre(2)
     grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', 'Condicional')
-    t[0] = FElseIF(t[2], t[3])
+    t[0] = FElseIF(t[2], t[3], t[4])
 
 def p_felseif2(t):
     '''FELSEIF : elseif SOPLOG INSTRUCCIONES end'''
     grafo.generarPadre(3)
     grafo.generarPadre(2)
     grafo.generarHijos(t[1], 'Operacion', 'Instrucciones', t[4])
-    t[0] = FElseIF(t[2], t[3])
+    t[0] = FElseIF(t[2], t[3], [OPPASS()])
     
         
 def p_felse(t):
@@ -697,7 +701,8 @@ def p_soplogPar(t):
 
 def p_soplogterm2(t):
     '''SOPLOG : OPID
-            | LLAMADARR'''
+            | LLAMADARR
+            | SOPNATIV'''
     t[0] = t[1]
     
 

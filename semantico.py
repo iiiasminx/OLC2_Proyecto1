@@ -98,14 +98,16 @@ class FIFuni(Instruccion):
         self.instruccionesF = instruccionesF
 
 class FIF(Instruccion):
-    def __init__(self,  oplog, instruccionesv) :
+    def __init__(self,  oplog, instruccionesv, instruccionesf) :
         self.oplog = oplog
         self.instruccionesv = instruccionesv
+        self.instruccionesf = instruccionesf
 
 class FElseIF(Instruccion):
-    def __init__(self,  oplog, instruccionesv) :
+    def __init__(self,  oplog, instruccionesv, instruccionesf) :
         self.oplog = oplog
         self.instruccionesv = instruccionesv
+        self.instruccionesf = instruccionesf
 
 class FELSE(Instruccion):
     def __init__(self,  instrucciones) :
@@ -117,7 +119,8 @@ class FWhile(Instruccion):
         self.instrucciones = instrucciones
 
 class FFor(Instruccion):
-    def __init__(self,  rango, instrucciones) :
+    def __init__(self, var,  rango, instrucciones) :
+        self.var = var
         self.rango = rango
         self.instrucciones = instrucciones
 

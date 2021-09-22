@@ -31,13 +31,12 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <!--CHART JS-->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
-  <!--DOT JS-->
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/d3-graphviz@4.0.0/build/d3-graphviz.min.js"></script>
-
+  <script src="//d3js.org/d3.v5.min.js"></script>
+  <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+  <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
 
 </head>
+
 
 <body>
 
@@ -113,6 +112,42 @@
     <div class="column">
 
       <form>
+        <h2>&emsp;Tabla de Símbolos</h2>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Valor</th>
+              <th scope="col">Ámbito</th>
+              <th scope="col">Nota</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for simbolo in simbolos %}
+
+            <tr>
+              <td>{{simbolo.nombre}}</td>
+              <td>{{simbolo.tipo}}</td>
+              <td>{{simbolo.valor}}</td>
+              <td>{{simbolo.ambito}}</td>
+              <td>{{simbolo.nota}}</td>
+            </tr>
+
+            {% endfor %}
+
+          </tbody>
+        </table>
+      </form>
+
+
+    </div>
+    <div class="column2">
+    </div>
+    <div class="column">
+
+
+      <form>
         <h2>&emsp;Reporte de Errores</h2>
         <table class="table table-hover">
           <thead>
@@ -124,6 +159,7 @@
               <th scope="col">Hora</th>
             </tr>
           </thead>
+
           <tbody>
             {% for error in erroreslex %}
 
@@ -159,15 +195,25 @@
 
             {% endfor %}
           </tbody>
+
         </table>
+
       </form>
     </div>
+  </div>
+
+  </br></br>
+  </br></br>
+  </br></br></br>
+</br></br>
+
+  <div class="row form-group">
     <div class="column2">
     </div>
     <div class="column">
 
       <form>
-        <h2>&emsp;Tabla de Símbolos</h2>
+        <h2>&emsp;Bitácora de Cambios</h2>
         <table class="table table-hover">
           <thead>
             <tr>
@@ -179,7 +225,7 @@
             </tr>
           </thead>
           <tbody>
-            {% for simbolo in simbolos %}
+            {% for simbolo in simbolos2 %}
 
             <tr>
               <td>{{simbolo.nombre}}</td>
@@ -195,9 +241,11 @@
         </table>
       </form>
     </div>
+    <div class="column2">
+    </div>
+    <div class="column">
+    </div>
   </div>
-
-
 
   <pre><p id="txtsalida">{{ mesg }}</p></pre>
   <pre><p id="txtentrada" >{{ entrada }}</p></pre>
@@ -205,5 +253,16 @@
 
 
 </body>
+
+<script>
+
+  let grafo = document.getElementById("txterrores").innerHTML;
+  let nuevo = grafo.replace(/&gt;/g, '>');
+  console.log(nuevo);
+
+  d3.select("#graph").graphviz()
+    .renderDot(nuevo);
+
+</script>
 
 </html>

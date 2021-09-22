@@ -5,6 +5,7 @@ from datetime import datetime
 
 class Exporte:
     listasemanticos = []
+    listasegundos = []
     def __init__(self, interpretacion, tabla_simbolos, grafo, tabla_errores, arbol):
         self.interpretacion = interpretacion
         self.tabla_simbolos = tabla_simbolos
