@@ -86,7 +86,7 @@ def p_instrucciones1(t):
     grafo.generarPadre(2)
     grafo.generarPadre(1)
     grafo.generarHijos('InstruccionesF', 'InstruccionF', t[3] )
-    t[1].append(t[3])
+    t[1].append(t[2])
     t[0] = t[1]
 
 
@@ -657,6 +657,11 @@ def p_sopid10(t):
     grafo.generarHijos(t[1])
     t[0] = OPCadena(t[1])
 
+def p_sopid11(t):
+    '''OPID : LLAMADARR'''
+    #grafo.generarHijos(t[1])
+    t[0] = t[1]
+
 
 #------------------------------OPERACIONES LOGICAS----------------------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -691,7 +696,8 @@ def p_soplogPar(t):
     t[0] = t[2]
 
 def p_soplogterm2(t):
-    '''SOPLOG : OPID'''
+    '''SOPLOG : OPID
+            | LLAMADARR'''
     t[0] = t[1]
     
 

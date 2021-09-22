@@ -13,6 +13,8 @@ contaerrores = 0
 listasemanticos = []
 textoimpresion = ""
 contabucle = 0
+pilaentornos = []
+
 
 def fightingfinal(texto):
     exportef = fighting2(texto)
@@ -28,6 +30,8 @@ def fightingfinal(texto):
     textoimpresion = "Lo que imprimo va acá :3 ---------------------\n"
     global ts_global
     ts_global.simbolos.clear()
+    pilaentornos.clear()
+    pilaentornos.append('global')
 
     
     procesarInstrucciones(arbol, ts_global)
@@ -52,8 +56,6 @@ def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
 
 
         elif isinstance(instruccion, Declaracion): intDeclaracion(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, Asignacion): intAsignacion(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, AsignacionTipada): intAsignacionTipada(instruccion, tablaSimbolos)
         elif isinstance(instruccion, Scope): intScope(instruccion, tablaSimbolos)
 
 
@@ -63,12 +65,6 @@ def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
         elif isinstance(instruccion, FuncParams): intDefFuncParam(instruccion, tablaSimbolos)
 
         elif isinstance(instruccion, LlamadaFuncion): intLlamadaFuncion(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, FParse): intFParse(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, FTrunc): intFTrunc(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, FFloat): intFFloat(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, FString): intFString(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, Ftypeof): intFtypeof(instruccion, tablaSimbolos)
-
 
         elif isinstance(instruccion, FIFuni): intFIFuni(instruccion, tablaSimbolos)
         elif isinstance(instruccion, FIF): intFIF(instruccion, tablaSimbolos)
@@ -166,6 +162,7 @@ def errorEquis(nombre_instruccion, razon):
     contaerrores += 1
     global listasemanticos
     listasemanticos.append(nuevo)
+    return None
 # ------------------------------------------------------------------------- 
 # Inicio Operaciones ------------------------------------------------------
 # ------------------------------------------------------------------------- 
@@ -180,7 +177,7 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
         print(Exp.term2)
         print(tipoVariable(exp2), ' ', exp2)
 
-        if exp1 == 'Failed' or exp2 == 'Failed':
+        if exp1 == None or exp2 == None:
             return None
 
         if Exp.operador == ARITMETICA.ASTERISCO : 
@@ -197,19 +194,19 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
         return Exp.id
     elif isinstance(Exp, OPLength):
         cad = resolverCadena(Exp.term1, tablaSimbolos)
-        if cad == 'Failed':
+        if cad == None:
             return None
         
         return len(str(cad))
     elif isinstance(Exp, OPLowercase):
         cad = resolverCadena(Exp.term1, tablaSimbolos)
-        if cad == 'Failed':
+        if cad == None:
             return None
         
         return str(cad).lower()
     elif isinstance(Exp, OPUppercase):
         cad = resolverCadena(Exp.term1, tablaSimbolos)
-        if cad == 'Failed':
+        if cad == None:
             return None
         
         return str(cad).upper()
@@ -222,7 +219,7 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
         print(Exp.term2)
         print(tipoVariable(exp2), ' ', exp2)
 
-        if exp1 == 'Failed' or exp2 == 'Failed':
+        if exp1 == None or exp2 == None:
             return None
 
         return exp1 + str(exp2)
@@ -236,7 +233,7 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
             print(Exp.term2)
             print(tipoVariable(exp2), ' ', exp2)
 
-            if exp1 == 'Failed' or exp2 == 'Failed':
+            if exp1 == None or exp2 == None:
                 return None
             if tipoVariable(exp2) == 'Int64' and exp2 != None: 
             
@@ -246,7 +243,7 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
                     copia += str(exp1)
                     i += 1
                 return copia        
-        except: return 'Failed'
+        except: return None
     elif isinstance(Exp, OPID):
         x = siExisteHardcore(Exp.id, tablaSimbolos)
         if x:
@@ -254,7 +251,40 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
             return x.valor
         else: 
             print('FALLA EN ID')
-            return'Failed'
+            returnNone
+    elif isinstance(Exp, LlamadaArr):
+        arr_indices = []
+        contadimensiones = 0
+        for indice in Exp.inds:
+            x = resolverNumerica(indice, tablaSimbolos)
+            print (tipoVariable(x), ' , ', x)
+
+            if tipoVariable(x) != 'Int64':
+                errordeTipos('Asignacion de Array')
+                return None
+
+            arr_indices.append(x)
+            contadimensiones += 1
+
+        arr = siExisteHardcore(Exp.nombre, tablaSimbolos)
+        if arr == False or not arr:
+            return None
+        
+        placeholder = ""
+        try:
+            if contadimensiones == 0: return errordeTipos('Asignación a arreglo')
+            elif contadimensiones == 1: 
+                placeholder = arr.valor[arr_indices[0]]
+                return arr.valor[arr_indices[0]]
+            elif contadimensiones == 2:
+                placeholder = arr.valor[arr_indices[0]][arr_indices[1]]
+                return arr.valor[arr_indices[0]][arr_indices[1]]
+            elif contadimensiones == 3: 
+                placeholder = arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]]
+                return arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]]
+        except Exception as e:
+            print(e)
+            return errorEquis('Asignación a arreglo', str(e))
     else:
         print('viendo si se va a las lógicas')
         global contabucle
@@ -283,7 +313,7 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
         exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
         exp2 = resolverNumerica(Exp.term2, tablaSimbolos) 
 
-        if exp1 == 'Failed' or exp2 == 'Failed':
+        if exp1 == None or exp2 == None:
             return None
 
         if tipoVariable(exp1) != 'Int64' and tipoVariable(exp2) != 'Int64':
@@ -300,13 +330,13 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
         else:  return None
     elif isinstance(Exp, OPNeg):
         exp1 = resolverNumerica(Exp.term, tablaSimbolos)
-        if exp1 == 'Failed':
+        if exp1 == None:
             return None
 
         return - exp1
     elif isinstance(Exp, OPNativa):#log10, sin, cos, tan, sqrt
         exp1 = resolverNumerica(Exp.term, tablaSimbolos)
-        if exp1 == 'Failed':
+        if exp1 == None:
             return None
 
         if Exp.tipo == MATH.LOG10 : return math.log10(exp1)
@@ -317,7 +347,7 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
     elif isinstance(Exp, OPNativaLog):
         exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
         exp2 = resolverNumerica(Exp.term2, tablaSimbolos)
-        if exp1 == 'Failed' or exp2 == 'Failed':
+        if exp1 == None or exp2 == None:
             return None
 
         return math.log(exp2, exp1)
@@ -325,7 +355,7 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
         exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
         exp2 = resolverNumerica(Exp.term2, tablaSimbolos)
 
-        if exp1 == 'Failed' or exp2 == 'Failed':
+        if exp1 == None or exp2 == None:
             return None
 
         if exp1 == 'Float64':
@@ -345,7 +375,7 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             return None
     elif isinstance(Exp, FTrunc):
         exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
-        if exp1 == 'Failed':
+        if exp1 == None:
             return None
 
         try:  
@@ -355,7 +385,7 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             return None      
     elif isinstance(Exp, FFloat):
         exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
-        if exp1 == 'Failed':
+        if exp1 == None:
             return None
 
         try:  
@@ -365,14 +395,12 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             return None        
     elif isinstance(Exp, FString):
         exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
-        if exp1 == 'Failed':
+        if exp1 == None:
             return None
 
         return str(exp1)
     elif isinstance(Exp, Ftypeof):
         exp1 = resolverNumerica(Exp.term1, tablaSimbolos)
-        if exp1 == 'Failed':
-            return None
 
         return tipoVariable(exp1)
     elif isinstance(Exp, OPNum):
@@ -386,6 +414,8 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             return'Failed'
     elif isinstance(Exp, OPType):
         return getTipo(Exp)
+    elif isinstance(Exp, OPNothing):
+        return None
     elif isinstance(Exp, list):
         #print('Acá hay un arreglol')
         aux = []
@@ -400,6 +430,39 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             x = resolverNumerica(term, tablaSimbolos)
             aux.append(x)
         return aux
+    elif isinstance(Exp, LlamadaArr):
+        arr_indices = []
+        contadimensiones = 0
+        for indice in Exp.inds:
+            x = resolverNumerica(indice, tablaSimbolos)
+            print (tipoVariable(x), ' , ', x)
+
+            if tipoVariable(x) != 'Int64':
+                errordeTipos('Asignacion de Array')
+                return None
+
+            arr_indices.append(x)
+            contadimensiones += 1
+
+        arr = siExisteHardcore(Exp.nombre, tablaSimbolos)
+        if arr == False or not arr:
+            return None
+        
+        placeholder = ""
+        try:
+            if contadimensiones == 0: return errordeTipos('Asignación a arreglo')
+            elif contadimensiones == 1: 
+                placeholder = arr.valor[arr_indices[0]]
+                return arr.valor[arr_indices[0]]
+            elif contadimensiones == 2:
+                placeholder = arr.valor[arr_indices[0]][arr_indices[1]]
+                return arr.valor[arr_indices[0]][arr_indices[1]]
+            elif contadimensiones == 3: 
+                placeholder = arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]]
+                return arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]]
+        except Exception as e:
+            print(e)
+            return errorEquis('Asignación a arreglo', str(e))
     else: 
         print('viendo si se va a las cadenas')
         global contabucle
@@ -417,7 +480,11 @@ def resolverBooleana(Exp, tablaSimbolos: cst.TablaSimbolos):
         exp1 = resolverBooleana(Exp.term1, tablaSimbolos)
         exp2 = resolverBooleana(Exp.term2, tablaSimbolos) 
 
+        print(exp1, ' ', exp2)
         if exp1 == 'Failed' or exp2 == 'Failed':
+            return None
+        
+        if exp1 == None or exp2 == None:
             return None
 
         if Exp.operador == LOGICA.AND : return exp1 and exp2
@@ -444,6 +511,36 @@ def resolverBooleana(Exp, tablaSimbolos: cst.TablaSimbolos):
         else: 
             print('FALLA EN ID')
             return'Failed'
+    elif isinstance(Exp, LlamadaArr):
+        print("llamando arreglo")
+        arr_indices = []
+        contadimensiones = 0
+        for indice in Exp.inds:
+            x = resolverNumerica(indice, tablaSimbolos)
+            print (tipoVariable(x), ' , ', x)
+
+            if tipoVariable(x) != 'Int64':
+                errordeTipos('Asignacion de Array')
+                return None
+
+            arr_indices.append(x)
+            contadimensiones += 1
+
+        arr = siExisteHardcore(Exp.nombre, tablaSimbolos)
+        if arr == False or not arr:
+            return None
+        
+        try:
+            if contadimensiones == 0: return errordeTipos('Asignación a arreglo')
+            elif contadimensiones == 1: 
+                return arr.valor[arr_indices[0]]
+            elif contadimensiones == 2:
+                return arr.valor[arr_indices[0]][arr_indices[1]]
+            elif contadimensiones == 3: 
+                return arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]]
+        except Exception as e:
+            print(e)
+            return errorEquis('Asignación a arreglo', str(e))
     else: 
         print('viendo si se va a los numeros')
         global contabucle
@@ -486,7 +583,11 @@ def intDeclaracion(instr, tablaSimbolos : cst.TablaSimbolos): #ver si necesito m
     print('intDeclaracion')
 def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio este por otro como lo hice en el sintactico
     print('Asignando')
-    ambito = instr.scope
+    
+    global pilaentornos
+    ambito = pilaentornos[-1]
+    if instr.scope == 'global':
+        ambito = instr.scope
 
     #si lo que está a la izq es un array 
     if isinstance(instr.asignacion.nombre, LlamadaArr):
@@ -591,13 +692,63 @@ def intLlamadaFuncion(instr, tablaSimbolos : cst.TablaSimbolos):
 def intFIFuni(instr, tablaSimbolos : cst.TablaSimbolos):
     pass
 def intFIF(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
+    print('if')
+
+    global pilaentornos
+    pilaentornos.append('if')
+    print('oplog', instr.oplog)
+    print('instrucciones : ', instr.instruccionesv)
+
+    global ts_global
+    ts_local = ts_global
+
+    if resolverBooleana(instr.oplog, tablaSimbolos):       
+        procesarInstrucciones(instr.instruccionesv, ts_local)
+
+    pilaentornos.pop()
 def intFElseIF(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
+    print('elif')
+
+    global pilaentornos
+    pilaentornos.append('elif')
+    print('oplog', instr.oplog)
+    print('instrucciones : ', instr.instruccionesv)
+
+    global ts_global
+    ts_local = ts_global
+
+    if resolverBooleana(instr.oplog, tablaSimbolos):       
+        procesarInstrucciones(instr.instruccionesv, ts_local)
+
+
+    pilaentornos.pop()
 def intFELSE(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intFWhile(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
+    print('else')
+
+    global pilaentornos
+    pilaentornos.append('else')
+    global ts_global
+    ts_local = ts_global
+
+    procesarInstrucciones(instr.instrucciones, ts_local)
+
+    pilaentornos.pop()
+def intFWhile(instr : FWhile, tablaSimbolos : cst.TablaSimbolos):
+    print('while')
+
+    global pilaentornos
+    pilaentornos.append('while')
+    print('oplog', instr.oplog)
+    print('instrucciones : ', instr.instrucciones)
+
+    global ts_global
+    ts_local = ts_global
+
+    while resolverBooleana(instr.oplog, tablaSimbolos):       
+        procesarInstrucciones(instr.instrucciones, ts_local)
+
+    pilaentornos.pop()
+
 def intFFor(instr, tablaSimbolos : cst.TablaSimbolos):
     pass
 def intFForRangoNum(instr, tablaSimbolos : cst.TablaSimbolos):
