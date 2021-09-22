@@ -103,6 +103,8 @@ class NodoSimbolo:
     nota = ''
     fila = 'nc'
     columna = 'nc'
+    funcinstrucciones = []
+    funcparams = []
     def __init__(self, nombre, tipo, ambito, valor):
         self.nombre = nombre
         self.tipo = tipo        # int (?)

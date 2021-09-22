@@ -192,3 +192,9 @@ class OPTransferencia: #1 = break, #2 = continue, #3, return
     def __init__(self, tipo, obj = "") :
         self.tipo = tipo
         self.obj = obj
+
+
+class ParamF:
+    def __init__(self, id, tipo = "") :
+        self.id = id
+        self.tipo = tipo

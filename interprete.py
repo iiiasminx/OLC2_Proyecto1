@@ -68,7 +68,6 @@ def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
 
         elif isinstance(instruccion, DefFuncion): intDefFuncion(instruccion, tablaSimbolos)
         elif isinstance(instruccion, DefFuncParam): intDefFuncParam(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, DefFuncParams): intDefFuncParam(instruccion, tablaSimbolos)
         elif isinstance(instruccion, FuncParams): intDefFuncParam(instruccion, tablaSimbolos)
 
         elif isinstance(instruccion, LlamadaFuncion): intLlamadaFuncion(instruccion, tablaSimbolos)
@@ -211,7 +210,7 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
         if cad == None:
             return None
         
-        return len(str(cad))
+        return len(cad)
     elif isinstance(Exp, OPLowercase):
         cad = resolverCadena(Exp.term1, tablaSimbolos)
         if cad == None:
@@ -265,7 +264,7 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
             return x.valor
         else: 
             print('FALLA EN ID')
-            returnNone
+            return None
     elif isinstance(Exp, LlamadaArr):
         arr_indices = []
         contadimensiones = 0
@@ -493,9 +492,10 @@ def resolverNumerica(Exp, tablaSimbolos: cst.TablaSimbolos):
             exp1 += 1
 
         return aux
-        
+    elif isinstance(Exp, LlamadaFuncion): 
+        return intLlamadaFuncion(Exp, tablaSimbolos)    
     else: 
-        print('viendo si se va a las cadenas')
+        print('viendo si se va a las cadenas, ', Exp)
         global contabucle
         contabucle += 1
         if contabucle > 20:
@@ -621,17 +621,22 @@ def intDeclaracion(instr:Asignacion, tablaSimbolos : cst.TablaSimbolos): #ver si
 
     if aux:
         print('actualizando')
+        if aux.tipo == 'Function':
+            errorEquis('Asignación', 'ya existe una funcion con este nombre')
+            return None
         # actualizo el valor
         simbolo = cst.NodoSimbolo(instr.nombre[0].id, tipo, ambito, valor)
         simbolo.nota = 'Actualización'
         tablaSimbolos.actualizar(simbolo)
         añadiraTabla(simbolo)
+        return True
     else:
         print('nuevo')
         # creo una nueva variable
         simbolo = cst.NodoSimbolo(instr.nombre[0].id, tipo, ambito, valor)
         tablaSimbolos.agregar(simbolo)
         añadiraTabla(simbolo)
+        return True
 
 def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio este por otro como lo hice en el sintactico
     print('Asignando')
@@ -690,13 +695,16 @@ def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio es
     # si lo que esta a la izq del parentesis es un id
     elif isinstance(instr.asignacion.nombre[0], OPID):
         
-        print(instr.asignacion.valor)
+        print('VAL ->',instr.asignacion.valor)
         valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
         aux = siExiste(instr.asignacion.nombre[0].id, tablaSimbolos)
         if isinstance(instr.asignacion, Asignacion) : 
             tipo = tipoVariable(valor)
             if aux:
                 print('actualizando')
+                if aux.tipo == 'Function':
+                    errorEquis('Asignación', 'ya existe una funcion con este nombre')
+                    return
                 # actualizo el valor
                 simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, tipo, ambito, valor)
                 simbolo.nota = 'Actualización'
@@ -726,23 +734,146 @@ def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio es
 
 # Funciones ---------------------------------------------------------------
 # -------------------------------------------------------------------------
-def intDefFuncion(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intDefFuncParam(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intDefFuncParams(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intFuncParams(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
-def intLlamadaFuncion(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
+def intDefFuncion(instr: DefFuncion, tablaSimbolos : cst.TablaSimbolos):
+    print('DefFunction')
+    print('nombre = ', instr.nombre)
+    #print('params = ', instr.params)
+    print('instrucciones = ', instr.instrucciones)
+
+    #geteando un array con parámetros -- nombre y tipo en string
+    params = []
+    solonombres = []
+    for parametro in instr.params:
+        x = intDefFuncParam(parametro, tablaSimbolos)
+        params.append(x)
+        solonombres.append(x.id)
+        print( x.id, ' , ', x.tipo)
+    
+    # si ya existe una variable con este nombre, x
+    aux = siExiste(instr.nombre, tablaSimbolos)
+    if aux:
+        print('ya existe')
+        errorEquis('DefFunc', 'ya existe una función con ese nombre :C')
+        return
+    else:
+        print('nuevo')
+        # creo una nueva variable
+        simbolo = cst.NodoSimbolo(instr.nombre, 'Function', str(solonombres), '-')
+        simbolo.funcinstrucciones = instr.instrucciones #listadeinstrucciones
+        simbolo.funcparams = params
+        tablaSimbolos.agregar(simbolo)
+        añadiraTabla(simbolo)
+
+def intDefFuncParam(instr: DefFuncParam, tablaSimbolos : cst.TablaSimbolos):
+    tipo = ""
+    if instr.tipo != "":
+        tipo = getTipo(instr.tipo)
+
+    return (ParamF(instr.param.id, tipo))
+def intLlamadaFuncion(instr: LlamadaFuncion, tablaSimbolos : cst.TablaSimbolos):
+    print('LlamadaFunc')
+    print('nombre: ', instr.funcion)
+    print('params enviados: ', instr.params)
+    global pilaentornos
+    pilaentornos.append('funcion')
+
+    #verificando si la función existe (y es funcion)
+    aux = siExiste(instr.funcion, tablaSimbolos)
+    if aux:
+        if aux.tipo != 'Function':
+            print(aux.tipo, ' no es Function')
+            errordeTipos('Llamada a función')
+            return
+
+        #verificando los parámetros
+        if len(instr.params) != len(aux.funcparams):
+            print(len(instr.params), ' no es ', len(aux.ambito))
+            errorEquis('Llamada funcion', 'Los parámetros no son los correctos')
+            return
+        
+        contador = 0
+        #funcparams = nombre, tipo
+        #param = cosox
+        for param in instr.params:
+            if aux.funcparams[contador].tipo == '':
+                contador += 1
+                continue
+            
+            valorparam = resolverNumerica(param, tablaSimbolos)
+            if aux.funcparams[contador].tipo != tipoVariable(valorparam):
+                print('params no compatibles')
+                errordeTipos('LLamada Funcion - Params')
+                return           
+            
+            contador+= 1
+
+        print ('TEST PASADO :D')
+
+        #ya puedo empezar a ver que pez
+        instruccionesfuncion = aux.funcinstrucciones
+        global ts_global
+        ts_local = ts_global
+        global extra
+
+        contador = 0
+        for param in instr.params:
+            intDeclaracion(Asignacion([aux.funcparams[contador]], param), ts_local)
+            contador += 1   
+
+        procesarInstrucciones(instruccionesfuncion, ts_local)   
+        if extra != "":
+           print('SENTENCIA RECIBIDAFN')
+           if extra.tipo == 1: 
+               errorEquis('funcion', 'break outsode loop')
+               pilaentornos.pop()
+               extra = ""
+               return None
+           if extra.tipo == 2: 
+               errorEquis('funcion', 'continue outsode loop')
+               pilaentornos.pop()
+               extra = ""
+               return None
+           if extra.tipo == 3: 
+               pilaentornos.pop()
+               ret = extra.obj
+               print('EL RETORNO ES: ', ret)
+               ret = resolverNumerica(extra.obj, ts_local)
+               extra = ""
+               return ret
+          
+    else:
+        errorEquis('LLamada a función', 'la función no existe') 
+        return
+    
 
 
 # Condicionales -----------------------------------------------------------
 # -------------------------------------------------------------------------
 
 def intFIFuni(instr, tablaSimbolos : cst.TablaSimbolos):
-    pass
+    print('if')
+
+    global pilaentornos
+    pilaentornos.append('if')
+    print('oplog', instr.oplog)
+    print('instruccionesv : ', instr.instruccionesv)
+    print('instruccionesf : ', instr.instruccionesf)
+
+    global ts_global
+    ts_local = ts_global
+
+    if resolverBooleana(instr.oplog, tablaSimbolos):       
+        procesarInstrucciones(instr.instruccionesv, ts_local)
+        if extra != "":
+           print('SENTENCIA RECIBIDAIF')
+           return
+    else:
+        procesarInstrucciones([instr.instruccionesf], ts_local)
+        if extra != "":
+           print('SENTENCIA RECIBIDAIF')
+           return
+
+    pilaentornos.pop()
 def intFIF(instr, tablaSimbolos : cst.TablaSimbolos):
     print('if')
 
@@ -814,7 +945,7 @@ def intFWhile(instr : FWhile, tablaSimbolos : cst.TablaSimbolos):
        procesarInstrucciones(instr.instrucciones, ts_local)  
        global extra
        if extra != "":
-           print('SENTENCIA RECIBIDA')
+           print('SENTENCIA RECIBIDAWH')
            if extra.tipo == 1: break
            if extra.tipo == 2: continue
            if extra.tipo == 3: 
@@ -847,10 +978,14 @@ def intFFor(instr: FFor, tablaSimbolos : cst.TablaSimbolos):
     
     #si el rango es una cadena 
     if tipoVariable(rangoraw) == 'String':
-        intDeclaracion(Asignacion([OPID(instr.var)], OPCadena(rangoraw[0])), ts_aux)
+        x = intDeclaracion(Asignacion([OPID(instr.var)], OPCadena(rangoraw[0])), ts_aux)
+        if x == None:
+            return 
         
         for i in rangoraw:
-            intDeclaracion(Asignacion([OPID(instr.var)], OPCadena(i)), ts_aux)
+            y = intDeclaracion(Asignacion([OPID(instr.var)], OPCadena(i)), ts_aux)
+            if y == None:
+                return 
 
             procesarInstrucciones(instr.instrucciones, ts_aux)              
             if extra != "":
@@ -862,11 +997,14 @@ def intFFor(instr: FFor, tablaSimbolos : cst.TablaSimbolos):
                     break 
     # si e rango es un arreglo
     else:
-        intDeclaracion(Asignacion([OPID(instr.var)], OPNum(rangoraw[0])), ts_aux)
+        x = intDeclaracion(Asignacion([OPID(instr.var)], OPNum(rangoraw[0])), ts_aux)
+        if x == None:
+            return 
         
-        for i in rangoraw:
-            intDeclaracion(Asignacion([OPID(instr.var)], OPCadena(i)), ts_aux)
-
+        for i in rangoraw: 
+            y =  intDeclaracion(Asignacion([OPID(instr.var)], OPCadena(i)), ts_aux)
+            if y == None:
+                return 
             procesarInstrucciones(instr.instrucciones, ts_aux)
             if extra != "":
                 print('SENTENCIA RECIBIDA')

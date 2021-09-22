@@ -202,10 +202,10 @@ def p_atributo2(t):
     t[0] = OPAtributo(t[1])
 
 def p_creacionstruct(t):
-    '''STRUCTINI : id parentesisa PARAMSFUNC parentesisc'''
+    '''STRUCTINI : id parentesisa PARAMSFUNCS parentesisc'''
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Params', t[4])
-    t[0] = ConstruccionStruct(t[1], t[3])
+    t[0] = LlamadaFuncion(t[1], t[3])
 
 def p_structasign(t):
     '''STRUCTASIGN : id '''    
@@ -303,7 +303,7 @@ def p_params(t):
     grafo.generarPadre(3)
     grafo.generarPadre(1)
     grafo.generarHijos('Params', t[2], 'Param')
-    t[3].append(t[1])
+    t[1].append(t[3])
     t[0] = t[1]
 
 def p_params4(t):
@@ -314,24 +314,25 @@ def p_params4(t):
 def p_params2(t):
     '''PARAM : id '''
     grafo.generarHijos(t[1])
-    t[0] = [DefFuncParam(OPID(t[1]))]
+    t[0] = DefFuncParam(OPID(t[1]))
 
 def p_params3(t):
     '''PARAM :  '''
     grafo.generarHijos('')
-    t[0] = [DefFuncParam(OPNothing())]
+    t[0] = DefFuncParam(OPNothing())
 
 def p_params3(t):
     '''PARAM : id dos_dospuntos TIPOS'''
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Type')
-    t[0] = [DefFuncParam(OPID(t[1]))]
+    t[0] = DefFuncParam(OPID(t[1]), t[3])
 
 def p_llamadafunc(t):
     '''LLAMADAFUNC : id parentesisa PARAMSFUNCS parentesisc'''
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Parámetros', t[4])
     t[0] = LlamadaFuncion(t[1], t[3])
+    #print('llamadaFunc detectada')
 
 def p_paramsfunc(t):
     '''PARAMSFUNCS : PARAMSFUNCS coma PARAMSFUNC'''
@@ -347,7 +348,7 @@ def p_paramsfunc44(t):
 
 def p_paramsfunc3(t):
     '''PARAMSFUNC :  ALGO'''    
-    t[0] = FuncParams(t[1])
+    t[0] = t[1]
 
 def p_paramsfunc2(t):
     '''PARAMSFUNC :  '''
@@ -465,7 +466,7 @@ def p_transferencia2(t):
     '''TRANSF : return ALGO'''
     grafo.generarPadre(2)
     grafo.generarHijos(t[1], 'Contenido')
-    t[0] = SReturn(t[1])
+    t[0] = SReturn(t[2])
 
 #  -------------------------------------- FOR---------------------------------------------------------
 
@@ -488,6 +489,11 @@ def p_rangofor2(t):
     '''RANGO : cadena'''
     grafo.generarHijos(t[1])
     t[0] = OPCadena(t[1])
+
+def p_rangofor4(t):
+    '''RANGO : id'''
+    grafo.generarHijos(t[1])
+    t[0] = OPID(t[1])
 
 def p_rangofor3(t):
     '''RANGO : ARREGLO'''
@@ -585,11 +591,13 @@ def p_scontprint2(t):
 
 def p_scontprintterm(t):
     '''SCONTPRNT :  ALGO
-                | FIFUNI'''
+                | FIFUNI
+                | LLAMADAFUNC'''
     
     grafo.generarPadre(1)
     grafo.generarHijos('Contenido')
     t[0] = t[1]
+
     
 
 #  -------------------------------OPERACION CON ID ---------------------------------------------------
@@ -662,7 +670,9 @@ def p_sopid10(t):
     t[0] = OPCadena(t[1])
 
 def p_sopid11(t):
-    '''OPID : LLAMADARR'''
+    '''OPID : LLAMADARR
+            | LLAMADAFUNC
+            | SOPNATIV'''
     #grafo.generarHijos(t[1])
     t[0] = t[1]
 

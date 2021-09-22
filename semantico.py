@@ -49,8 +49,9 @@ class DefFuncion(Instruccion): #nombre, params, instrucciones
         self.instrucciones = instrucciones
 
 class DefFuncParam(Instruccion): # param
-    def __init__(self,  param) :
+    def __init__(self,  param, tipo = "") :
         self.param = param
+        self.tipo = tipo
 
 class DefFuncParams(Instruccion): #*params
     def __init__(self,  *params) :
