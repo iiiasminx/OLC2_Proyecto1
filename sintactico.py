@@ -746,18 +746,27 @@ def p_soplogterm(t):
 def p_sopnativ(t):
     '''SOPNATIV : uppercase parentesisa SOPN parentesisc
                 | lowercase parentesisa SOPN parentesisc
-                | length parentesisa SOPN parentesisc'''
+                | length parentesisa SOPN parentesisc
+                | pop parentesisa SOPN parentesisc'''
     grafo.generarPadre(3)
     grafo.generarHijos(t[1], t[2], 'Termino', t[4])
     if t[1] == 'uppercase' : t[0] = OPUppercase(t[3])
     elif t[1] == 'lowercase' : t[0] = OPLowercase(t[3])
+    elif t[1] == 'pop' : t[0] = OPPop(t[3])
     else : t[0] = OPLength(t[3])
 
 
 def p_sopnativterm(t):
-    ''' SOPN :  SOPSTRING''' 
+    ''' SOPN :  SOPSTRING
+            | ARREGLO''' 
     t[0] = t[1]
 
+def p_soppush(t):
+    '''SOPNATIV : push parentesisa SOPN coma ALGO parentesisc'''
+    grafo.generarPadre(5)
+    grafo.generarPadre(3)
+    grafo.generarHijos(t[1], t[2], 'Termino', t[4], 'Termino', t[6])
+    t[0] = OPPush(t[3], t[5])
 
 def p_declnativ(t):
     '''DECLNATIV : parse parentesisa TIPOS coma ALGO parentesisc'''

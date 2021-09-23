@@ -211,6 +211,54 @@ def resolverCadena(Exp, tablaSimbolos: cst.TablaSimbolos):
             return None
         
         return len(cad)
+    elif isinstance(Exp, OPPop):
+        nombre = ""
+        
+        if isinstance(Exp.arreglo, OPID):
+            nombre = Exp.arreglo.id
+            print('si hay nombre: ', nombre)
+
+        arr = resolverNumerica(Exp.arreglo, tablaSimbolos)
+        if arr == None:
+            return None
+
+        if tipoVariable(arr) != 'Array':
+            errorEquis('Pop', 'el valor no es una lista')
+
+        print('antes ->', arr)
+        elemento = arr.pop()
+        if nombre != "":
+            print('despues ->', arr)
+            obj = siExiste(nombre, tablaSimbolos)
+            obj.valor = arr
+            obj.nota = 'Actualización'
+            tablaSimbolos.actualizar(obj)
+            añadiraTabla(obj)
+                
+        return elemento
+    elif isinstance(Exp, OPPush):
+        nombre = ""
+        if isinstance(Exp.arreglo, OPID):
+            nombre = Exp.arreglo.id
+
+        arr = resolverNumerica(Exp.arreglo, tablaSimbolos)
+        if arr == None:
+            return None
+
+        if tipoVariable(arr) != 'Array':
+            errorEquis('Push', 'el valor no es una lista')
+
+        otro = resolverNumerica(Exp.term, tablaSimbolos)
+        print('antes ->', arr)
+        arr.append(otro)
+        print('despues ->', arr)
+        if nombre != "":
+            obj = siExiste(nombre, tablaSimbolos)
+            obj.valor = arr
+            obj.nota = 'Actualización'
+            tablaSimbolos.actualizar(obj)
+            añadiraTabla(obj)
+        return arr
     elif isinstance(Exp, OPLowercase):
         cad = resolverCadena(Exp.term1, tablaSimbolos)
         if cad == None:
@@ -821,6 +869,9 @@ def intLlamadaFuncion(instr: LlamadaFuncion, tablaSimbolos : cst.TablaSimbolos):
             contador += 1   
 
         procesarInstrucciones(instruccionesfuncion, ts_local)   
+        
+        #si es un arreglo lo paso por referencia
+
         if extra != "":
            print('SENTENCIA RECIBIDAFN')
            if extra.tipo == 1: 

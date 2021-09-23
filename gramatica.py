@@ -117,7 +117,8 @@ tokens = [
 
     'dos_dospuntos',
     'dospuntos',
-    'salto'
+    'salto',
+    'push2'
 ] + list(reservadas)
 
 
@@ -158,6 +159,7 @@ t_interrogacionc = r'\?'
 
 t_dos_dospuntos = r'::'
 t_dospuntos = r':'
+push2 = r'push\!'
 
 def t_id(t):
     r'[a-zA-Z_ñÑ][a-zA-Z0-9_ñÑ]*'

@@ -99,6 +99,17 @@ class OPLength(ExpCadena) : #este está tentativo acá
         self.term1 = term1
 
 
+class OPPush:
+    nombre = ""
+    def __init__(self, arreglo, term) :
+        self.arreglo = arreglo
+        self.term = term
+
+class OPPop:
+    nombre =""
+    def __init__(self, arreglo) :
+        self.arreglo = arreglo
+
 class OPCadena(ExpCadena) :
 
     def __init__(self, id = "") :
