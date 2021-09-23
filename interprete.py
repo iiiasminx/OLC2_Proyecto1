@@ -1,4 +1,5 @@
 # importo todo de todos lados
+from sys import exc_info
 from gramatica import fighting, tokens
 import cst as cst
 from operaciones import *
@@ -94,8 +95,57 @@ def procesarInstrucciones(ast, tablaSimbolos : cst.TablaSimbolos):
         elif isinstance(instruccion, DeclStruct): intDeclStruct(instruccion, tablaSimbolos)
         elif isinstance(instruccion, ConstruccionStruct): intConstruccionStruct(instruccion, tablaSimbolos)
         elif isinstance(instruccion, AsignacionAtributosStruct): intAsignacionAtributosStruct(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, AccesoAtributo): intAccesoAtributo(instruccion, tablaSimbolos)
-        elif isinstance(instruccion, OPPASS): placeholder = 0
+        elif isinstance(instruccion, AccesoAtributo): intAccesoAtributo(instruccion, tablaSimbolos)        
+        elif isinstance(instruccion, OPPASS): print('-')
+        elif isinstance(instruccion, OPPop):
+            nombre = ""
+            
+            if isinstance(instruccion.arreglo, OPID):
+                nombre = instruccion.arreglo.id
+                print('si hay nombre: ', nombre)
+
+            arr = resolverNumerica(instruccion.arreglo, tablaSimbolos)
+            if arr == None:
+                continue
+
+            if tipoVariable(arr) != 'Array':
+                errorEquis('Pop', 'el valor no es una lista')
+
+            print('antes ->', arr)
+            elemento = arr.pop()
+            if nombre != "":
+                print('despues ->', arr)
+                obj = siExiste(nombre, tablaSimbolos)
+                obj.valor = arr
+                obj.nota = 'Actualización'
+                tablaSimbolos.actualizar(obj)
+                añadiraTabla(obj)
+                    
+            continue
+        elif isinstance(instruccion, OPPush):
+            nombre = ""
+            if isinstance(instruccion.arreglo, OPID):
+                nombre = instruccion.arreglo.id
+
+            arr = resolverNumerica(instruccion.arreglo, tablaSimbolos)
+            if arr == None:
+                continue
+
+            if tipoVariable(arr) != 'Array':
+                errorEquis('Push', 'el valor no es una lista')
+
+            otro = resolverNumerica(instruccion.term, tablaSimbolos)
+            print('antes ->', arr)
+            arr.append(otro)
+            print('despues ->', arr)
+            if nombre != "":
+                obj = siExiste(nombre, tablaSimbolos)
+                obj.valor = arr
+                obj.nota = 'Actualización'
+                tablaSimbolos.actualizar(obj)
+                añadiraTabla(obj)
+            continue
+    
         else :
             desc = "Error semántico con la instruccion número: " + str(contador) + " de " + str(pilaentornos[-1])
             global contaerrores
@@ -694,91 +744,93 @@ def intScope(instr: Scope, tablaSimbolos : cst.TablaSimbolos): #ver si cambio es
     if instr.scope == 'global':
         ambito = instr.scope
 
+    try: 
     #si lo que está a la izq es un array 
-    if isinstance(instr.asignacion.nombre, LlamadaArr):
-        print('ESUNARRAY')
-        print(instr.asignacion.nombre.nombre, ' , ', instr.asignacion.nombre.inds)
-        valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
+        if isinstance(instr.asignacion.nombre, LlamadaArr):
+            print('ESUNARRAY')
+            print(instr.asignacion.nombre.nombre, ' , ', instr.asignacion.nombre.inds)
+            valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
 
-        arr_indices = []
-        contadimensiones = 0
-        for indice in instr.asignacion.nombre.inds:
-            x = resolverNumerica(indice, tablaSimbolos)
-            print (tipoVariable(x), ' , ', x)
+            arr_indices = []
+            contadimensiones = 0
+            for indice in instr.asignacion.nombre.inds:
+                x = resolverNumerica(indice, tablaSimbolos)
+                print (tipoVariable(x), ' , ', x)
 
-            if tipoVariable(x) != 'Int64':
-                errordeTipos('Asignacion de Array')
+                if tipoVariable(x) != 'Int64':
+                    errordeTipos('Asignacion de Array')
+                    return None
+
+                arr_indices.append(x)
+                contadimensiones += 1
+
+            arr = siExisteHardcore(instr.asignacion.nombre.nombre, tablaSimbolos)
+            if arr == False or not arr:
                 return None
+            
+            placeholder = ""
+            try:
+                if contadimensiones == 0: return errordeTipos('Asignación a arreglo')
+                elif contadimensiones == 1: 
+                    placeholder = arr.valor[arr_indices[0]]
+                    arr.valor[arr_indices[0]] = valor
+                elif contadimensiones == 2:
+                    placeholder = arr.valor[arr_indices[0]][arr_indices[1]]
+                    arr.valor[arr_indices[0]][arr_indices[1]] = valor
+                elif contadimensiones == 3: 
+                    placeholder = arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]]
+                    arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]] = valor
+            except Exception as e:
+                print(e)
+                return errorEquis('Asignación a arreglo', str(e))
 
-            arr_indices.append(x)
-            contadimensiones += 1
+            print('valor de arr izq: ', placeholder)
+            if placeholder == "":
+                return
+            arr.nota = 'Actualización Array'
+            tablaSimbolos.actualizar(arr)
+            añadiraTabla(arr)
 
-        arr = siExisteHardcore(instr.asignacion.nombre.nombre, tablaSimbolos)
-        if arr == False or not arr:
-            return None
-        
-        placeholder = ""
-        try:
-            if contadimensiones == 0: return errordeTipos('Asignación a arreglo')
-            elif contadimensiones == 1: 
-                placeholder = arr.valor[arr_indices[0]]
-                arr.valor[arr_indices[0]] = valor
-            elif contadimensiones == 2:
-                placeholder = arr.valor[arr_indices[0]][arr_indices[1]]
-                arr.valor[arr_indices[0]][arr_indices[1]] = valor
-            elif contadimensiones == 3: 
-                placeholder = arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]]
-                arr.valor[arr_indices[0]][arr_indices[1]][arr_indices[2]] = valor
-        except Exception as e:
-            print(e)
-            return errorEquis('Asignación a arreglo', str(e))
-
-        print('valor de arr izq: ', placeholder)
-        if placeholder == "":
-            return
-        arr.nota = 'Actualización Array'
-        tablaSimbolos.actualizar(arr)
-        añadiraTabla(arr)
-
-    # si lo que esta a la izq del parentesis es un id
-    elif isinstance(instr.asignacion.nombre[0], OPID):
-        
-        print('VAL ->',instr.asignacion.valor)
-        valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
-        aux = siExiste(instr.asignacion.nombre[0].id, tablaSimbolos)
-        if isinstance(instr.asignacion, Asignacion) : 
-            tipo = tipoVariable(valor)
-            if aux:
-                print('actualizando')
-                if aux.tipo == 'Function':
-                    errorEquis('Asignación', 'ya existe una funcion con este nombre')
-                    return
-                # actualizo el valor
-                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, tipo, ambito, valor)
-                simbolo.nota = 'Actualización'
-                tablaSimbolos.actualizar(simbolo)
-                añadiraTabla(simbolo)
-            else:
-                print('nuevo')
-                # creo una nueva variable
-                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, tipo, ambito, valor)
-                tablaSimbolos.agregar(simbolo)
-                añadiraTabla(simbolo)
-        elif isinstance(instr.asignacion, AsignacionTipada): 
-            if aux:
-                print('actualizando')
-                # actualizo el valor
-                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, getTipo(instr.asignacion.tipo), ambito, valor)
-                simbolo.nota = 'Actualización'
-                tablaSimbolos.actualizar(simbolo)
-                añadiraTabla(simbolo)
-            else:
-                print('nuevo')
-                # creo una nueva variable
-                simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, getTipo(instr.asignacion.tipo), ambito, valor)
-                tablaSimbolos.agregar(simbolo)
-                añadiraTabla(simbolo)
-        
+        # si lo que esta a la izq del parentesis es un id
+        elif isinstance(instr.asignacion.nombre[0], OPID):
+            
+            print('VAL ->',instr.asignacion.valor)
+            valor = resolverNumerica(instr.asignacion.valor, tablaSimbolos)
+            aux = siExiste(instr.asignacion.nombre[0].id, tablaSimbolos)
+            if isinstance(instr.asignacion, Asignacion) : 
+                tipo = tipoVariable(valor)
+                if aux:
+                    print('actualizando')
+                    if aux.tipo == 'Function':
+                        errorEquis('Asignación', 'ya existe una funcion con este nombre')
+                        return
+                    # actualizo el valor
+                    simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, tipo, ambito, valor)
+                    simbolo.nota = 'Actualización'
+                    tablaSimbolos.actualizar(simbolo)
+                    añadiraTabla(simbolo)
+                else:
+                    print('nuevo')
+                    # creo una nueva variable
+                    simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, tipo, ambito, valor)
+                    tablaSimbolos.agregar(simbolo)
+                    añadiraTabla(simbolo)
+            elif isinstance(instr.asignacion, AsignacionTipada): 
+                if aux:
+                    print('actualizando')
+                    # actualizo el valor
+                    simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, getTipo(instr.asignacion.tipo), ambito, valor)
+                    simbolo.nota = 'Actualización'
+                    tablaSimbolos.actualizar(simbolo)
+                    añadiraTabla(simbolo)
+                else:
+                    print('nuevo')
+                    # creo una nueva variable
+                    simbolo = cst.NodoSimbolo(instr.asignacion.nombre[0].id, getTipo(instr.asignacion.tipo), ambito, valor)
+                    tablaSimbolos.agregar(simbolo)
+                    añadiraTabla(simbolo)
+    except Exception as ee:
+        errorEquis('Asignación', 'algo x pasó :c')
 
 # Funciones ---------------------------------------------------------------
 # -------------------------------------------------------------------------

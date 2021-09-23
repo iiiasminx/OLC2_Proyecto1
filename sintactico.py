@@ -758,7 +758,8 @@ def p_sopnativ(t):
 
 def p_sopnativterm(t):
     ''' SOPN :  SOPSTRING
-            | ARREGLO''' 
+            | ARREGLO
+            | LLAMADARR''' 
     t[0] = t[1]
 
 def p_soppush(t):
